@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="">
+	<meta http-equiv="content-security-policy">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    
+    <title></title>
+    
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/news.css" rel="stylesheet" />
+    <style>
+			
+		</style>
+    
+</head>
+<body>
+
+
+<div class="mui-content">
+	<div id="slider" class="mui-slider mui-fullscreen">
+		<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+			<div class="mui-scroll">
+				<a class="mui-control-item mui-active" href="#item1mobile">
+					推荐
+				</a>
+				<a class="mui-control-item" href="#item2mobile">
+					宁波
+				</a>
+				<a class="mui-control-item" href="#item3mobile">
+					独家
+				</a>
+				<a class="mui-control-item" href="#item4mobile">
+					天下
+				</a>
+				<a class="mui-control-item" href="#item5mobile">
+					文娱
+				</a>
+				<a class="mui-control-item" href="#item6mobile">
+					健康
+				</a>
+				<a class="mui-control-item" href="#item7mobile">
+					亲子
+				</a>
+			</div>
+		</div>
+		<div class="mui-slider-group">
+			<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="item2mobile" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="item3mobile" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="item4mobile" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="item5mobile" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="item6mobile" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="item7mobile" class="mui-slider-item mui-control-content">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll news-list">
+						<ul class="mui-table-view">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+	<script src="js/mui.min.js"></script>
+	<script src="js/mui.pullToRefresh.js"></script>
+	<script src="js/mui.pullToRefresh.material.js"></script>
+	<script src="js/mui.lazyload.js"></script>
+	<script src="js/mui.lazyload.img.js"></script>
+
+	<script>
+	mui.init({
+		gestureConfig:{
+			doubletap:true
+		}
+	});
+
+	(function($) {
+		var columnArray = [11672,11246,11886,11247,11248,11249,11250],
+			currentIndex = [0,0,0,0,0,0,0],
+			columuNameArray = ['推荐','宁波','独家','天下','文娱','健康','亲子'],
+			loadNewsCount = 20;
+		//阻尼系数
+		var deceleration = mui.os.ios?0.003:0.0009;
+		$('.mui-scroll-wrapper').scroll({
+			bounce: false,
+			indicators: true, //是否显示滚动条
+			deceleration:deceleration
+		});
+		$.plusReady(function() {
+			//循环初始化所有下拉刷新，上拉加载。
+			$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+				$(pullRefreshEl).pullToRefresh({
+					down: {
+						contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+					    contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+					    contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+						callback: function() {
+							var self = this;
+							var ul = self.element.querySelector('.mui-table-view');
+							currentIndex[index] = 0;
+							createFragment(self, ul, index, loadNewsCount, 0);							
+						}
+					},
+					up: {
+						contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      					contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: function() {
+							var self = this;
+							var ul = self.element.querySelector('.mui-table-view');
+							currentIndex[index] += loadNewsCount;
+							createFragment(self, ul, index, loadNewsCount, 1);
+						}
+					}
+				});
+				
+				
+
+				var ele = this;
+					eleul = this.querySelector('.mui-table-view');
+				createFragment(ele, eleul, index, loadNewsCount, 2);
+			});
+			function createFragment (self, ul, index, count, isreflash) {
+				var curType = columuNameArray[index];
+				mui.ajax('http://szt.nbtv.cn/201505/qxw/cms_api.php',{
+					data:{
+						cid:columnArray[index].toString(),
+						index: currentIndex[index].toString(),
+						length:count.toString()
+					},
+					dataType:'json',//服务器返回json格式数据
+					type:'get',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					success:function(data){
+						var fragment = document.createDocumentFragment();
+						var li;
+						$.each(data.data,function(){
+							var desc = this.desc?this.desc.substr(0,25):'';
+							li = document.createElement('li');
+							li.className = 'mui-table-view-cell mui-media';
+							li.innerHTML = '<a href="'+this.url+'" title="'+this.title+'" aid="'+this.id+'" tp="'+curType+'">'+
+												'<img class="mui-media-object mui-pull-left" src="'+this.img+'" />'+
+												'<div class="mui-media-body">'+
+													'<div class="c-news-title">'+this.title+'</div>'+
+													'<p class="c-news-desc mui-ellipsis">'+desc+'...</p>'+
+												'</div>'+
+											'</a>';
+							fragment.appendChild(li);
+						});
+						
+						if(isreflash == 0) {
+							ul.innerHTML = '';	
+							self.endPullDownToRefresh();
+						}else if(isreflash == 1){
+							self.endPullUpToRefresh();
+						}
+						ul.appendChild(fragment);
+					},
+					error:function(xhr,type,errorThrown){
+						if(isreflash == 0) {
+							self.endPullDownToRefresh();
+						}else if(isreflash == 1) {
+							self.endPullupToRefresh();
+						}
+					}
+				});
+				
+			};
+		});
+		
+		
+
+		
+		mui('.mui-table-view').on('tap', 'a', function() {
+			var id = this.getAttribute('aid'),
+				href = this.href,
+				type = this.getAttribute("open-type"),
+				title = this.title,
+				type = this.getAttribute('tp'),
+				webview_style = {
+					popGesture: "close"
+				};
+			
+			var webview = mui.openWindow({
+			    url:'news_detail_header.html',
+			    id:'news_detail_header.html',
+			    styles:{
+			      top:'0px',//新页面顶部位置
+			      bottom:'0px'
+			    },
+			    extras:{
+			      aid:id,
+			      title:title,
+			      tp:type
+			    },
+			    createNew:false,//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+			    show:{
+			      autoShow:true//页面loaded事件发生后自动显示，默认为true
+			    },
+			    waiting:{
+			      autoShow:true,//自动显示等待框，默认为true
+			      title:'正在加载...'//等待对话框上显示的提示内容
+			    }
+			})			
+						
+		})
+
+		
+		
+		
+	})(mui);
+	
+	
+	</script>
+
+</body>
+</html>

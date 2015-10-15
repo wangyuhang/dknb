@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>宁波广电网</title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/index.css" rel="stylesheet" />
+    <link href="css/comm.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+     	mui.init();
+      	mui.plusReady(function(){
+      		//首页快捷菜单点击事件
+		    mui('#indexFastNav').on('tap', 'a', function(e) {
+		    		var pageId = this.getAttribute('link');
+		    		var webview = mui.openWindow({
+				    url:pageId+'.html',
+				    id:pageId,
+				    styles:{
+				      top:'0px',//新页面顶部位置
+				      bottom:'0px'
+				    },
+				    extras:{
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+		    });
+		    
+		    //初始化精彩互动
+		    initinteractionFun();
+		    
+		    //初始化热点新闻
+		    initHotNewsFun();
+		    
+		    //初始化轮转图内容
+		    initFocusPicFun();
+		    //首页头部轮转图点击事
+		    mui('.openNews').on('tap', 'a', function(e) {
+		    		var id = this.getAttribute('aid'),
+					title = this.title,
+					type = this.getAttribute('tp'),
+					thumbs = this.getAttribute('thumbs');
+		    		var pageId = this.getAttribute('link');
+		    		var webview = mui.openWindow({
+				    url:pageId+'.html',
+				    id:pageId,
+				    styles:{
+				      top:'0px',//新页面顶部位置
+				      bottom:'0px'
+				    },
+				    extras:{
+						aid:id,
+						title:title,
+						tp:type,
+						thumbs:thumbs
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+		    });
+		    
+		    /*document.getElementById('openVideoPage').addEventListener('tap', function() {
+			  //打开关于页面
+			  mui.openWindow({
+			    url: 'video_c.html', 
+			    id:'video-c'
+			  });
+			});*/
+
+		    /*var MPMoviePlayerController = plus.ios.importClass('MPMoviePlayerController');
+		    var NSURL = plus.ios.importClass('NSURL');
+		    var movieUrl = NSURL.URLWithString('http://mobile.nbtv.cn/nas3/010004_t/2015/09/02/A14/A14efeeeifiiffjilml6w6_cug.mp4');
+			var videoPlayer = new MPMoviePlayerController();
+			videoPlayer.plusSetAttribute('top',0);
+			videoPlayer.plusSetAttribute('left',0);
+			videoPlayer.ijdnitWithContentURL(movieUrl);
+			videoPlayer.play();
+			plus.webview.currentWebview().append(videoPlayer);*/
+			//var UIWebView = plus.ios.importClass('UIWebView');
+			//var selfView = plus.webview.currentWebview();
+			//selfView.plusSetAttribute('allowsInlineMediaPlayback',true);
+			//selfView.plusSetAttribute('mediaPlaybackRequiresUserAction',true);
+			//console.log(selfView.nativeInstanceObject().plusGetAttribute('allowsInlineMediaPlayback'));
+			//selfView.allowsInlineMediaPlayback(true)
+			//selfView.plusSetAttribute('allowsInlineMediaPlayback',true)
+			//console.log(selfView.plusGetAttribute('allowsInlineMediaPlayback')==null);
+			//console.log(new Boolean('yes'))
+			//plus.ios.deleteObject(selfView);
+		});
+
+
+		$(document).ready(function() {
+			resetPlaceFun();
+      	})
+		
+		//快捷菜单加载后根据不同屏幕自动计算排列
+		function resetPlaceFun() {
+			var w = parseInt($('body').css('width')),
+      			yyy = $('.c-yyy'),
+      			yyyImg = $(".c-yyy img"),
+      			myshow = $('.c-myshow'),
+      			myshowImg = $(".c-myshow img"),
+      			report = $('.c-report'),
+      			reportImg = $(".c-report img"),
+      			interact = $('.c-interact'),
+      			interactImg = $(".c-interact img"),
+      			fastNav = $('.c-index-fast-nav');
+      		yyy.css({'height':w*0.5, 'width':w*0.4, 'top':0, 'left':0});
+      		myshow.css({'height':w*0.25, 'width':w*0.32, 'top':0, 'left':w*0.4});
+      		report.css({'height':w*0.25, 'width':w*0.32, 'top':w*0.25, 'left':w*0.4});
+      		interact.css({'height':w*0.5, 'width':w*0.28, 'top':0, 'left':w*0.72}); 
+      		fastNav.css({'height':w*0.5}); 
+		}
+		
+		function initFocusPicFun() {
+			mui.ajax('http://cmsapi.tools.nbtv.cn',{
+				data:{
+					task:'get-articles',
+					channelId:11684,
+					offset: 0,
+					count:2
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					var ctn = document.querySelector('#slideCtn');
+					var fragment = document.createDocumentFragment();
+					var div;
+					var firstPic = null,
+						lastPic = null;
+					mui.each(data.data,function(index){
+						div = document.createElement('div');
+						div.setAttribute('class','mui-slider-item');
+						div.innerHTML = '<a href="javascript:;" link="news_detail_header" aid="'+this.id+'" title="'+this.title+'" thumbs="'+this.index_img+'">'+
+											'<img src="'+this.index_img+'">'+
+											'<p class="mui-slider-title">'+this.title+'</p>'+
+										'</a>';
+						fragment.appendChild(div);
+						if(index === 0){
+							firstPic = div.cloneNode(true);
+							firstPic.setAttribute('class','mui-slider-item mui-slider-item-duplicate');
+						}else if(index === 1) {
+							lastPic = div.cloneNode(true);
+							lastPic.setAttribute('class','mui-slider-item mui-slider-item-duplicate');
+						}
+					});
+					ctn.innerHTML = '';			
+					ctn.appendChild(fragment);
+					ctn.appendChild(firstPic);
+					ctn.insertBefore(lastPic,ctn.childNodes[0]);
+				},
+				error:function(xhr,type,errorThrown){
+				}
+			});
+		}
+		
+		//初始化精彩互动
+		function initinteractionFun() {
+			mui.ajax('http://cmsapi.tools.nbtv.cn',{
+				data:{
+					task:'get-articles',
+					channelId:11248,
+					offset: 0,
+					count:3
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					var ctn = document.querySelector('#interactionCtn');
+					var fragment = document.createDocumentFragment();
+					var div;
+					mui.each(data.data,function(index){
+						div = document.createElement('a');
+						div.setAttribute('aid',this.id);
+						div.setAttribute('link','news_detail_header');
+						div.setAttribute('title',this.title);
+						div.setAttribute('thumbs',this.index_img);
+						div.innerHTML = '<img src="'+this.index_img+'">'+
+										'<div class="c-title">'+this.title+'</div>';
+						fragment.appendChild(div);						
+					});
+					ctn.innerHTML = '';			
+					ctn.appendChild(fragment);
+				},
+				error:function(xhr,type,errorThrown){
+				}
+			});
+		}
+		
+		//初始化热点新闻
+		function initHotNewsFun() {
+			mui.ajax('http://cmsapi.tools.nbtv.cn',{
+				data:{
+					task:'get-articles',
+					channelId:11672,
+					offset: 0,
+					count:3
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					var ctn = document.querySelector('#hotNewsCtn');
+					var fragment = document.createDocumentFragment();
+					var div;
+					mui.each(data.data,function(index){
+						div = document.createElement('a');
+						div.setAttribute('aid',this.id);
+						div.setAttribute('link','news_detail_header');
+						div.setAttribute('title',this.title);
+						div.setAttribute('thumbs',this.index_img);
+						div.innerHTML = '<img src="'+this.index_img+'">'+
+											'<div class="c-title">'+this.title+'</div>'+
+										'<div class="c-summary">'+this.description+'</div>';
+						fragment.appendChild(div);						
+					});
+					ctn.innerHTML = '';			
+					ctn.appendChild(fragment);
+				},
+				error:function(xhr,type,errorThrown){
+				}
+			});
+		}
+		
+    </script>
+    <script>
+    
+    </script>
+</head>
+<body>
+
+<!--<div>
+	<video width="320" webkit-playsinline autoplay="autoplay">
+		<source src="http://mobile.nbtv.cn/nas3/010004_t/2015/09/02/A14/A14efeeeifiiffjilml6w6_cug.mp4" type="video/mp4">
+	</video>
+</div>-->
+
+<div class="mui-content">
+	<div id="slider" class="mui-slider openNews">
+		<div id="slideCtn" class="mui-slider-group mui-slider-loop">
+			<div class="mui-slider-item mui-slider-item-duplicate"></div>
+			<div class="mui-slider-item"></div>
+			<div class="mui-slider-item"></div>
+			<div class="mui-slider-item mui-slider-item-duplicate"></div>
+		</div>
+		<div class="mui-slider-indicator mui-text-right">
+			<div class="mui-indicator mui-active"></div>
+			<div class="mui-indicator"></div>			
+		</div>
+	</div>
+</div>
+
+<div class="c-index-broadcast">摇一摇每天有100次机会赢iphone6 斗地主淘汰</div>
+
+<div id="indexFastNav" class="c-index-fast-nav">
+	<a class="c-yyy" href="javascript:;" link="shack"><img src="images/index_fast_nav_1.gif"></a>
+	<a class="c-myshow" href="javascript:;" link="show"><img src="images/index_fast_nav_2.gif"></a>
+	<a class="c-report" href="javascript:;"><img src="images/index_fast_nav_3.gif"></a>
+	<a class="c-interact" href="javascript:;"><img src="images/index_fast_nav_4.gif"></a>
+</div>
+
+<div class="c-index-h">
+	<strong>精彩互动</strong>
+	<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
+</div>
+<div id="interactionCtn" class="c-index-cell-3 openNews">
+	
+</div>
+
+<div class="c-index-h">
+	<strong>热点新闻</strong>
+	<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
+</div>
+<div id="hotNewsCtn" class="c-index-cell-1 openNews">
+</div>
+
+<!--<div class="c-index-h">
+	<strong>主持人</strong>
+	<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
+</div>
+<div class="c-index-cell-3">
+	<a href="javascript:;">
+		<img src="images/60x60.gif">
+		<div class="c-title">阿斯顿发生地方发生地方撒</div>
+	</a>
+	<a href="javascript:;">
+		<img src="images/60x60.gif">
+		<div class="c-title">阿斯顿发生地方发地方撒地</div>
+	</a>
+	<a href="javascript:;">
+		<img src="images/60x60.gif">
+		<div class="c-title">阿斯顿发生地方发生方地方</div>
+	</a>
+</div>-->
+
+
+
+
+</body>
+</html>

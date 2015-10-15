@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <script src="js/zepto.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet" />
+    <link href="css/video.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	
+      	$(document).ready(function() {
+      		//直播点播切换
+      		var liveCtn = document.querySelector("#liveCtn"),
+      			bookCtn = document.querySelector("#bookCtn"),
+      			targetCtn = $(".targetCtn");
+      		mui('#tabVideo').on('tap', 'a', function(e) {
+      			var target = this.getAttribute('rel');
+      			document.querySelector('#tabVideo .c-on').classList.remove('c-on');
+      			this.classList.add('c-on');
+      			targetCtn.css('display','none');
+      			document.getElementById(target).style.display = 'block';
+      			//从直播切换到点播暂停直播
+      			videoSource.pause();
+      		})
+      		
+      		//切换直播频道 初始化nbtv1直播
+      		var videoSource = document.getElementById('videoSource');
+      		videoSource.setAttribute('src','http://zb.nbtv.cn:8989/hls-live/livepkgr/_definst_/liveevent/'+videoPath[0]+'.m3u8');
+      		mui('#videoLiveNav').on('tap', 'a', function(e) {
+      			document.querySelector('#liveCtn .c-on').classList.remove('c-on');
+      			this.classList.add('c-on');
+      			videoSource.setAttribute('src','http://zb.nbtv.cn:8989/hls-live/livepkgr/_definst_/liveevent/'+videoPath[this.getAttribute('rel')]+'.m3u8');
+      		});
+
+      		//切换视频过程中等待对话框
+      		var waitingTabVideoLive = null,
+      			isWaitingTabVideoLiveClosed = false,
+      			waitingTabVideoLiveTimeout = null,
+      			videoLiveFirstLoadFlg = true;
+      		videoSource.addEventListener('canplay', function(){
+      			if(!isWaitingTabVideoLiveClosed && !videoLiveFirstLoadFlg) {
+      				waitingTabVideoLive.close();
+      				isWaitingTabVideoLiveClosed = true;
+      				clearTimeout(waitingTabVideoLiveTimeout);
+      			}    			
+      			videoLiveFirstLoadFlg = false;
+      		});
+
+      		videoSource.addEventListener('loadstart', function(){
+      			if(!videoLiveFirstLoadFlg){
+      				waitingTabVideoLive = plus.nativeUI.showWaiting('视频加载中，请等待...');  			
+	      			isWaitingTabVideoLiveClosed = false;
+	      			waitingTabVideoLiveTimeout = setTimeout(function() {
+	      				if(!isWaitingTabVideoLiveClosed) {
+	      					waitingTabVideoLive.close();
+	      					isWaitingTabVideoLiveClosed = true;
+	      					mui.toast('视频加载失败');
+	      				}     				
+	      			},10000)
+	      		}
+      		});
+      		
+      		
+      	})
+      	
+      	mui.plusReady(function() {
+      		//点击栏目展开列表
+      		mui('#bookCtn').on('tap', 'li', function(e) {
+      			var webview = mui.openWindow({
+				    url:'video_book_list.html',
+				    id:'video_book_list.html',
+				    styles:{
+				      top:'0px',//新页面顶部位置
+				      bottom:'0px'
+				    },
+				    extras:{
+				    		cid:this.getAttribute('cid'),
+				    		title:this.getAttribute('title')
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+      		});
+      		
+      		initColumnsFun(12, document.getElementById('nbtv1'), 50);
+      		initColumnsFun(13, document.getElementById('nbtv2'), 50);
+      		initColumnsFun(14, document.getElementById('nbtv3'), 50);
+      		initColumnsFun(15, document.getElementById('nbtv4'), 50);
+      		initColumnsFun(16, document.getElementById('nbtv5'), 50);   		
+      	})
+      	
+      	//请求点播的节目列表
+      	function initColumnsFun(cid, appendTarget, count){     		
+      		mui.ajax('http://cmsapi.tools.nbtv.cn',{
+				data:{
+					task:'get-children-columns',
+					channelId:cid,
+					offset:0,
+					count:count
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(data){
+					var fragment = document.createDocumentFragment();
+					var li;
+					mui.each(data.data,function(){
+						li = document.createElement('li');
+						li.setAttribute('cid',this.id);
+						li.setAttribute('title',this.name);
+						li.innerHTML = '<img src="'+this.index_img+'" /><div>'+this.name+'</div>';
+						fragment.appendChild(li);
+					});
+					appendTarget.innerHTML = '';			
+					appendTarget.appendChild(fragment);
+				},
+				error:function(xhr,type,errorThrown){
+				}
+			});
+      	}
+      	
+      	var videoPath = ["nbtv1_"+getVideoEncrypt(1),
+      	"nbtv2_"+getVideoEncrypt(2),
+      	"nbtv3_"+getVideoEncrypt(3),
+      	"nbtv4_"+getVideoEncrypt(4),
+      	"nbtv5_"+getVideoEncrypt(5)];
+      	
+      	function getVideoEncrypt(index){	
+      		var date = new Date();
+      		var year = date.getFullYear().toString().substring(2,4);
+      		var month = (date.getMonth()+1).toString();
+      		var day = date.getDate().toString();
+			var num1 =  parseInt((new Date(date.toDateString()).getTime())/1000);
+			var num2 = num1 - 1400000000;
+			var num3 = num2 * (index + 5);
+			var num4 = num3 + 126789021;
+			var num5 = num4 * (5 + date.getDay());
+			return parseInt( num5 / (parseInt(year+month+day)));
+		}
+    </script>
+</head>
+<body>
+	<div id="tabVideo" class="c-video-nav">
+		<a class="c-on" href="javascript:;" rel="liveCtn">直播</a>
+		<a href="javascript:;" rel="bookCtn">点播</a>
+	</div>
+	
+	<!--直播-->
+	<div id="liveCtn" class="targetCtn">
+		<div class="c-video-box">
+			<video id="videoSource" webkit-playsinline="true" controls="controls">
+				<source type="video/mp4">
+			</video>
+		</div>
+		
+		<div class="c-index-broadcast">摇一摇每天有100次机会赢iphone6 斗地主淘汰</div>
+		
+		<div>
+			<div id="videoLiveNav" class="c-video-live-nav">
+				<a class="c-on" href="javascript:;" rel="0">
+					<img src="images/60x60.gif" />
+					<div>新闻综合频道</div>
+				</a>
+				<a  href="javascript:;" rel="1">
+					<img src="images/60x60.gif" />
+					<div>经济生活频道</div>
+				</a>
+				<a href="javascript:;" rel="2">
+					<img src="images/60x60.gif" />
+					<div>都市文体频道</div>
+				</a>
+				<a  href="javascript:;" rel="3">
+					<img src="images/60x60.gif" />
+					<div>影视剧频道</div>
+				</a>
+				<a  href="javascript:;" rel="4">
+					<img src="images/60x60.gif" />
+					<div>少儿频道</div>
+				</a>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+		
+		
+		
+	</div>
+		
+	
+	<!--点播-->
+	<div id="bookCtn" class="targetCtn" style="display:none;">
+		<section class="c-video-book-section">
+			<div class="c-sub-title">NBTV<strong>-1</strong> 新闻综合频道</div>
+			<div>
+				<ul id="nbtv1">
+					<li cid="10209"><img src="images/60x60.gif" /><div>宁波新闻</div></li>
+					<li cid="10208"><img src="images/60x60.gif" /><div>看看看</div></li>
+					<li><img src="images/60x60.gif" /><div>丹说</div></li>
+					<li><img src="images/60x60.gif" /><div>刘博士调查室</div></li>
+					<li><img src="images/60x60.gif" /><div>家博会</div></li>
+					<li><img src="images/60x60.gif" /><div>养生有一套</div></li>
+					<li><img src="images/60x60.gif" /><div>锋领港城</div></li>
+					<li><img src="images/60x60.gif" /><div>法系邻里</div></li>
+				</ul>
+				<div style="clear:both;"></div>
+			</div>
+		</section>
+		
+		<section class="c-video-book-section">
+			<div class="c-sub-title">NBTV<strong>-2</strong> 经济生活频道</div>
+			<div>
+				<ul id="nbtv2">
+					<li><img src="images/60x60.gif" /><div>宁波新闻</div></li>
+					<li><img src="images/60x60.gif" /><div>看看看</div></li>
+					<li><img src="images/60x60.gif" /><div>丹说</div></li>
+					<li><img src="images/60x60.gif" /><div>刘博士调查室</div></li>
+					<li><img src="images/60x60.gif" /><div>家博会</div></li>
+					<li><img src="images/60x60.gif" /><div>养生有一套</div></li>
+					<li><img src="images/60x60.gif" /><div>锋领港城</div></li>
+					<li><img src="images/60x60.gif" /><div>法系邻里</div></li>
+				</ul>
+				<div style="clear:both;"></div>
+			</div>
+		</section>
+		
+		<section class="c-video-book-section">
+			<div class="c-sub-title">NBTV<strong>-3</strong> 都市问题频道</div>
+			<div>
+				<ul  id="nbtv3">
+					<li><img src="images/60x60.gif" /><div>宁波新闻</div></li>
+					<li><img src="images/60x60.gif" /><div>看看看</div></li>
+					<li><img src="images/60x60.gif" /><div>丹说</div></li>
+					<li><img src="images/60x60.gif" /><div>刘博士调查室</div></li>
+					<li><img src="images/60x60.gif" /><div>家博会</div></li>
+					<li><img src="images/60x60.gif" /><div>养生有一套</div></li>
+					<li><img src="images/60x60.gif" /><div>锋领港城</div></li>
+					<li><img src="images/60x60.gif" /><div>法系邻里</div></li>
+				</ul>
+				<div style="clear:both;"></div>
+			</div>
+		</section>
+		
+		<section class="c-video-book-section">
+			<div class="c-sub-title">NBTV<strong>-4</strong> 影视剧频道</div>
+			<div>
+				<ul  id="nbtv4">
+					<li><img src="images/60x60.gif" /><div>宁波新闻</div></li>
+					<li><img src="images/60x60.gif" /><div>看看看</div></li>
+					<li><img src="images/60x60.gif" /><div>丹说</div></li>
+					<li><img src="images/60x60.gif" /><div>刘博士调查室</div></li>
+					<li><img src="images/60x60.gif" /><div>家博会</div></li>
+					<li><img src="images/60x60.gif" /><div>养生有一套</div></li>
+					<li><img src="images/60x60.gif" /><div>锋领港城</div></li>
+					<li><img src="images/60x60.gif" /><div>法系邻里</div></li>
+				</ul>
+				<div style="clear:both;"></div>
+			</div>
+		</section>
+		
+		<section class="c-video-book-section">
+			<div class="c-sub-title">NBTV<strong>-5</strong> 少儿频道</div>
+			<div>
+				<ul  id="nbtv5">
+					<li><img src="images/60x60.gif" /><div>宁波新闻</div></li>
+					<li><img src="images/60x60.gif" /><div>看看看</div></li>
+					<li><img src="images/60x60.gif" /><div>丹说</div></li>
+					<li><img src="images/60x60.gif" /><div>刘博士调查室</div></li>
+					<li><img src="images/60x60.gif" /><div>家博会</div></li>
+					<li><img src="images/60x60.gif" /><div>养生有一套</div></li>
+					<li><img src="images/60x60.gif" /><div>锋领港城</div></li>
+					<li><img src="images/60x60.gif" /><div>法系邻里</div></li>
+				</ul>
+				<div style="clear:both;"></div>
+			</div>
+		</section>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet" />
+    <link href="css/video.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	
+      	mui.plusReady(function() {
+      		//初始化视频框
+      		var maid = plus.webview.currentWebview().maid,
+      			vTitlt = plus.webview.currentWebview().title,
+      			videoSource = document.getElementById('videoSource');
+      		videoSource.setAttribute('src',maid);
+      		document.getElementById('videoTitle').innerHTML = vTitlt;
+      		
+      		//切换视频过程中等待对话框
+      		var waitingTabVideoLive = null,
+      			isWaitingTabVideoLiveClosed = false,
+      			waitingTabVideoLiveTimeout = null;
+
+      		videoSource.addEventListener('loadstart', function(){
+      			waitingTabVideoLive = plus.nativeUI.showWaiting('视频加载中，请等待...');
+      			isWaitingTabVideoLiveClosed = false;
+      			waitingTabVideoLiveTimeout = setTimeout(function() {
+      				if(!isWaitingTabVideoLiveClosed) {
+      					waitingTabVideoLive.close();
+      					isWaitingTabVideoLiveClosed = true;
+      				}     				
+      			},1000)
+      		});
+      	})
+    </script>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav c-blue-top">
+  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+    <span class="mui-icon mui-icon-left-nav"></span>
+    返回
+  </button>
+  <h1 id="typeTitle" class="mui-title">视频播放</h1>
+</header>
+<div class="mui-content">
+	<div class="c-video-box">
+		<video id="videoSource" webkit-playsinline="webkit-playsinline"  controls="controls">
+		</video>
+	</div>
+	<div id="videoTitle" class="c-video-title"></div>
+	
+	<div class="c-comment-ctn">
+		<div class="c-comment-info">评论 3</div>
+		<div class="c-comment-list">
+			<ul>
+				<li>
+					<div>
+						<img src="">
+						<div class="c-comment-cnt">
+							<div>
+								<span class="c-name">游客</span>
+								<span class="c-time">09-09 14:32</span>
+							</div>
+							<div class="c-content">HTML最开始其实不是一个编程语言，确实用不着什么ide。</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<img src="">
+						<div class="c-comment-cnt">
+							<div>
+								<span class="c-name">游客</span>
+								<span class="c-time">09-09 14:32</span>
+							</div>
+							<div class="c-content">但是发展到现在，7w多个语法，js越来越庞大，真开发一个达到原生水准的App，不是用以前的文本编辑器能搞定的。</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<img src="">
+						<div class="c-comment-cnt">
+							<div>
+								<span class="c-name">游客</span>
+								<span class="c-time">09-09 14:32</span>
+							</div>
+							<div class="c-content">目前竟然没有一个开发工具能把7w多HTML5语法提示齐全，这不科学，在原生开发里这是不可想象的，xcode之于iOS，eclipse之于Android，vs之于winphone，在语法提示、转到定义、重构、调试等方面都非常高效。
+作为同时熟悉原生和HTML5开发的我们，我们在开发HTML5时明显感受到效率低下。</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="c-fix-bottom"></div>
+	<div class="c-comment-input">
+		<input type="text" placeholder="我说两句..." />
+		<a href="javascript:;">发送</a>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>上传视频</title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <link href="css/show.css" rel="stylesheet"/>
+    <script src="js/zepto.min.js"></script>
+    <script src="js/jquery.uploadifive.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	mui.plusReady(function() {
+			$('#file_upload').uploadifive({
+				'auto'             : false,
+				'checkScript'      : 'check-exists.php',
+				'formData'         : {
+									   
+				                     },
+				'queueID'          : 'queue',
+				'uploadScript'     : 'uploadifive.php',
+				'onUploadComplete' : function(file, data) { console.log(data); },
+				'multi'           : false
+			});	
+		})
+      	
+    </script>
+</head>
+<body>
+<form>
+	<header class="mui-bar mui-bar-nav c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 class="mui-title">上传视频</h1>
+	  <a id="upload" class="mui-icon mui-pull-right" href="javascript:$('#file_upload').uploadifive('upload')">提交</a>
+	</header>
+	
+	<div class="c-show-upload-content">
+		<div>
+			<div>
+				<div class="c-show-upload-btn">
+					<input id="file_upload" class="c-show-upload-file" name="file_upload" type="file"  />
+					<img src="images/upload_btn.gif">
+				</div>
+				<div class="c-upload-info">
+					<div id="queue">
+						
+					</div>
+					<div id="fileSize" class="c-file">2000KB</div>
+					<div class="c-progress-bar"><div style="width:40%;" class="c-progress-content"></div></div>
+					<div id="speed" class="c-speed">0KB/S</div>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+			<div>
+				<input class="c-show-upload-title" placeholder="输入标题（5-50字以内）" type="text">
+			</div>
+			<div>
+				<textarea class="c-show-upload-textarea" placeholder="说点什么吧...（10-140字以内）"></textarea>
+			</div>
+		</div>
+	</div>
+</form>
+</body>
+</html>

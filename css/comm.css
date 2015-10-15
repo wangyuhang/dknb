@@ -1,0 +1,33 @@
+@font-face {
+	font-family:ico;
+    src:url('../fonts/ico.ttf') format('truetype');/* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+}
+.c-ico{
+	font-family:ico;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+.c-ico-news:before{content:'\e613';}
+.c-ico-video:before{content:'\e60b';}
+.c-ico-interaction:before{content:'\e608';}
+.c-ico-local:before{content:'\e602';}
+.c-ico-user:before{content:'\e60f';}
+.c-ico-all:before{content:'\e609';}
+.c-ico-traver:before{content:'\e600';}
+.c-ico-photo:before{content:'\e603';}
+.c-ico-baby:before{content:'\e601';}
+.c-ico-delicacy:before{content:'\e606';}
+.c-ico-zan:before{content:'\e61e';}
+.c-ico-reply:before{content:'\e617';}
+.c-ico-share:before{content:'\e61d';}
+
+.mui-title img{width:150px; height:25px; margin-top:12px;}
+.c-blue-top{background-color:#07a7e1;}
+.mui-bar .mui-btn-link{color:#fff;}
+.mui-title{color:#fff;}
+
+
+/*c-index-broadcast*/
+.c-index-broadcast{height:36px; line-height:36px; padding:0 10px; background-color:#f0f0f0; font-size:14px; color:#818181;}

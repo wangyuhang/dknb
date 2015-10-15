@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <link href="css/show.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init({
+      		swipeBack: true
+      	});
+      	mui.plusReady(function(){
+      		//首页快捷菜单点击事件
+		    mui('#cShowContent').on('tap', '.c-sub-title', function(e) {
+		    		var pageId = this.getAttribute('link'),
+		    			title = this.getAttribute('title');
+		    		var webview = mui.openWindow({
+				    url:pageId+'.html',
+				    id:pageId,
+				    styles:{
+				      top:'0px',
+				      bottom:'0px'
+				    },
+				    extras:{
+				    		title:title
+				    },
+				    waiting:{
+				      autoShow:true,
+				      title:'正在加载...'
+				    }				  
+				})
+		    });
+		})
+    </script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 id="typeTitle" class="mui-title">全民秀</h1>
+	</header>
+	<div id="cShowContent" class="c-show-content">
+		<section class="c-show-columns">
+			<div class="c-sub-title" link="show_list" title="爱旅行">
+				<span class="c-ico c-ico-traver"><span>爱旅行</span></span>
+				<a class="more" href="javascript:;"><span class="mui-icon mui-icon-arrowright"></span></a>
+			</div>
+			<div class="mui-content" style="background-color:#fff">
+			    <ul class="mui-table-view mui-grid-view">
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">印象之旅</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">生活，听听看</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#"><img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">走吧，在不沁水</div>
+			            </a>
+			        </li>
+			    </ul>    
+			</div>
+		</section>
+		
+		<section class="c-show-columns">
+			<div class="c-sub-title" link="show_list" title="摄影控">
+				<span class="c-ico c-ico-photo"><span>摄影控</span></span>
+				<a class="more" href="javascript:;"><span class="mui-icon mui-icon-arrowright"></span></a>
+			</div>
+			<div class="mui-content" style="background-color:#fff">
+			    <ul class="mui-table-view mui-grid-view">
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">印象之旅</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">生活，听听看</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#"><img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">走吧，在不沁水</div>
+			            </a>
+			        </li>
+			    </ul>    
+			</div>
+		</section>
+		
+		<section class="c-show-columns">
+			<div class="c-sub-title" link="show_list" title="育儿分享">
+				<span class="c-ico c-ico-baby"><span>育儿分享</span></span>
+				<a class="more" href="javascript:;"><span class="mui-icon mui-icon-arrowright"></span></a>
+			</div>
+			<div class="mui-content" style="background-color:#fff">
+			    <ul class="mui-table-view mui-grid-view">
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">印象之旅</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">生活，听听看</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#"><img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">走吧，在不沁水</div>
+			            </a>
+			        </li>
+			    </ul>    
+			</div>
+		</section>
+		<section class="c-show-columns">
+			<div class="c-sub-title" link="show_list" title="爱美食">
+				<span class="c-ico c-ico-delicacy"><span>爱美食</span></span>
+				<a class="more" href="javascript:;"><span class="mui-icon mui-icon-arrowright"></span></a>
+			</div>
+			<div class="mui-content" style="background-color:#fff">
+			    <ul class="mui-table-view mui-grid-view">
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">印象之旅</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#">
+			                <img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">生活，听听看</div>
+			            </a>
+			        </li>
+			        <li class="mui-table-view-cell mui-media mui-col-xs-4">
+			            <a href="#"><img class="mui-media-object" src="images/60x60.gif">
+			                <div class="mui-media-body">走吧，在不沁水</div>
+			            </a>
+			        </li>
+			    </ul>    
+			</div>
+		</section>
+		
+	</div>
+</body>
+</html>

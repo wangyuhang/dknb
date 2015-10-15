@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <link href="css/show.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	mui.plusReady(function() {
+			//init
+			document.getElementById('typeTitle').innerHTML = plus.webview.currentWebview().title;
+			
+			//点击上传
+			document.getElementById('upload').addEventListener('click', function(e) {
+		    		var webview = mui.openWindow({
+				    url:'show_upload.html',
+				    id:'show_upload',
+				    styles:{
+				      top:'0px',
+				      bottom:'0px'
+				    },
+				    extras:{
+				    },
+				    waiting:{
+				      autoShow:true,
+				      title:'正在加载...'
+				    }				  
+				})
+		    });
+		})
+    </script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 id="typeTitle" class="mui-title"></h1>
+	  <a id="upload" class="mui-icon mui-pull-right">上传</a>
+	</header>
+	
+	<div class="c-show-list">
+		<ul>
+			<li>
+				<div class="c-cell">
+					<div>
+						<img class="c-avatar" src="images/42x42.gif">
+						<div class="c-info"><div class="c-name">绯红</div><div class="c-date">2015-09-09</div></div>
+						<div style="clear:both;"></div>
+					</div>
+					<div class="c-cover"><img src="images/60x60.gif"><div class="c-title">宝宝成长日记</div></div>
+					<div class="c-other">
+						<div class="c-ico c-ico-zan c-zan"><span>23</span></div>
+						<div class="c-ico c-ico-reply c-reply"><span>10</span></div>
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+			</li>
+			
+			<li>
+				<div class="c-cell">
+					<div>
+						<img class="c-avatar" src="images/42x42.gif">
+						<div class="c-info"><div class="c-name">绯红</div><div class="c-date">2015-09-09</div></div>
+						<div style="clear:both;"></div>
+					</div>
+					<div class="c-cover"><img src="images/60x60.gif"><div class="c-title">宝宝成长日记</div></div>
+					<div class="c-other">
+						<div class="c-ico c-ico-zan c-zan"><span>23</span></div>
+						<div class="c-ico c-ico-reply c-reply"><span>10</span></div>
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+			</li>
+			
+			<li>
+				<div class="c-cell">
+					<div>
+						<img class="c-avatar" src="images/42x42.gif">
+						<div class="c-info"><div class="c-name">绯红</div><div class="c-date">2015-09-09</div></div>
+						<div style="clear:both;"></div>
+					</div>
+					<div class="c-cover"><img src="images/60x60.gif"><div class="c-title">宝宝成长日记</div></div>
+					<div class="c-other">
+						<div class="c-ico c-ico-zan c-zan"><span>23</span></div>
+						<div class="c-ico c-ico-reply c-reply"><span>10</span></div>
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+			</li>
+			
+			<li>
+				<div class="c-cell">
+					<div>
+						<img class="c-avatar" src="images/42x42.gif">
+						<div class="c-info"><div class="c-name">绯红</div><div class="c-date">2015-09-09</div></div>
+						<div style="clear:both;"></div>
+					</div>
+					<div class="c-cover"><img src="images/60x60.gif"><div class="c-title">宝宝成长日记</div></div>
+					<div class="c-other">
+						<div class="c-ico c-ico-zan c-zan"><span>23</span></div>
+						<div class="c-ico c-ico-reply c-reply"><span>10</span></div>
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+			</li>
+			
+			<li>
+				<div class="c-cell">
+					<div>
+						<img class="c-avatar" src="images/42x42.gif">
+						<div class="c-info"><div class="c-name">绯红</div><div class="c-date">2015-09-09</div></div>
+						<div style="clear:both;"></div>
+					</div>
+					<div class="c-cover"><img src="images/60x60.gif"><div class="c-title">宝宝成长日记</div></div>
+					<div class="c-other">
+						<div class="c-ico c-ico-zan c-zan"><span>23</span></div>
+						<div class="c-ico c-ico-reply c-reply"><span>10</span></div>
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+</body>
+</html>

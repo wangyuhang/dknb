@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <link href="css/news.css" rel="stylesheet"/>
+    	<script type="text/javascript" src="js/common.js"></script>	
+	<style>
+		.mui-popover{position:fixed;}
+	</style>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav c-top-bar">
+  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+    <span class="mui-icon mui-icon-left-nav"></span>
+    返回
+  </button>
+  <h1 id="typeTitle" class="mui-title"></h1>
+  <a id="sharePop" class="mui-icon mui-pull-right c-ico c-ico-share" href="#share"></a>
+</header>
+
+<div class="mui-content">
+	<div style="display:block;" id="output"></div>
+	<h1 id="newsTitle" class="news-title"></h1>
+	<div class="news-info">
+		<span id="createTime"></span>
+	</div>
+	<div id="newsContent" class="news-content">正在加载中....</div>
+	<div></div>
+	
+</div>
+
+<!--分享-->
+<div id="share" class="mui-popover mui-popover-action mui-popover-bottom">
+	<ul id="dlist" class="mui-table-view"></ul>
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<a href="#share"><b>取消</b></a>
+		</li>
+	</ul>
+</div>
+<!--分享 end-->
+
+<script>
+
+	function transTime(nS) {     
+       var date =  new Date(parseInt(nS)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+       date = date.substring(0, date.indexOf('G'))
+       return date;
+    }     
+	
+	//分享相关变量
+	//list，在这个element里打印分享按钮
+	//shares，分享的对象数组
+	//sharecontent，分享内容
+	var list=null,
+		shares=null,
+		sharecontent = {};
+	
+	
+		
+	//更新分享列表
+	function updateServices(){
+		list.innerHTML="";
+		plus.share.getServices( function(ss){
+			shares = ss;
+			for( var i in ss ) {
+				var s = ss[i];
+				var item = document.createElement("li");
+				item.setAttribute( "class", "mui-table-view-cell" );
+				item.setAttribute( "onclick", "shareAction(this.plusShare)" );
+				item.innerText = s.description;
+				item.plusShare = s;
+				list.appendChild( item );
+			}
+		}, function(e){
+			outSet( "获取分享服务列表失败："+e.message );
+		} );
+	}
+	//分享操作@param {plus.share.ShareService}
+	
+	function shareAction(s) {
+		outSet( "分享操作：" );
+		if ( !s ) {
+			outLine( "无效的分享服务！" );
+			return;
+		}
+		if ( s.authenticated ) {
+			shareMessage( s );
+		} else {
+			s.authorize( shareMessage, function(e){
+				outLine( "认证授权失败："+e.code+" - "+e.message );
+			} )
+		}
+	}
+	//发送分享消息 @param {plus.share.ShareService}
+	 
+	function shareMessage(s){
+		s.send(sharecontent, function(){
+			//outLine( "分享到\""+s.description+"\"成功！ " );
+			mui.toast( "分享到\""+s.description+"\"成功！ " );
+		}, function(e){
+			outLine( "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
+			mui.toast(  "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
+		} );
+		mui('#share').popover('toggle');
+	}
+	//解除所有分享服务的授权
+	function cancelAuth(){try{
+		outSet( "解除授权：" );
+		for ( var i in shares ) {
+			var s = shares[i];
+			if ( s.authenticated ) {
+				outLine( "取消\""+s.description+"\"");
+			}
+			s.forbid();
+		}
+		// 取消授权后需要更新服务列表
+		updateServices();
+		outLine( "操作成功！" );}catch(e){alert(e);}
+	}
+	
+	
+	// 创建下载任务
+	var thumbsUrl = '';
+	function createDownload() {
+		var dtask = plus.downloader.createDownload( thumbsUrl, {}, function ( d, status ) {
+			// 下载完成
+			if ( status == 200 ) {
+				//sharecontent.thumbs = ['file://' + plus.io.convertLocalFileSystemURL(d.filename)];
+				sharecontent.pictures = ['file://' + plus.io.convertLocalFileSystemURL(d.filename)];
+				alert(sharecontent.pictures);
+				//alert( "Download success: " + d.filename );
+			} else {
+				alert( "Download failed: " + status ); 
+			}  
+		});
+		//dtask.addEventListener( "statechanged", onStateChanged, false );
+		dtask.start(); 
+	}
+  
+
+	mui.init({
+		swipeBack:true,
+		gestureConfig:{
+			doubletap:true
+		}
+	});
+			
+	mui.plusReady(function() {
+		//接收上个页面传入的参数
+		var newsType = plus.webview.currentWebview().tp,
+			newsTitle = plus.webview.currentWebview().title,
+			newsThumbs = plus.webview.currentWebview().thumbs;
+			
+		thumbsUrl = plus.webview.currentWebview().thumbs;
+		createDownload();
+		
+		//赋值分享内容
+		/*sharecontent = {
+			'title':newsTitle,
+			'thumbs':'_downloads/1505ebe174655.jpg',
+			'href':'http://hd.nbtv.cn/testapp/test.html'
+		};*/
+		list = document.getElementById("dlist");
+		//调用分享功能
+		updateServices();
+		
+		
+		//填充页面内容
+		document.getElementById('typeTitle').innerHTML = newsType;
+		document.getElementById('newsTitle').innerHTML = newsTitle;
+
+		
+		//获取平面宽度，用于给文章图片设定宽度
+		var windowWidth = plus.webview.currentWebview().getStyle().width;
+		
+		//根据文章id请求文章内容
+		var aid = plus.webview.currentWebview().aid;
+		mui.ajax('http://zt.nbtv.cn/st/201505/qxw/cms_article_api.php',{
+			data:{
+				aid:aid
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				var title = data.data.title,
+					subtitle = data.data.sub_title,
+					desc = data.data.desc,
+					createTime =  data.data.create_time;
+
+				document.getElementById('newsContent').innerHTML = data.data.article_content;
+				document.getElementById('createTime').innerHTML = transTime(createTime);
+				
+				var imgs = document.getElementsByTagName('img'),
+					widthLimit = windowWidth-40;
+				mui.each(imgs, function() {
+					var scale = (this.width/widthLimit);
+					this.width = widthLimit;
+					this.height = this.height/scale;
+				});
+				
+			},
+			error:function(xhr,type,errorThrown){
+				
+			}
+		});
+		
+		
+	});
+				
+			
+</script>
+
+
+
+
+<script>	
+	var info = document.getElementById("info");
+	mui('body').on('tap', '#sharePop', function() {
+		var a = this,
+			parent;
+		//根据点击按钮，反推当前是哪个actionsheet
+		for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
+			if (parent.classList.contains('mui-popover-action')) {
+				break;
+			}
+		}
+		//关闭actionsheet
+		mui('#' + parent.id).popover('toggle');
+		//info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
+	})
+</script>
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/pop_nav.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	mui.plusReady(function(){
+      		document.getElementById('closeNav').addEventListener('tap', function() {
+      			plus.webview.currentWebview().hide();
+      		})
+      	})
+    </script>
+</head>
+<body>
+<!--右上角弹出菜单-->
+<div class="c-popnav">
+	<div class="c-popnav-arrow"></div>
+	<div class="c-scroll-wrapper">
+		<div class="c-scroll">
+			<ul>
+				<li><a href="#"><img src="images/42x42.gif"><div>首页</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>摇一摇</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>新闻</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>电视</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>广播</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>爆料</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>活动</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>社区</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>服务</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>全民秀</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>积分商城</div></a></li>
+				<li><a href="#"><img src="images/42x42.gif"><div>邀请好友</div></a></li>
+				<div style="clear:both;"></div>
+			</ul>
+			<div class="c-close-btn"><a id="closeNav" href="javascript:;">x</a></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
