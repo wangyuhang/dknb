@@ -12,6 +12,14 @@
     <script type="text/javascript" charset="utf-8">
      	mui.init();
       	mui.plusReady(function(){
+      		/*mui.openWindow({
+      			url:'http://hd.nbtv.cn/testapp/test2.html',
+      			styles:{
+				      top:'0px',//新页面顶部位置
+				      bottom:'0px'
+				    }
+      		})*/
+      		
       		//首页快捷菜单点击事件
 		    mui('#indexFastNav').on('tap', 'a', function(e) {
 		    		var pageId = this.getAttribute('link');

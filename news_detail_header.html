@@ -24,7 +24,7 @@
 </header>
 
 <div class="mui-content">
-	<div style="display:block;" id="output"></div>
+	<div style="display:none;" id="output"></div>
 	<h1 id="newsTitle" class="news-title"></h1>
 	<div class="news-info">
 		<span id="createTime"></span>
@@ -104,7 +104,7 @@
 			//outLine( "分享到\""+s.description+"\"成功！ " );
 			mui.toast( "分享到\""+s.description+"\"成功！ " );
 		}, function(e){
-			outLine( "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
+			//outLine( "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
 			mui.toast(  "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
 		} );
 		mui('#share').popover('toggle');
@@ -131,16 +131,30 @@
 		var dtask = plus.downloader.createDownload( thumbsUrl, {}, function ( d, status ) {
 			// 下载完成
 			if ( status == 200 ) {
-				//sharecontent.thumbs = ['file://' + plus.io.convertLocalFileSystemURL(d.filename)];
-				sharecontent.pictures = ['file://' + plus.io.convertLocalFileSystemURL(d.filename)];
-				alert(sharecontent.pictures);
-				//alert( "Download success: " + d.filename );
+				sharecontent.thumbs = ['file://' + plus.io.convertLocalFileSystemURL(d.filename)];
+				compressImage(sharecontent.thumbs[0])
 			} else {
 				alert( "Download failed: " + status ); 
 			}  
 		});
 		//dtask.addEventListener( "statechanged", onStateChanged, false );
 		dtask.start(); 
+	}
+	
+	//图片剪裁
+	function compressImage(url) {
+		plus.zip.compressImage(
+			{
+				'src': url,
+				'dst': url,
+				'overwrite': true,
+				'quality': 10,
+				'width': '40%'
+			},
+			function() {
+			},function(error) {
+			}
+		);
 	}
   
 
@@ -152,20 +166,21 @@
 	});
 			
 	mui.plusReady(function() {
+
 		//接收上个页面传入的参数
 		var newsType = plus.webview.currentWebview().tp,
-			newsTitle = plus.webview.currentWebview().title,
-			newsThumbs = plus.webview.currentWebview().thumbs;
+			newsTitle = plus.webview.currentWebview().title;
 			
-		thumbsUrl = plus.webview.currentWebview().thumbs;
+		thumbsUrl = plus.webview.currentWebview().thumbs;		
 		createDownload();
 		
+		
+		
 		//赋值分享内容
-		/*sharecontent = {
+		sharecontent = {
 			'title':newsTitle,
-			'thumbs':'_downloads/1505ebe174655.jpg',
 			'href':'http://hd.nbtv.cn/testapp/test.html'
-		};*/
+		};
 		list = document.getElementById("dlist");
 		//调用分享功能
 		updateServices();
