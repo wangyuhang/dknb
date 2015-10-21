@@ -31,3 +31,17 @@
 
 /*c-index-broadcast*/
 .c-index-broadcast{height:36px; line-height:36px; padding:0 10px; background-color:#f0f0f0; font-size:14px; color:#818181;}
+
+/*c-comment-ctn*/
+.c-comment-ctn{margin-top:10px; background-color:#fff;}
+.c-comment-info{padding:10px 10px 0 10px; text-align:right; font-size:14px;}
+.c-comment-list ul{padding:0 10px; margin:0; list-style:none;}
+.c-comment-list ul li{padding:10px 0; border-bottom:1px solid #f0f0f0;}
+.c-comment-list ul li img{width:40px; height:40px; margin-right:10px; float:left; border-radius:20px;}
+.c-comment-list ul li .c-comment-cnt{display:table-cell; font-size:14px;}
+.c-comment-list ul li .c-time{color:#999;}
+.c-comment-list ul li .c-content{margin-top:5px; color:#666;}
+.c-comment-input{width:100%; height:44px; padding:6px; background-color:#e5e5e5; position:fixed; bottom:0;}
+.c-comment-input input{width:85%; height:32px; background-color:#fff; float:left; font-size:12px;}
+.c-comment-input a{display:inline-block; width:13.5%; height:32px; line-height:32px; text-align:center; font-size:14px;}
+.c-fix-bottom{width:100%; height:44px;}

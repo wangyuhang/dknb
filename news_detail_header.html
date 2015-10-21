@@ -25,12 +25,26 @@
 
 <div class="mui-content">
 	<div style="display:none;" id="output"></div>
-	<h1 id="newsTitle" class="news-title"></h1>
-	<div class="news-info">
-		<span id="createTime"></span>
+	<div class="c-news">
+		<h1 id="newsTitle" class="news-title"></h1>
+		<div class="news-info">
+			<span id="createTime"></span>
+		</div>
+		<div id="newsContent" class="news-content">正在加载中....</div>
 	</div>
-	<div id="newsContent" class="news-content">正在加载中....</div>
-	<div></div>
+	
+	
+	<div class="c-comment-ctn">
+		<!--<div class="c-comment-info">评论 3</div>-->
+		<div class="c-comment-list">
+			<ul id="commentList"></ul>
+		</div>
+	</div>
+	<div class="c-fix-bottom"></div>
+	<div class="c-comment-input">
+		<input type="text" placeholder="我说两句..." />
+		<a href="javascript:;">发送</a>
+	</div>
 	
 </div>
 
@@ -197,20 +211,22 @@
 		
 		//根据文章id请求文章内容
 		var aid = plus.webview.currentWebview().aid;
-		mui.ajax('http://zt.nbtv.cn/st/201505/qxw/cms_article_api.php',{
+		mui.ajax('http://cmsapi.tools.nbtv.cn',{
 			data:{
-				aid:aid
+				articleId:aid,
+				task: 'get-single-article'
 			},
 			dataType:'json',//服务器返回json格式数据
 			type:'get',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；
 			success:function(data){
-				var title = data.data.title,
-					subtitle = data.data.sub_title,
-					desc = data.data.desc,
-					createTime =  data.data.create_time;
+				var result = (data.data)[0],
+					title = result.title,
+					subtitle = result.sub_title,
+					desc = result.desc,
+					createTime =  result.create_time;
 
-				document.getElementById('newsContent').innerHTML = data.data.article_content;
+				document.getElementById('newsContent').innerHTML = result.article_content;
 				document.getElementById('createTime').innerHTML = transTime(createTime);
 				
 				var imgs = document.getElementsByTagName('img'),
@@ -228,6 +244,41 @@
 		});
 		
 		
+		//根据文章id请求评论数据
+		mui.ajax('http://cmscomment.tools.nbtv.cn/index.php',{
+			data:{
+				articleId:5,
+				r: 'app-comment/list',
+				offset: 0,
+				count: 5
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(data){
+				var arr = data.data,
+					html = '';
+				mui.each(arr, function() {
+					html += '<li>'+
+								'<div>'+
+									'<img src="">'+
+									'<div class="c-comment-cnt">'+
+										'<div>'+
+											'<span class="c-name">'+this.nickname+'</span>'+
+											'<span class="c-time">'+transTime(this.create_time)+'</span>'+
+										'</div>'+
+										'<div class="c-content">'+this.content+'</div>'+
+									'</div>'+
+								'</div>'+
+							'</li>'
+				});
+				document.getElementById('commentList').innerHTML = html;				
+			},
+			error:function(xhr,type,errorThrown){
+				
+			}
+		});
+		
 	});
 				
 			
@@ -237,7 +288,6 @@
 
 
 <script>	
-	var info = document.getElementById("info");
 	mui('body').on('tap', '#sharePop', function() {
 		var a = this,
 			parent;
@@ -249,7 +299,6 @@
 		}
 		//关闭actionsheet
 		mui('#' + parent.id).popover('toggle');
-		//info.innerHTML = "你刚点击了\"" + a.innerHTML + "\"按钮";
 	})
 </script>
 
