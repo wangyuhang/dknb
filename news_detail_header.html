@@ -148,8 +148,8 @@
 				'src': url,
 				'dst': url,
 				'overwrite': true,
-				'quality': 10,
-				'width': '40%'
+				'quality': 50,
+				'width': '60px'
 			},
 			function() {
 			},function(error) {
@@ -169,17 +169,18 @@
 
 		//接收上个页面传入的参数
 		var newsType = plus.webview.currentWebview().tp,
-			newsTitle = plus.webview.currentWebview().title;
+			newsTitle = plus.webview.currentWebview().title,
+			shareUrl = plus.webview.currentWebview().shareUrl;
 			
 		thumbsUrl = plus.webview.currentWebview().thumbs;		
 		createDownload();
 		
 		
 		
-		//赋值分享内容
+		//赋值分享内容		
 		sharecontent = {
 			'title':newsTitle,
-			'href':'http://hd.nbtv.cn/testapp/test.html'
+			'href':shareUrl
 		};
 		list = document.getElementById("dlist");
 		//调用分享功能

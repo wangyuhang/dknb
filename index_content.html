@@ -52,7 +52,8 @@
 		    		var id = this.getAttribute('aid'),
 					title = this.title,
 					type = this.getAttribute('tp'),
-					thumbs = this.getAttribute('thumbs');
+					thumbs = this.getAttribute('thumbs'),
+					shareUrl = this.getAttribute('share');
 		    		var pageId = this.getAttribute('link');
 		    		var webview = mui.openWindow({
 				    url:pageId+'.html',
@@ -65,7 +66,8 @@
 						aid:id,
 						title:title,
 						tp:type,
-						thumbs:thumbs
+						thumbs:thumbs,
+						shareUrl:shareUrl
 				    },
 				    waiting:{
 				      autoShow:true,//自动显示等待框，默认为true
@@ -147,7 +149,7 @@
 					mui.each(data.data,function(index){
 						div = document.createElement('div');
 						div.setAttribute('class','mui-slider-item');
-						div.innerHTML = '<a href="javascript:;" link="news_detail_header" aid="'+this.id+'" title="'+this.title+'" thumbs="'+this.index_img+'">'+
+						div.innerHTML = '<a href="javascript:;" link="news_detail_header" aid="'+this.id+'" title="'+this.title+'" thumbs="'+this.index_img+'" share="'+this.share_url+'">'+
 											'<img src="'+this.index_img+'">'+
 											'<p class="mui-slider-title">'+this.title+'</p>'+
 										'</a>';

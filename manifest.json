@@ -107,7 +107,7 @@
 		},
 		"runmode": "normal",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
-		"distribute": {"plugins":{"share":{"qq":{"appid":"","description":"QQ分享"},"sina":{"appkey":"","appsecret":"","redirect_uri":"","description":"可选，新浪微博分享"},"weixin":{"appid":"wx1f426b3ae81fdd3e","appsecret":"10f2b08a0e93dba78de27cf7f5e0c0f6","description":"可选，微信分享"},"tencent":{"appkey":"","appsecret":"","redirect_uri":"","description":"可选，腾讯微博分享"}}},
+		"distribute": {"plugins":{"share":{"weixin":{"appid":"wx1f426b3ae81fdd3e","appsecret":"10f2b08a0e93dba78de27cf7f5e0c0f6","description":"可选，微信分享"}}},
 			"apple": {
 				"appid": "Ningbo.New.Media.Technology",/*iOS应用标识，苹果开发网站申请的appid，如io.dcloud.HelloH5*/
 				"mobileprovision": "",/*iOS应用打包配置文件*/
