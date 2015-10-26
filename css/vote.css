@@ -1,0 +1,17 @@
+body{background-color:#fff;}
+.mui-content{background-color:#fff;}
+.mui-table-view-cell{font-size:14px; text-overflow:ellipsis; white-space:nowrap;}
+
+.c-vote-detail{padding:0 15px;}
+.c-vote-title{padding-top:10px; font-weight:bold;}
+.c-vote-info{font-size:14px; color:#666;}
+.c-vote-info strong{color:#f0553b;}
+
+.c-vote-list ul{padding:0; margin:0; list-style:none;}
+.c-vote-list ul li{padding-left:5%; background-color:#f9f9f9; border:1px solid #eee; position:relative;}
+.c-vote-list ul li .c-vote-content{width:75%; padding:10px 10px 10px 0; float:left; font-size:14px;}
+.c-vote-list ul li .c-vote-btn{width:20%; float:left;}
+.c-vote-list ul li .c-vote-count{float:left; font-size:12px; color:#666;}
+.c-vote-list ul li .c-vote-proportion{float:right; font-size:12px; color:#666;}
+.c-vote-list ul li .c-vote-bar{width:100%; height:5px; background-color:#eee;}
+.c-vote-list ul li .c-vote-progress{height:5px; background-color:#80c26a;}

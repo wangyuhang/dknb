@@ -6,8 +6,30 @@
     <title></title>
     <script src="js/mui.min.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <link href="css/interation.css" rel="stylesheet"/>
     <script type="text/javascript" charset="utf-8">
       	mui.init();
+      	mui.plusReady(function(){
+      		//首页快捷菜单点击事件
+		    mui('#interactionList').on('tap', 'li', function(e) {
+		    		var pageId = this.getAttribute('link');
+		    		var webview = mui.openWindow({
+				    url:pageId+'.html',
+				    id:pageId,
+				    styles:{
+				      top:'0px',//新页面顶部位置
+				      bottom:'0px'
+				    },
+				    extras:{
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+		    });
+      	})
     </script>
 </head>
 <body>
@@ -46,6 +68,39 @@
 			
 		</div>
 	</div>
+	
+	<div class="c-index-broadcast">摇一摇每天有100次机会赢iphone6 斗地主淘汰</div>
+	
+	<div id="interactionList" class="c-interaction-list">
+		<ul>
+			<li link="shack" title="摇一摇">
+				<img src="images/interaction-ico-shack.gif">
+				<div>摇一摇</div>
+			</li>
+			<li link="show" title="全民秀">
+				<img src="images/interaction-ico-show.gif">
+				<div>全民秀</div>
+			</li>
+			<li link="" title="报料">
+				<img src="images/interaction-ico-broke.gif">
+				<div>报料</div>
+			</li>
+			<li link="vote" title="调查投票">
+				<img src="images/interaction-ico-vote.gif">
+				<div>调查投票</div>
+			</li>
+			<li link="" title="游戏">
+				<img src="images/interaction-ico-game.gif">
+				<div>游戏</div>
+			</li>
+			<li link="" title="商城">
+				<img src="images/interaction-ico-shop.gif">
+				<div>商城</div>
+			</li>
+		</ul>
+		<div style="clear:both;"></div>
+	</div>
+	
 </div>
 
 </body>

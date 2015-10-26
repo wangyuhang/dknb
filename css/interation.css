@@ -1,0 +1,4 @@
+.c-interaction-list{padding-bottom:40px; background-color:#fff;}
+.c-interaction-list ul{list-style:none; padding:0; margin:0;}
+.c-interaction-list ul li{width:22%; margin-left:8.5%; margin-top:30px; float:left; text-align:center; font-size:14px;}
+.c-interaction-list ul li img{width:100%; border-radius:50%; border:1px solid #eee;}
