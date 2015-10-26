@@ -63,7 +63,7 @@
 
 	function transTime(nS) {     
        var date =  new Date(parseInt(nS)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
-       date = date.substring(0, date.indexOf('G'))
+       date = date.substring(0, date.indexOf('G'));
        return date;
     }     
 	

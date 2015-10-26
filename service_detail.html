@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init({
+      		swipeBack: true
+      	});
+      	
+      	var embed = null,
+      		auto = false,
+      		waitingWebviewLoadding = null;
+      		      		
+      	mui.plusReady(function(){
+			var url = plus.webview.currentWebview().link,
+				title = plus.webview.currentWebview().title;
+			document.getElementById('typeTitle').innerHTML = title;
+      		embed = plus.webview.create(url, '', {top:'44px',bottom:'0px'});
+			embed.show()
+			embed.addEventListener('loaded',onBrowserLoaded,false);
+			waitingWebviewLoadding = plus.nativeUI.showWaiting('页面加载中，请等待...'); 
+      	})
+  
+		// 页面跳转完成事件
+		function onBrowserLoaded(){
+			waitingWebviewLoadding.close();
+		}
+    </script>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav c-blue-top">
+  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+    <span class="mui-icon mui-icon-left-nav"></span>
+    返回
+  </button>
+  <h1 id="typeTitle" class="mui-title"></h1>
+</header>
+
+<div>
+	
+</div>
+
+
+</body>
+</html>
