@@ -34,6 +34,7 @@
       			document.querySelector('#liveCtn .c-on').classList.remove('c-on');
       			this.classList.add('c-on');
       			videoSource.setAttribute('src','http://zb.nbtv.cn:8989/hls-live/livepkgr/_definst_/liveevent/'+videoPath[this.getAttribute('rel')]+'.m3u8');
+      			
       		});
 
       		//切换视频过程中等待对话框
@@ -154,7 +155,7 @@
 	<!--直播-->
 	<div id="liveCtn" class="targetCtn">
 		<div class="c-video-box">
-			<video id="videoSource" webkit-playsinline="true" controls="controls">
+			<video id="videoSource" webkit-playsinline="true" autoplay="autoplay" controls="controls">
 				<source type="video/mp4">
 			</video>
 		</div>

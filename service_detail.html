@@ -23,7 +23,10 @@
       		embed = plus.webview.create(url, '', {top:'44px',bottom:'0px'});
 			embed.show()
 			embed.addEventListener('loaded',onBrowserLoaded,false);
-			waitingWebviewLoadding = plus.nativeUI.showWaiting('页面加载中，请等待...'); 
+			waitingWebviewLoadding = plus.nativeUI.showWaiting('页面加载中，请等待...');
+			setTimeout(function(){
+				waitingWebviewLoadding.close();
+			},5000);
       	})
   
 		// 页面跳转完成事件

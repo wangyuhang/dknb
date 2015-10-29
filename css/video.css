@@ -12,10 +12,10 @@
 .c-video-live-nav a.c-on img{border:1px solid #19aee4;}
 
 .c-video-book-section{background-color:#fff; margin-top:10px;}
-.c-video-book-section .c-sub-title{height:40px; line-height:40px; margin-bottom:10px; padding-left:10px; border-bottom:1px solid #e8e8e8;}
+.c-video-book-section .c-sub-title{height:40px; line-height:40px; margin-bottom:10px; padding-left:10px; border-bottom:1px solid #e8e8e8; font-size:14px;}
 .c-video-book-section .c-sub-title strong{color:#19aee4;}
 .c-video-book-section ul{list-style:none; padding:0; margin:0;}
-.c-video-book-section ul li{width:25%; margin-bottom:10px; text-align:center; float:left; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.c-video-book-section ul li{width:25%; margin-bottom:10px; text-align:center; float:left; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .c-video-book-section ul li img{width:60px; height:60px; border-radius:30px;}
 
 .mui-scroll{background-color:#fff;}
