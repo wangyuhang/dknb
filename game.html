@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <style>
+    	body{background-color:#fff;}
+    	.mui-content>.mui-table-view:first-child{margin-top:0;}
+    </style>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	
+      	mui.plusReady(function(){
+		    mui('#gameList').on('tap', 'li', function(e) {
+		    		var link = this.getAttribute('link'),
+		    			title = this.getAttribute('title');
+		    		var webview = mui.openWindow({
+				    url:'game_detail.html',
+				    id:'game_detail',
+				    styles:{
+				      top:'0px',//新页面顶部位置
+				      bottom:'0px'
+				    },
+				    extras:{
+				    		'link': link,
+				    		'title':title
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+		    });
+		  })
+    </script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 id="typeTitle" class="mui-title">游戏</h1>
+	</header>
+	
+	<div class="mui-content" style="background-color:#fff">
+	    <ul id="gameList" class="mui-table-view mui-grid-view">
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="小羊肖恩" link="http://www.play68.com/play/xyxe2">
+	            <a href="#">
+	                <img class="mui-media-object" src="images/game1.jpg">
+	                <div class="mui-media-body">小羊肖恩</div></a></li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="神抓手" link="http://www.play68.com/play/szs">
+	            <a href="#">
+	                <img class="mui-media-object" src="images/game2.jpg">
+	                <div class="mui-media-body">神抓手</div></a>
+	        </li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="移动就空格" link="http://www.play68.com/play/ydjgg">
+	            <a href="#"><img class="mui-media-object" src="images/game3.jpg">
+	                <div class="mui-media-body">移动就空格</div></a></li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="围你个球" link="http://www.play68.com/play/wgq2">
+	            <a href="#">
+	                <img class="mui-media-object" src="images/game4.jpg">
+	                <div class="mui-media-body">围你个球</div></a>
+	        </li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="彩球进洞" link="http://www.play68.com/play/wzglf">
+	            <a href="#">
+	                <img class="mui-media-object" src="images/game5.jpg">
+	                <div class="mui-media-body">彩球进洞</div></a></li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6">
+	            <a href="#">
+	                <img class="mui-media-object" src="images/game6.jpg" title="你的极限速度" link="http://www.play68.com/play/ndjxsd">
+	                <div class="mui-media-body">你的极限速度</div></a></li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="六角拼图" link="http://www.play68.com/play/ljsp">
+	            <a href="#"><img class="mui-media-object" src="images/game7.jpg">
+	                <div class="mui-media-body">六角拼图</div></a>
+	        </li>
+	        <li class="mui-table-view-cell mui-media mui-col-xs-6" title="切果冻" link="http://www.play68.com/play/qgd">
+	            <a href="#">
+	                <img class="mui-media-object" src="images/game8.jpg">
+	                <div class="mui-media-body">切果冻</div></a>
+	        </li>
+	    </ul>    
+	</div>
+</body>
+</html>
