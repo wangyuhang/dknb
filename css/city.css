@@ -16,5 +16,5 @@
 
 .c-service-list{padding-bottom:40px; background-color:#fff;}
 .c-service-list ul{list-style:none; padding:0; margin:0;}
-.c-service-list ul li{width:22%; margin-left:8.5%; margin-top:30px; float:left; text-align:center; font-size:14px;}
+.c-service-list ul li{width:20%; margin-left:10%; margin-top:30px; float:left; text-align:center; font-size:12px;}
 .c-service-list ul li img{width:100%; border-radius:50%; border:1px solid #eee;}
