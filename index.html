@@ -69,6 +69,10 @@
 			}
 			self.append(sub);
 		}
+		
+		plus.webview.getWebviewById('video_c.html').addEventListener('hide', function() {
+            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()')
+        });
 	})
   	
   	//当前激活选项
