@@ -10,7 +10,26 @@
     <link href="css/index.css" rel="stylesheet" />
     <link href="css/comm.css" rel="stylesheet" />
     <script type="text/javascript" charset="utf-8">
-     	mui.init();
+     	//mui.init();
+     	mui.init({
+		  pullRefresh : {
+		    container:'#refreshContainer',//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+		    down : {
+		      contentdown : '下拉可以刷新',//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+		      contentover : '释放立即刷新',//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+		      contentrefresh : '正在刷新...',//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+		      callback :function() {
+		      	setTimeout(function(){
+		      		mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+		      	},1000);
+		      	initFocusPicFun();
+		      	initinteractionFun();
+		      	initHotNewsFun();
+		      }
+		    }
+		  }
+		});
+		
       	mui.plusReady(function(){
       		/*mui.openWindow({
       			url:'http://hd.nbtv.cn/testapp/test2.html',
@@ -129,6 +148,7 @@
       		fastNav.css({'height':w*0.5}); 
 		}
 		
+		//初始化功能导航区块
 		function initFocusPicFun() {
 			mui.ajax('http://cmsapi.tools.nbtv.cn',{
 				data:{
@@ -254,7 +274,8 @@
 	</video>
 </div>-->
 
-<div class="mui-content">
+<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+<div class="mui-scroll">
 	<div id="slider" class="mui-slider openNews">
 		<div id="slideCtn" class="mui-slider-group mui-slider-loop">
 			<div class="mui-slider-item mui-slider-item-duplicate"></div>
@@ -267,31 +288,35 @@
 			<div class="mui-indicator"></div>			
 		</div>
 	</div>
-</div>
-
-<div class="c-index-broadcast">摇一摇每天有100次机会赢iphone6 斗地主淘汰</div>
-
-<div id="indexFastNav" class="c-index-fast-nav">
-	<a class="c-yyy" href="javascript:;" link="shack"><img src="images/index_fast_nav_1.gif"></a>
-	<a class="c-myshow" href="javascript:;" link="show"><img src="images/index_fast_nav_2.gif"></a>
-	<a class="c-report" href="javascript:;"><img src="images/index_fast_nav_3.gif"></a>
-	<a class="c-interact" href="javascript:;"><img src="images/index_fast_nav_4.gif"></a>
-</div>
-
-<div class="c-index-h">
-	<strong>精彩互动</strong>
-	<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
-</div>
-<div id="interactionCtn" class="c-index-cell-3 openNews">
 	
+	<div class="c-index-broadcast">摇一摇每天有100次机会赢iphone6 斗地主淘汰</div>
+
+	<div id="indexFastNav" class="c-index-fast-nav">
+		<a class="c-yyy" href="javascript:;" link="shack"><img src="images/index_fast_nav_1.gif"></a>
+		<a class="c-myshow" href="javascript:;" link="show"><img src="images/index_fast_nav_2.gif"></a>
+		<a class="c-report" href="javascript:;"><img src="images/index_fast_nav_3.gif"></a>
+		<a class="c-interact" href="javascript:;"><img src="images/index_fast_nav_4.gif"></a>
+	</div>
+	
+	<div class="c-index-h">
+		<strong>精彩互动</strong>
+		<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
+	</div>
+	<div id="interactionCtn" class="c-index-cell-3 openNews">
+		
+	</div>
+	
+	<div class="c-index-h">
+		<strong>热点新闻</strong>
+		<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
+	</div>
+	<div id="hotNewsCtn" class="c-index-cell-1 openNews">
+	</div>
+	
+</diuv>
 </div>
 
-<div class="c-index-h">
-	<strong>热点新闻</strong>
-	<span class="more">更多<span class="mui-icon mui-icon-arrowright"></span></span>
-</div>
-<div id="hotNewsCtn" class="c-index-cell-1 openNews">
-</div>
+
 
 <!--<div class="c-index-h">
 	<strong>主持人</strong>
