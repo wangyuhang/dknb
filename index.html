@@ -69,10 +69,13 @@
 			}
 			self.append(sub);
 		}
+		//直播页面切换到其他页面的时候（延迟监听是为了修正create页面之后无法立刻获取page的BUG）
+		setTimeout(function() {
+			plus.webview.getWebviewById('video_c.html').addEventListener('hide', function() {
+	            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()');
+	        },200);
+		})
 		
-		plus.webview.getWebviewById('video_c.html').addEventListener('hide', function() {
-            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()')
-        });
 	})
   	
   	//当前激活选项
