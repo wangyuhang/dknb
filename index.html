@@ -70,12 +70,13 @@
 			self.append(sub);
 		}
 		//直播页面切换到其他页面的时候（延迟监听是为了修正create页面之后无法立刻获取page的BUG）
-		setTimeout(function() {
-			plus.webview.getWebviewById('video_c.html').addEventListener('hide', function() {
-	            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()');
-	        },200);
-		})
-		
+		if(mui.os.ios) {
+			setTimeout(function() {
+				plus.webview.getWebviewById('video_c.html').addEventListener('hide', function() {
+		            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()');
+		        },200);
+			})
+		}	
 	})
   	
   	//当前激活选项
@@ -145,11 +146,6 @@
 		});
 	   
 	});
-	
-		   //展开试听
-	   /*document.getElementById('popVideo').addEventListener('tap', function() {
-	   		plus.webview.getWebviewById('index_content').evalJS('popVideoNavFun()');
-	   })*/	
 		
 		
     </script>

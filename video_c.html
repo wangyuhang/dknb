@@ -13,6 +13,25 @@
       	mui.init();
       	
       	$(document).ready(function() {
+      		//android插入原生player，ios用video标签
+      		var videoCtn = $('#videoCtn');
+      		if(mui.os.android) {
+      			videoCtn.html('<div id="videoSource" src="http://zb.nbtv.cn:8989/hls-live/livepkgr/_definst_/liveevent/'+videoPath[0]+'.m3u8" style="color:#fff;">'+videoPath[0]+'</div>');
+      			mui(document).on('tap', '#videoSource', function(e) {
+	      			var Intent = plus.android.importClass("android.content.Intent");
+				    var Uri = plus.android.importClass("android.net.Uri");
+				    var main = plus.android.runtimeMainActivity();
+				    var intent=new Intent(Intent.ACTION_VIEW);
+				    var uri=Uri.parse(this.getAttribute('src'));
+				    intent.setDataAndType(uri,'video/*');
+				    main.startActivity(intent);
+	      		})      			
+      		}else{
+      			videoCtn.html('<video id="videoSource" webkit-playsinline="true" autoplay="autoplay" controls="controls">'+
+								'<source type="video/mp4">'+
+							'</video>');
+      		}
+      		
       		//直播点播切换
       		var liveCtn = document.querySelector("#liveCtn"),
       			bookCtn = document.querySelector("#bookCtn"),
@@ -23,8 +42,10 @@
       			this.classList.add('c-on');
       			targetCtn.css('display','none');
       			document.getElementById(target).style.display = 'block';
-      			//从直播切换到点播暂停直播
-      			videoSource.pause();
+      			if(mui.os.ios) {
+      				//从直播切换到点播暂停直播
+      				videoSource.pause();	
+      			}      			
       		})
       		
       		//切换直播频道 初始化nbtv1直播
@@ -33,39 +54,25 @@
       		mui('#videoLiveNav').on('tap', 'a', function(e) {
       			document.querySelector('#liveCtn .c-on').classList.remove('c-on');
       			this.classList.add('c-on');
-      			videoSource.setAttribute('src','http://zb.nbtv.cn:8989/hls-live/livepkgr/_definst_/liveevent/'+videoPath[this.getAttribute('rel')]+'.m3u8');
-      			
+      			videoSource.setAttribute('src','http://zb.nbtv.cn:8989/hls-live/livepkgr/_definst_/liveevent/'+videoPath[this.getAttribute('rel')]+'.m3u8');   
+      			videoSource.innerHTML = videoPath[this.getAttribute('rel')];
       		});
 
       		//切换视频过程中等待对话框
-      		var waitingTabVideoLive = null,
-      			isWaitingTabVideoLiveClosed = false,
-      			waitingTabVideoLiveTimeout = null,
-      			videoLiveFirstLoadFlg = true;
-      		videoSource.addEventListener('canplay', function(){
-      			if(!isWaitingTabVideoLiveClosed && !videoLiveFirstLoadFlg) {
-      				waitingTabVideoLive.close();
-      				isWaitingTabVideoLiveClosed = true;
-      				clearTimeout(waitingTabVideoLiveTimeout);
-      			}    			
-      			videoLiveFirstLoadFlg = false;
-      		});
-
-      		videoSource.addEventListener('loadstart', function(){
-      			if(!videoLiveFirstLoadFlg){
-      				waitingTabVideoLive = plus.nativeUI.showWaiting('视频加载中，请等待...');  			
-	      			isWaitingTabVideoLiveClosed = false;
-	      			waitingTabVideoLiveTimeout = setTimeout(function() {
-	      				if(!isWaitingTabVideoLiveClosed) {
-	      					waitingTabVideoLive.close();
-	      					isWaitingTabVideoLiveClosed = true;
-	      					mui.toast('视频加载失败');
-	      				}     				
-	      			},10000)
-	      		}
-      		});
-      		
-      		
+      		if(mui.os.ios) {
+      			var waitingTabVideoLive = null,
+	      			isWaitingTabVideoLiveClosed = false,
+	      			waitingTabVideoLiveTimeout = null,
+	      			videoLiveFirstLoadFlg = true;
+	      		videoSource.addEventListener('canplay', function(){
+	      			if(!isWaitingTabVideoLiveClosed && !videoLiveFirstLoadFlg) {
+	      				waitingTabVideoLive.close();
+	      				isWaitingTabVideoLiveClosed = true;
+	      				clearTimeout(waitingTabVideoLiveTimeout);
+	      			}    			
+	      			videoLiveFirstLoadFlg = false;
+	      		});
+      		}     		
       	})
       	
       	mui.plusReady(function() {
@@ -94,6 +101,7 @@
       		initColumnsFun(14, document.getElementById('nbtv3'), 50);
       		initColumnsFun(15, document.getElementById('nbtv4'), 50);
       		initColumnsFun(16, document.getElementById('nbtv5'), 50);   		
+      						
       	})
       	
       	
@@ -156,10 +164,8 @@
 	
 	<!--直播-->
 	<div id="liveCtn" class="targetCtn">
-		<div class="c-video-box">
-			<video id="videoSource" webkit-playsinline="true" autoplay="autoplay" controls="controls">
-				<source type="video/mp4">
-			</video>
+		<div id="videoCtn" class="c-video-box">
+			
 		</div>
 		
 		<div class="c-index-broadcast">摇一摇每天有100次机会赢iphone6 斗地主淘汰</div>
@@ -188,10 +194,7 @@
 				</a>
 				<div style="clear:both;"></div>
 			</div>
-		</div>
-		
-		
-		
+		</div>		
 	</div>
 		
 	
