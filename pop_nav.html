@@ -11,7 +11,7 @@
       	mui.init();
       	mui.plusReady(function(){
       		document.getElementById('closeNav').addEventListener('tap', function() {
-      			plus.webview.currentWebview().hide();
+      			plus.webview.currentWebview().hide('slide-out-top', 300);
       		})
       	})
     </script>

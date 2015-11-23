@@ -190,7 +190,7 @@
 							var desc = this.desc?this.desc.substr(0,25):'';
 							li = document.createElement('li');
 							li.className = 'mui-table-view-cell mui-media';
-							li.innerHTML = '<a href="'+this.url+'" title="'+this.title+'" aid="'+this.id+'" tp="'+curType+'">'+
+							li.innerHTML = '<a href="'+this.url+'" title="'+this.title+'" aid="'+this.id+'" tp="'+curType+'" shareUrl="'+this.share_url+'">'+
 												'<img class="mui-media-object mui-pull-left" src="'+this.img+'" />'+
 												'<div class="mui-media-body">'+
 													'<div class="c-news-title">'+this.title+'</div>'+
@@ -225,10 +225,10 @@
 		
 		mui('.mui-table-view').on('tap', 'a', function() {
 			var id = this.getAttribute('aid'),
-				href = this.href,
-				type = this.getAttribute("open-type"),
 				title = this.title,
 				type = this.getAttribute('tp'),
+				thumbs = this.getAttribute('thumbs'),
+				shareUrl = this.getAttribute('share');
 				webview_style = {
 					popGesture: "close"
 				};
@@ -241,9 +241,11 @@
 			      bottom:'0px'
 			    },
 			    extras:{
-			      aid:id,
-			      title:title,
-			      tp:type
+			      	aid:id,
+					title:title,
+					tp:type,
+					thumbs:thumbs,
+					shareUrl:shareUrl
 			    },
 			    createNew:false,//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
 			    show:{

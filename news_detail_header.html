@@ -151,8 +151,7 @@
 				alert( "Download failed: " + status ); 
 			}  
 		});
-		//dtask.addEventListener( "statechanged", onStateChanged, false );
-		dtask.start(); 
+		//dtask.start(); 
 	}
 	
 	//图片剪裁
@@ -180,16 +179,13 @@
 	});
 			
 	mui.plusReady(function() {
-
 		//接收上个页面传入的参数
 		var newsType = plus.webview.currentWebview().tp,
 			newsTitle = plus.webview.currentWebview().title,
 			shareUrl = plus.webview.currentWebview().shareUrl;
 			
 		thumbsUrl = plus.webview.currentWebview().thumbs;		
-		createDownload();
-		
-		
+		createDownload();		
 		
 		//赋值分享内容		
 		sharecontent = {
@@ -199,12 +195,10 @@
 		list = document.getElementById("dlist");
 		//调用分享功能
 		updateServices();
-		
-		
+				
 		//填充页面内容
 		document.getElementById('typeTitle').innerHTML = newsType;
 		document.getElementById('newsTitle').innerHTML = newsTitle;
-
 		
 		//获取平面宽度，用于给文章图片设定宽度
 		var windowWidth = plus.webview.currentWebview().getStyle().width;
@@ -238,8 +232,7 @@
 				});
 				
 			},
-			error:function(xhr,type,errorThrown){
-				
+			error:function(xhr,type,errorThrown){				
 			}
 		});
 		

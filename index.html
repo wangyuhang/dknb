@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>点看宁波</title>
     <script src="js/mui.min.js"></script>
+    <script src="js/zepto.min.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/comm.css" rel="stylesheet"/>
     <link href="css/index.css" rel="stylesheet" />
@@ -14,6 +15,7 @@
 
 
 <header class="mui-bar mui-bar-nav c-top-bar">
+	<a id="home" class="mui-icon c-ico c-ico-home cIndexNav" href="index_content.html"><span class="mui-tab-label" style="display:none;">首页</span></a>
 	<a id="popNav" class="mui-icon mui-pull-right c-ico c-ico-all"></a>
 	<h1 id="title" class="mui-title"><img src="images/logo.png"></h1>
 </header>
@@ -21,23 +23,23 @@
 
 
 <nav class="mui-bar mui-bar-tab">
-	<a id="defaultTab" class="mui-tab-item mui-active" href="index_content.html">
+	<a id="defaultTab" class="mui-tab-item cIndexNav" href="news.html">
 		<span class="mui-icon c-ico c-ico-news"></span>
-		<span class="mui-tab-label">首页</span>
+		<span class="mui-tab-label">新闻</span>
 	</a>
-	<a id="popVideo" class="mui-tab-item" href="video_c.html">
+	<a class="mui-tab-item cIndexNav" href="video_c.html">
 		<span class="mui-icon c-ico c-ico-video"><span class="mui-badge">9</span></span>
 		<span class="mui-tab-label">视听</span>
 	</a>
-	<a class="mui-tab-item" href="interaction.html">
+	<a class="mui-tab-item cIndexNav" href="interaction.html">
 		<span class="mui-icon c-ico c-ico-interaction"></span>
 		<span class="mui-tab-label">互动</span>
 	</a>
-	<a class="mui-tab-item" href="city.html">
+	<a class="mui-tab-item cIndexNav" href="city.html">
 		<span class="mui-icon c-ico c-ico-local"></span>
 		<span class="mui-tab-label">同城</span>
 	</a>
-	<a class="mui-tab-item" href="setting.html">
+	<a class="mui-tab-item cIndexNav" href="setting.html">
 		<span class="mui-icon c-ico c-ico-user"></span>
 		<span class="mui-tab-label">我</span>
 	</a>
@@ -48,7 +50,7 @@
 
     mui.init();
     //所有底部菜单子页面数组
-	var subpages = ['index_content.html', 'video_c.html', 'interaction.html', 'city.html','setting.html'];
+	var subpages = ['news.html', 'video_c.html', 'interaction.html', 'city.html','setting.html','index_content.html'];
 	var subpage_style = {
 		top: '46px',
 		bottom: '50px'
@@ -58,10 +60,10 @@
   	mui.plusReady(function(){
   		//创建子页面，首个选项卡页面显示，其它均隐藏；
   		var self = plus.webview.currentWebview();
-		for (var i = 0; i < 5; i++) {
+		for (var i = 0; i < 6; i++) {
 			var temp = {};
 			var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
-			if (i > 0) {
+			if (i < 5) {
 				sub.hide();
 			}else{
 				temp[subpages[i]] = "true";
@@ -80,10 +82,10 @@
 	})
   	
   	//当前激活选项
-	var activeTab = subpages[0];
+	var activeTab = subpages[5];
 	var title = document.getElementById("title");
 	 //选项卡点击事件
-	mui('.mui-bar-tab').on('tap', 'a', function(e) {
+	mui(document).on('tap', '.cIndexNav', function(e) {
 		var targetTab = this.getAttribute('href');
 		if (targetTab == activeTab) {
 			return;
@@ -92,6 +94,7 @@
 		var tabTitle = this.querySelector('.mui-tab-label').innerHTML;
 		if(tabTitle == '首页') {
 			title.innerHTML = '<img src="images/logo.png">';
+			$('.mui-active').removeClass('mui-active');
 		}else {
 			title.innerHTML = tabTitle;
 		}
@@ -111,8 +114,9 @@
 		activeTab = targetTab;
 	});
 	
+	
 	 //自定义事件，模拟点击“首页选项卡”
-	document.addEventListener('gohome', function() {
+	/*document.addEventListener('gohome', function() {
 		var defaultTab = document.getElementById("defaultTab");
 		//模拟首页点击
 		mui.trigger(defaultTab, 'tap');
@@ -122,29 +126,32 @@
 			current.classList.remove('mui-active');
 			defaultTab.classList.add('mui-active');
 		}
-	});
+	});*/
   	
   	//头部导航展开
+
    document.getElementById('popNav').addEventListener('tap', function() {
-		mui.openWindow({
-		    url:'pop_nav.html',
-		    id:'pop_nav',
-		    styles:{
-		      top:'46px',
-		      bottom:'0px',
-		      opacity:0.98
-		    },
-		    show:{
-		      autoShow:true,
-		      aniShow:'slide-in-top'
-		    },
-		    waiting:{
-		      autoShow:true,
-		      title:'正在加载...'
-		     
-		    }
-		});
-	   
+   		if(plus.webview.getWebviewById('pop_nav') && plus.webview.getWebviewById('pop_nav').isVisible()) {
+   			plus.webview.getWebviewById('pop_nav').hide('slide-out-top', 300);
+   		}else{
+			mui.openWindow({
+			    url:'pop_nav.html',
+			    id:'pop_nav',
+			    styles:{
+			      top:'46px',
+			      bottom:'0px',
+			      opacity:0.98
+			    },
+			    show:{
+			      autoShow:true,
+			      aniShow:'slide-in-top'
+			    },
+			    waiting:{
+			      autoShow:true,
+			      title:'正在加载...'		     
+			    }
+			});
+		}
 	});
 		
 		
