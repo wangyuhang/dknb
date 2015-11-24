@@ -35,6 +35,9 @@
 .c-ico-friends:before{content:'\e60d';}
 .c-ico-service:before{content:'\e621';}
 .c-ico-setting:before{content:'\e622';}
+.c-ico-phone:before{content:'\e623';}
+.c-ico-v-code:before{content:'\e624';}
+.c-ico-i-code:before{content:'\e625';}
 
 .mui-title img{width:150px; height:25px; margin-top:12px;}
 .c-blue-top{background-color:#07a7e1;}
