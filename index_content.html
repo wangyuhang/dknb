@@ -30,15 +30,7 @@
 		  }
 		});
 		
-      	mui.plusReady(function(){
-      		/*mui.openWindow({
-      			url:'http://hd.nbtv.cn/testapp/test2.html',
-      			styles:{
-				      top:'0px',//新页面顶部位置
-				      bottom:'0px'
-				    }
-      		})*/
-      		
+      	mui.plusReady(function(){   		
       		//首页快捷菜单点击事件
 		    mui('#indexFastNav').on('tap', 'a', function(e) {
 		    		var pageId = this.getAttribute('link');
@@ -66,6 +58,7 @@
 		    
 		    //初始化轮转图内容
 		    initFocusPicFun();
+		    
 		    //首页头部轮转图点击事
 		    mui('.openNews').on('tap', 'a', function(e) {
 		    		var id = this.getAttribute('aid'),

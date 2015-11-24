@@ -26,6 +26,15 @@
 .c-ico-location:before{content:'\e605';}
 .c-ico-dianzan:before{content:'\e619';}
 .c-ico-home:before{content:'\e61f';}
+.c-ico-msg:before{content:'\e617';}
+.c-ico-personal:before{content:'\e604';}
+.c-ico-address:before{content:'\e615';}
+.c-ico-gift:before{content:'\e620';}
+.c-ico-card:before{content:'\e607';}
+.c-ico-lnvitation:before{content:'\e61a';}
+.c-ico-friends:before{content:'\e60d';}
+.c-ico-service:before{content:'\e621';}
+.c-ico-setting:before{content:'\e622';}
 
 .mui-title img{width:150px; height:25px; margin-top:12px;}
 .c-blue-top{background-color:#07a7e1;}
