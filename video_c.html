@@ -66,7 +66,7 @@
 	      			videoLiveFirstLoadFlg = true;
 	      		videoSource.addEventListener('canplay', function(){
 	      			if(!isWaitingTabVideoLiveClosed && !videoLiveFirstLoadFlg) {
-	      				waitingTabVideoLive.close();
+	      				//waitingTabVideoLive.close();
 	      				isWaitingTabVideoLiveClosed = true;
 	      				clearTimeout(waitingTabVideoLiveTimeout);
 	      			}    			

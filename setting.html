@@ -22,59 +22,65 @@
 	.c-coin .c-num{font-size:18px;}
 	.c-sign-btn{width:45px; height:45px; position:absolute; top:10px; right:10px;}
 	.c-sign-btn img{width:45px;}
+	
+	.c-login-btn{padding-top:20px;}
     </style>
-    <script type="text/javascript" charset="utf-8">
-      	mui.init();
-    </script>
+  
 </head>
 <body>
 <!--单页面开始-->
 <div class="mui-content">
 	<!--页面主内容区开始-->
-	<div class="mui-page-content c-setting-content">
+	<div id="hasLogined" class="mui-page-content c-setting-content">
 		<div class="c-setting-head">
-			<div class="c-avatar"><img src="images/42x42.gif"></div>
-			<div class="c-name">起个响亮一点的名字吧</div>
-			<div class="c-coin">积分：<span class="c-num">25800</span></div>
-			<div class="c-sign-btn"><img src="images/c-sign-btn.png"></div>
+			<div id="hasLogined" style="display: none;">
+				<div class="c-avatar"><img id="pAvatar" src="images/42x42.gif"></div>
+				<div id="pName" class="c-name">起个响亮一点的名字吧</div>
+				<div class="c-coin">积分：<span id="pIntegral" class="c-num">25800</span></div>
+				<div class="c-sign-btn"><img src="images/c-sign-btn.png"></div>
+			</div>
+			<div id="loginBtn" class="c-login-btn">
+				<div class="c-avatar"><img src="images/c-login-avatar.png"></div>
+				<div>点击登录/注册</div>
+			</div>
 		</div>
 		
 		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#notifications" class="mui-navigate-right mui-icon c-ico c-ico-msg"><span>我的消息</span></a>
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#privacy" class="mui-navigate-right mui-icon c-ico c-ico-personal"><span>个人资料</span></a>
 			</li>
 		</ul>
 		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#address" class="mui-navigate-right mui-icon c-ico c-ico-gift"><span>已兑换奖品</span></a>
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#address" class="mui-navigate-right mui-icon c-ico c-ico-address"><span>我的收货地址</span></a>
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#vipcard" class="mui-navigate-right mui-icon c-ico c-ico-card"><span>我的卡券</span></a>
 			</li>
 		</ul>
 		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-lnvitation"><span>邀请好友</span></a>
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-friends"><span>我的好友</span></a>
 			</li>
 		</ul>
 		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-service"><span>在线客服</span></a>
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="openItem mui-table-view-cell">
 				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-setting"><span>系统设置</span></a>
 			</li>
 		</ul>
-		<ul class="mui-table-view">
+		<ul id="signOutBtn" class="mui-table-view" style="display:none;">
 			<li class="mui-table-view-cell" style="text-align: center;">
 				<a>退出登录</a>
 			</li>
@@ -82,6 +88,71 @@
 
 	</div>
 	<!--页面主内容区结束-->
+	
+	
 </div>
 </body>
 </html>
+<script src="js/zepto.min.js"></script>
+<script src="js/cookie.js"></script>
+ <script type="text/javascript" charset="utf-8">
+ 
+mui.init();
+mui.plusReady(function(){
+	var loginView = mui.preload({
+	    url:'login.html',
+	    id:'login.html',
+	    styles:{
+	    		top:'0px',
+	    		bottom:'0px'
+	    },
+	    extras:{}
+	});
+ 	//打开登录界面
+ 	function openLoginView() {
+ 		console.log(plus.webview.getWebviewById('login.html'))
+ 		plus.webview.getWebviewById('login.html').show();
+ 	}
+ 	
+ 	//从localstore里读取用户信息
+ 	function loadPersonalInfo(personalInfo) {
+		$('#hasLogined').css('display','block');
+		$('#loginBtn').css('display','none');
+		$('#pAvatar').attr('src',personalInfo.avatar);
+		$('#pIntegral').text(personalInfo.integral);
+		$('#signOutBtn').css('display','block');
+ 	}
+ 	
+ 	$(document).ready(function() {
+ 		//点击登录注册打开登录界面
+ 		mui(document).on('tap', '#loginBtn', function() {
+			 openLoginView() ;
+		});
+		
+		mui(document).on('tap', '.openItem', function() {
+			console.log(plus.storage.getItem('personal'))
+			if(plus.storage.getItem('personal')) {
+				
+			}else{
+				 openLoginView() ;
+			}
+		});
+		console.log(plus.storage.getLength());
+		//关闭登录界面的时候，重新读取cookie
+		if(mui.os.ios) {
+			setTimeout(function() {
+				plus.webview.getWebviewById('login.html').addEventListener('hide', function() {
+					console.log(plus.storage.getItem('personal'))
+		           	var personalInfo = plus.storage.getItem('personal');
+		           	if(personalInfo) {
+			 			loadPersonalInfo(personalInfo);
+			 		}else{
+			 			mui.toast('信息有误');
+			 		}
+		        },200);
+			})
+		}
+		
+ 	})
+ })
+ </script>

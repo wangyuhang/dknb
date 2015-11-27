@@ -32,6 +32,14 @@
     
 </head>
 <body>
+	<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 id="typeTitle" class="mui-title">登录</h1>
+	</header>
+	
 	<div class="mui-content">
 		<div class="c-avatar"><img src="images/c-login-avatar.png"></div>
 		<div>
@@ -48,6 +56,7 @@
 </body>
 </html>
 <script src="js/zepto.min.js"></script>
+<script src="js/cookie.js"></script>
 <script type="text/javascript" charset="utf-8">
  	//电话号码验证
     function isnum(obj){
@@ -92,6 +101,7 @@
 			timeout:10000,//超时时间设置为10秒；
 			success:function(result){
 				if(result.succ) {
+					console.log(result.info)
 					token = result.info;
 					$('#getICode').css('display','block');
 				}
@@ -144,7 +154,7 @@
 				alert('请输入正确的手机号')
 			}
 		});
-		
+
 		//点击注册完成，注册成功直接登录
 		mui(document).on('tap', '#signInBtn', function() {
 			if(isnum(phoneNum)) {
@@ -155,12 +165,12 @@
 						username: phoneNum.val(),
 						smscode:'123456'
 					},
+					dataType:'json',
 					success: function(result) {
-						console.log(result)
 						if(result.succ) {
-							plus.storage.setItem('personal', result.data);
-							plus.webview.currentWebview().close();
-							plus.storage.getItem('personal')
+							//$.cookie('personal', result.data);		
+							plus.storage.setItem('persinal',result.data);
+							plus.webview.currentWebview().hide();
 						}else{
 							mui.toast(result.info);
 						}
@@ -170,6 +180,5 @@
 				alert('请输入正确的手机号')
 			}
 		});
-
 	})
  </script>
