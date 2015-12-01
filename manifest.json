@@ -66,7 +66,7 @@
 			"description": "访问距离感应器"
 		},
 		"Storage": {
-			"description": "管理应用本地数据"
+			"description": "访问应用本地存储数据"
 		},
 
 		"Uploader": {

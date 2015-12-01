@@ -31,7 +31,7 @@
 <!--单页面开始-->
 <div class="mui-content">
 	<!--页面主内容区开始-->
-	<div id="hasLogined" class="mui-page-content c-setting-content">
+	<div class="mui-page-content c-setting-content">
 		<div class="c-setting-head">
 			<div id="hasLogined" style="display: none;">
 				<div class="c-avatar"><img id="pAvatar" src="images/42x42.gif"></div>
@@ -99,60 +99,82 @@
  
 mui.init();
 mui.plusReady(function(){
+	
 	var loginView = mui.preload({
-	    url:'login.html',
-	    id:'login.html',
+	    url:'login_sign_in.html',
+	    id:'login_sign_in.html',
 	    styles:{
 	    		top:'0px',
 	    		bottom:'0px'
 	    },
 	    extras:{}
 	});
+	
  	//打开登录界面
  	function openLoginView() {
- 		console.log(plus.webview.getWebviewById('login.html'))
- 		plus.webview.getWebviewById('login.html').show();
+ 		plus.webview.getWebviewById('login_sign_in.html').show();
  	}
  	
  	//从localstore里读取用户信息
- 	function loadPersonalInfo(personalInfo) {
+ 	function initPage() {
+ 		if($.cookie('id')) {
+ 			loadPersonalInfo();
+ 		}else {
+ 			$('#hasLogined').css('display','none');
+			$('#loginBtn').css('display','block');
+			$('#signOutBtn').css('display','none');
+ 		}	
+ 	}
+ 	initPage();
+ 	
+ 	function loadPersonalInfo() {
 		$('#hasLogined').css('display','block');
 		$('#loginBtn').css('display','none');
-		$('#pAvatar').attr('src',personalInfo.avatar);
-		$('#pIntegral').text(personalInfo.integral);
+		$('#pAvatar').attr('src', $.cookie('avatar'));
+		$('#pIntegral').html($.cookie('integral'));
+		$('#pName').html($.cookie('username'))
 		$('#signOutBtn').css('display','block');
  	}
  	
- 	$(document).ready(function() {
- 		//点击登录注册打开登录界面
- 		mui(document).on('tap', '#loginBtn', function() {
+ 
+	//点击登录注册打开登录界面
+	mui(document).on('tap', '#loginBtn', function() {
+		 openLoginView() ;
+	});
+	
+	//点击注销，退出登录
+	mui(document).on('tap', '#signOutBtn', function() {
+		$.cookie('username',null);
+		$.cookie('id',null);
+		$.cookie('nickname',null);
+		$.cookie('avatar',null);
+		$.cookie('integral',null);
+		initPage();
+	});
+	
+	mui(document).on('tap', '.openItem', function() {
+		if($.cookie('id')) {
+			
+		}else{
 			 openLoginView() ;
-		});
-		
-		mui(document).on('tap', '.openItem', function() {
-			console.log(plus.storage.getItem('personal'))
-			if(plus.storage.getItem('personal')) {
-				
-			}else{
-				 openLoginView() ;
-			}
-		});
-		console.log(plus.storage.getLength());
-		//关闭登录界面的时候，重新读取cookie
-		if(mui.os.ios) {
-			setTimeout(function() {
-				plus.webview.getWebviewById('login.html').addEventListener('hide', function() {
-					console.log(plus.storage.getItem('personal'))
-		           	var personalInfo = plus.storage.getItem('personal');
-		           	if(personalInfo) {
-			 			loadPersonalInfo(personalInfo);
-			 		}else{
-			 			mui.toast('信息有误');
-			 		}
-		        },200);
-			})
 		}
+	});
+	
+
+	//关闭登录界面的时候，监听cookie是否已经写入，写入就显示登录信息，没有写入显示登录失败
+	if(mui.os.ios) {
+		setTimeout(function() {
+			plus.webview.getWebviewById('login_sign_in.html').addEventListener('hide', function() {
+				var personalInfo = $.cookie('id');
+	           	if(personalInfo) {
+		 			loadPersonalInfo();
+		 		}else{
+		 			mui.toast('信息有误');
+		 		}
+	        },100);
+		})
+	}
 		
- 	})
+
  })
  </script>

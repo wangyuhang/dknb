@@ -36,15 +36,130 @@
     </script>
 </head>
 <body>
+	<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 id="typeTitle" class="mui-title">登录</h1>
+	</header>
+	
 	<div class="mui-content">
 		<div class="c-avatar"><img src="images/c-login-avatar.png"></div>
 		<div>
-			<div class="c-login-input-cell"><i class="mui-icon c-ico c-ico-phone"></i><input type="text" placeholder="用户名/手机号" /></div>
-			<div class="c-login-input-cell"><i class="mui-icon c-ico c-ico-psd"></i><input type="text" placeholder="密码" /></div>
-			<div><button class="mui-btn mui-btn-primary mui-btn-block c-submit-btn">登陆</button></div>
-			<div><button class="mui-btn  mui-btn-block c-sign-up">注册</button></div>
+			<div class="c-login-input-cell"><i class="mui-icon c-ico c-ico-phone"></i><input id="phoneNum" type="text" placeholder="用户名/手机号" /></div>
+			<div class="c-login-input-cell"><i class="mui-icon c-ico c-ico-psd"></i><input id="psd" type="password" placeholder="密码" /></div>
+			<div><button id="loginBtn" class="mui-btn mui-btn-primary mui-btn-block c-submit-btn">登录</button></div>
+			<div><button id="registBtn" class="mui-btn  mui-btn-block c-sign-up">注册</button></div>
 			<div class="c-forget">忘记密码？</div>
 		</div>
 	</div>
 </body>
 </html>
+<script src="js/zepto.min.js"></script>
+<script src="js/cookie.js"></script>
+<script>
+mui.init();
+
+//电话号码验证
+function isnum(obj){
+  var reg=/^1[0-9]{10}/;
+  if(!reg.test(obj.val())){
+    return false;
+    obj.val('');
+  }else{
+  	return true;
+  }
+}
+
+ //验证邀请码格式
+function isPsd(obj){
+  var reg=/^\S{6,}$/;
+  if(!reg.test(obj.val())){
+    return false;
+    obj.val('');
+  }else{
+  	return true;
+  }
+}
+
+//服务器验证登录事件
+function loginFun() {
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/login',{
+		type: 'post',
+		data:{
+			username: phoneNum.val(),
+			password:psd.val()
+		},
+		dataType:'json',
+		success: function(result) {
+			if(result.succ) {
+				mui.toast(result.info);
+				$.cookie('username',result.data.username);
+				$.cookie('id',result.data.id);
+				$.cookie('nickname',result.data.nickname);
+				$.cookie('avatar',result.data.avatar);
+				$.cookie('integral',result.data.integral);
+				plus.webview.currentWebview().hide();
+			}else{
+				mui.toast(result.info);
+			}
+		}
+	});
+}
+
+var phoneNum = $('#phoneNum'),
+	  psd = $('#psd'),
+	  loginBtn = $('#loginBtn'),
+	  registBtn = $('#registBtn');
+mui.plusReady(function(){
+	//进入页面先清空输入框里的内容
+	phoneNum.val('');
+	psd.val('');
+	//预先加载注册页面
+	var registView = mui.preload({
+	    url:'regist_phone.html',
+	    id:'regist_phone.html',
+	    styles:{
+	    		top:'0px',
+	    		bottom:'0px'
+	    },
+	    extras:{}
+	});
+	
+	//点击注册打开注册界面
+	mui(document).on('tap', '#registBtn', function() {
+		 plus.webview.getWebviewById('regist_phone.html').show();
+	});
+	
+	//点击注册打开注册界面
+	mui(document).on('tap', '#loginBtn', function() {
+		if( !isnum(phoneNum)) {
+			mui.toast('用户名或手机号码输入有误');
+			return;
+		}else if( !isPsd(psd)) {
+			mui.toast('密码格式输入有误');
+			return;
+		}else {
+			loginFun();
+		}
+		
+	});
+	
+	
+	//关闭注册界面的时候，监听cookie是否已经写入，写入就显示登录信息，没有写入显示登录失败
+	if(mui.os.ios) {
+		setTimeout(function() {
+			plus.webview.getWebviewById('regist_phone.html').addEventListener('hide', function() {
+				var personalInfo = $.cookie('id');
+	           	if(personalInfo) {
+		 			plus.webview.currentWebview().hide();
+		 		}else{
+		 			mui.toast('注册失败');
+		 		}
+	        },100);
+		})
+	}
+	
+})
+</script>
