@@ -3,91 +3,385 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Hello MUI</title>
+		<title></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<script src="js/mui.min.js"></script>
     		<link href="css/mui.min.css" rel="stylesheet"/>
     		<link href="css/comm.css" rel="stylesheet"/>
     		<link href="css/setting.css" rel="stylesheet"/>
+    		<link href="css/mui.picker.css" rel="stylesheet" />
+		<link href="css/mui.poppicker.css" rel="stylesheet" />
+		<link href="css/mui.listpicker.css" rel="stylesheet" />
 
 		<style>
-
+		.mui-content{padding-top:44px; font-size:16px;}
+		input,textarea{font-size:16px;}
+		.c-head-right{line-height:44px; float:right; color:#fff;}
 		</style>
 	</head>
 
 	<body>
+		<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+		  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+		    <span class="mui-icon mui-icon-left-nav"></span>
+		    返回
+		  </button>
+		  <a id="saveInfo" class="c-head-right">保存</a>
+		  <h1 id="typeTitle" class="mui-title">登录</h1>
+		</header>
 		
 		<!--单页面结束-->
-		<div id="account" >
-			<div class="mui-page-content">
-				<div>
+		<div id="account"  class="mui-content">
 					
-					<form class="mui-input-group">
-						<div class="mui-table-view-cell">
-							<a id="head" class="mui-navigate-right">头像
-								<span class="mui-pull-right head">
-									<img class="head-img mui-action-preview" id="head-img1" src=""/>
-								</span>
-							</a>
-						</div>
-						<div class="mui-input-row">
-							<label>昵称</label>
-							<input type="text" class="mui-input-clear" placeholder="带清除按钮的输入框">
-						</div>
-						<div class="mui-input-row">
-							<label>姓别</label>
-							<input id='showUserPicker' class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>年龄</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>星座</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>职业</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>兴趣爱好</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>学校</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>故乡</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row">
-							<label>邮箱</label>
-							<input class="mui-input-clear" type='text' placeholder="请选择性别">
-						</div>
-						<div class="mui-input-row" style="height:auto;">
-							<label>个人说明</label>
-							<textarea id="textarea" rows="5" placeholder="多行文本框"></textarea>
-						</div>
-					</form>
-					
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell" style="text-align: center;">
-							<a>修改密码</a>
-						</li>
-					</ul>
-					
+			<form class="mui-input-group">
+				<div class="mui-table-view-cell">
+					<a id="head" class="mui-navigate-right">头像
+						<span class="mui-pull-right head" style="margin-right:20px;">
+							<img class="head-img mui-action-preview" id="avatar" src=""/>
+						</span>
+					</a>
 				</div>
-			</div>
+				<div class="mui-input-row">
+					<label>昵称</label>
+					<input id="nickname" type="text" class="mui-input-clear" placeholder="请输入昵称">
+				</div>
+				<div class="mui-input-row">
+					<label>姓别</label>
+					<input id='sex' class="mui-input-clear" type='text' readonly="readonly" placeholder="请选择性别"></input>
+				</div>
+				<div class="mui-input-row">
+					<label>年龄</label>
+					<input id="age" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row">
+					<label>星座</label>
+					<input id="constellation" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row">
+					<label>职业</label>
+					<input id="job" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row">
+					<label>兴趣爱好</label>
+					<input id="interest" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row">
+					<label>学校</label>
+					<input id="school" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row">
+					<label>故乡</label>
+					<input id="home" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row">
+					<label>邮箱</label>
+					<input id="email" class="mui-input-clear" type='text' placeholder="请选择性别">
+				</div>
+				<div class="mui-input-row" style="height:auto;">
+					<label>个人说明</label>
+					<textarea id="introduction" rows="5" placeholder="多行文本框"></textarea>
+				</div>
+			</form>
+			
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="text-align: center;">
+					<a>修改密码</a>
+				</li>
+			</ul>
+					
 		</div>
 		
 	</body>
+</html>
+<script src="js/zepto.min.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/mui.listpicker.js"></script>
+<script src="js/mui.picker.js"></script>
+<script src="js/mui.poppicker.js"></script>
+<script>
+mui.init();
 
-	<script>
-		mui.init();
-		 
-		 //更换头像
+
+function getImage() {
+	var c = plus.camera.getCamera();
+	c.captureImage(function(e) {
+		plus.io.resolveLocalFileSystemURL(e, function(entry) {
+			//该地址用于预览
+			var s = entry.toLocalURL() + "?version=" + new Date().getTime();
+			//该地址用于上传
+			var avatarUrl = entry.fullPath;
+			//预览
+			document.getElementById("avatar").src = s;
+			//上传
+			submitAvatar(avatarUrl);
+		}, function(e) {
+			console.log("读取拍照文件错误：" + e.message);
+		});
+	}, function(s) {
+		console.log("error" + s);
+	}, {
+		filename: "_doc/head.jpg"
+	})
+}
+
+function galleryImg() {
+	plus.gallery.pick(function(a) {
+		plus.io.resolveLocalFileSystemURL(a, function(entry) {
+			plus.io.resolveLocalFileSystemURL("_doc/", function(root) {
+				root.getFile("head.jpg", {}, function(file) {
+					//文件已存在
+					file.remove(function() {
+						console.log("file remove success");
+						entry.copyTo(root, 'head.jpg', function(event) {
+								//该地址用于预览
+								var e = event.fullPath + "?version=" + new Date().getTime();
+								//该地址用于上传
+								var avatarUrl = event.fullPath;
+								document.getElementById("avatar").src = e;
+								submitAvatar(avatarUrl);
+							},
+							function(e) {
+								console.log('copy image fail:' + e.message);
+							});
+					}, function() {
+						console.log("delete image fail:" + e.message);
+					});
+				}, function() {
+					//文件不存在
+					entry.copyTo(root, 'head.jpg', function(event) {
+							//该地址用于预览
+							var path = event.fullPath + "?version=" + new Date().getTime();
+							//该地址用于上传
+							var avatarUrl = event.fullPath;
+							document.getElementById("avatar").src = path;
+							submitAvatar(avatarUrl);
+						},
+						function(e) {
+							console.log('copy image fail:' + e.message);
+						});
+				});
+			}, function(e) {
+				console.log("get _www folder fail");
+			})
+		}, function(e) {
+			console.log("读取拍照文件错误：" + e.message);
+		});
+	}, function(a) {}, {
+		filter: "image"
+	})
+};
+
+function defaultImg() {
+	plus.io.resolveLocalFileSystemURL("_doc/head.jpg", function(entry) {
+		var s = entry.fullPath + "?version=" + new Date().getTime();;
+		//document.getElementById("head-img").src = s;
+		document.getElementById("avatar").src = s;
+	}, function(e) {
+		//document.getElementById("head-img").src = '../images/logo.png';
+		document.getElementById("avatar").src = '../images/logo.png';
+	})
+}
+document.getElementById("avatar").addEventListener('tap', function(e) {
+	e.stopPropagation();
+});
+
+
+function initImgPreview() {
+	var imgs = document.querySelectorAll("img.mui-action-preview");
+	imgs = mui.slice.call(imgs);
+	if (imgs && imgs.length > 0) {
+		var slider = document.createElement("div");
+		slider.setAttribute("id", "__mui-imageview__");
+		slider.classList.add("mui-slider");
+		slider.classList.add("mui-fullscreen");
+		slider.style.display = "none";
+		slider.addEventListener("tap", function() {
+			slider.style.display = "none";
+		});
+		slider.addEventListener("touchmove", function(event) {
+			event.preventDefault();
+		})
+		var slider_group = document.createElement("div");
+		slider_group.setAttribute("id", "__mui-imageview__group");
+		slider_group.classList.add("mui-slider-group");
+		imgs.forEach(function(value, index, array) {
+			//给图片添加点击事件，触发预览显示；
+			value.addEventListener('tap', function() {
+				slider.style.display = "block";
+				_slider.refresh();
+				_slider.gotoItem(index, 0);
+			})
+			var item = document.createElement("div");
+			item.classList.add("mui-slider-item");
+			var a = document.createElement("a");
+			var img = document.createElement("img");
+			img.setAttribute("src", value.src);
+			a.appendChild(img)
+			item.appendChild(a);
+			slider_group.appendChild(item);
+		});
+		slider.appendChild(slider_group);
+		document.body.appendChild(slider);
+		var _slider = mui(slider).slider();
+	}
+}
+
+//获取token值
+var token = null;
+function getToken() {
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/get-update-accesstoken',{
+		dataType:'json',//服务器返回json格式数据
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(result){
+			if(result.succ) {
+				token = result.info;
+			}
+		},
+		error:function(xhr,type,errorThrown){
+		}
+	});
+}
+getToken();
+
+function initInfo() {
+	var id = $.cookie('id');
+	if(id) {
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/get-user-message',{
+			data:{
+				uid: id
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(result){
+				if(result.succ) {
+					var data = result.data;
+					sexInput.val(data.sex == 0?'男':'女');
+					nicknameInput.val(data.nickname);
+					ageInput.val(data.age);
+					constellationInput.val(data.constellation);
+					jobInput.val(data.job);
+					interestInput.val(data.interest);
+					schoolInput.val(data.school);
+					emailInput.val(data.email);
+					homeInput.val(data.home);
+					introductionInput.val(data.introduction);
+					avatarImg.attr('src', data.avatar);
+				}else {
+					mui.toast(result.info);
+				}
+			},
+			error:function(xhr,type,errorThrown){
+			}
+		});
+	}else {
+		//plus.webview.currentWebview().hide();
+		mui.toast('登录失效请重新登录');
+	}
+}
+initInfo();
+
+function submitInfo() {
+	var id = $.cookie('id');
+	if(id) {
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/update-user-message', {
+			data:{
+				uid: id,
+				token: token,
+				sex: sexInput.val() == '男'?0:1,
+				nickname: nicknameInput.val(),
+				age: ageInput.val(),
+				constellation: constellationInput.val(),
+				job: jobInput.val(),
+				interest: interestInput.val(),
+				school: schoolInput.val(),
+				email: emailInput.val(),
+				home: homeInput.val(),
+				introduction: introductionInput.val()
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(result){
+				getToken();
+				mui.toast(result.info);
+			},
+			error:function(xhr,type,errorThrown){
+				getToken();
+			}
+		});
+	}else {
+		//plus.webview.currentWebview().hide();
+		mui.toast('登录失效请重新登录');
+	}
+}
+
+function submitAvatar(url) {
+	var id = $.cookie('id');
+	console.log(url)
+	var url = 'file://'+url;
+	if(id) {
+		var task = plus.uploader.createUpload( 'http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/upload/avatar', 
+			{ method:"post"},
+			function ( t, status ) {
+				getToken();
+				// 上传完成
+				if ( status == 200 ) { 
+					console.log( "Upload success: " + t.responseText);
+				} else {
+					alert( "Upload failed: " + status );
+				}
+			}
+		);
+		task.addFile(url, {key:"avatar"});
+		task.addData( "token", token);
+		task.addData( "uid", id );
+
+		task.start();
+	}else {
+		//plus.webview.currentWebview().hide();
+		mui.toast('登录失效请重新登录');
+	}
+}
+
+var sexInput = $('#sex'),
+	nicknameInput = $('#nickname'),
+	ageInput = $('#age'),
+	constellationInput = $('#constellation'),
+	jobInput = $('#job'),
+	interestInput = $('#interest'),
+	schoolInput = $('#school'),
+	homeInput = $('#home'),
+	emailInput = $('#email'),
+	introductionInput = $('#introduction'),
+	avatarImg = $('#avatar');
+	
+mui.plusReady(function(){		 
+		//性别选择框
+		var sexPicker =new mui.PopPicker();
+		sexPicker.setData([{
+			value: '0',
+			text: '男'
+		}, {
+			value: '1',
+			text: '女'
+		}]);
+		var sexInput = document.getElementById('sex');
+		sexInput.addEventListener('tap', function(event) {
+			sexPicker.show(function(items) {
+				sexInput.value = items[0].text;
+			});
+		}, false);
+		
+		
+		//点击保存提交信息
+		mui(document).on('tap', '#saveInfo', function() {
+			 submitInfo() ;
+		});
+		
+		
+		//更换头像
 		mui(".mui-table-view-cell").on("tap", "#head", function(e) {
 			var a = [{
 				title: "拍照"
@@ -113,129 +407,6 @@
 				}
 			})
 		});
+})
+</script>
 
-		function getImage() {
-			var c = plus.camera.getCamera();
-			c.captureImage(function(e) {
-				plus.io.resolveLocalFileSystemURL(e, function(entry) {
-					var s = entry.toLocalURL() + "?version=" + new Date().getTime();
-					console.log(s);
-					document.getElementById("head-img").src = s;
-					document.getElementById("head-img1").src = s;
-					//变更大图预览的src
-					//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-					document.querySelector("#__mui-imageview__group .mui-slider-item img").src = s + "?version=" + new Date().getTime();;;
-				}, function(e) {
-					console.log("读取拍照文件错误：" + e.message);
-				});
-			}, function(s) {
-				console.log("error" + s);
-			}, {
-				filename: "_doc/head.jpg"
-			})
-		}
-
-		function galleryImg() {
-			plus.gallery.pick(function(a) {
-				plus.io.resolveLocalFileSystemURL(a, function(entry) {
-					plus.io.resolveLocalFileSystemURL("_doc/", function(root) {
-						root.getFile("head.jpg", {}, function(file) {
-							//文件已存在
-							file.remove(function() {
-								console.log("file remove success");
-								entry.copyTo(root, 'head.jpg', function(e) {
-										var e = e.fullPath + "?version=" + new Date().getTime();
-										document.getElementById("head-img").src = e;
-										document.getElementById("head-img1").src = e;
-										//变更大图预览的src
-										//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-										document.querySelector("#__mui-imageview__group .mui-slider-item img").src = e + "?version=" + new Date().getTime();;
-									},
-									function(e) {
-										console.log('copy image fail:' + e.message);
-									});
-							}, function() {
-								console.log("delete image fail:" + e.message);
-							});
-						}, function() {
-							//文件不存在
-							entry.copyTo(root, 'head.jpg', function(e) {
-									var path = e.fullPath + "?version=" + new Date().getTime();
-									document.getElementById("head-img").src = path;
-									document.getElementById("head-img1").src = path;
-									//变更大图预览的src
-									//目前仅有一张图片，暂时如此处理，后续需要通过标准组件实现
-									document.querySelector("#__mui-imageview__group .mui-slider-item img").src = path;
-								},
-								function(e) {
-									console.log('copy image fail:' + e.message);
-								});
-						});
-					}, function(e) {
-						console.log("get _www folder fail");
-					})
-				}, function(e) {
-					console.log("读取拍照文件错误：" + e.message);
-				});
-			}, function(a) {}, {
-				filter: "image"
-			})
-		};
-
-		function defaultImg() {
-			plus.io.resolveLocalFileSystemURL("_doc/head.jpg", function(entry) {
-				var s = entry.fullPath + "?version=" + new Date().getTime();;
-				document.getElementById("head-img").src = s;
-				document.getElementById("head-img1").src = s;
-			}, function(e) {
-				document.getElementById("head-img").src = '../images/logo.png';
-				document.getElementById("head-img1").src = '../images/logo.png';
-			})
-		}
-		document.getElementById("head-img1").addEventListener('tap', function(e) {
-			e.stopPropagation();
-		});
-		
-
-		function initImgPreview() {
-			var imgs = document.querySelectorAll("img.mui-action-preview");
-			imgs = mui.slice.call(imgs);
-			if (imgs && imgs.length > 0) {
-				var slider = document.createElement("div");
-				slider.setAttribute("id", "__mui-imageview__");
-				slider.classList.add("mui-slider");
-				slider.classList.add("mui-fullscreen");
-				slider.style.display = "none";
-				slider.addEventListener("tap", function() {
-					slider.style.display = "none";
-				});
-				slider.addEventListener("touchmove", function(event) {
-					event.preventDefault();
-				})
-				var slider_group = document.createElement("div");
-				slider_group.setAttribute("id", "__mui-imageview__group");
-				slider_group.classList.add("mui-slider-group");
-				imgs.forEach(function(value, index, array) {
-					//给图片添加点击事件，触发预览显示；
-					value.addEventListener('tap', function() {
-						slider.style.display = "block";
-						_slider.refresh();
-						_slider.gotoItem(index, 0);
-					})
-					var item = document.createElement("div");
-					item.classList.add("mui-slider-item");
-					var a = document.createElement("a");
-					var img = document.createElement("img");
-					img.setAttribute("src", value.src);
-					a.appendChild(img)
-					item.appendChild(a);
-					slider_group.appendChild(item);
-				});
-				slider.appendChild(slider_group);
-				document.body.appendChild(slider);
-				var _slider = mui(slider).slider();
-			}
-		}
-	</script>
-
-</html>

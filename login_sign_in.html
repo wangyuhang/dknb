@@ -51,7 +51,7 @@
 			<div class="c-login-input-cell"><i class="mui-icon c-ico c-ico-psd"></i><input id="psd" type="password" placeholder="密码" /></div>
 			<div><button id="loginBtn" class="mui-btn mui-btn-primary mui-btn-block c-submit-btn">登录</button></div>
 			<div><button id="registBtn" class="mui-btn  mui-btn-block c-sign-up">注册</button></div>
-			<div class="c-forget">忘记密码？</div>
+			<div class="c-forget"><a id="forgetPsd" href="javascript:;">忘记密码？</a></div>
 		</div>
 	</div>
 </body>
@@ -88,7 +88,7 @@ function loginFun() {
 	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/login',{
 		type: 'post',
 		data:{
-			username: phoneNum.val(),
+			cellphone: phoneNum.val(),
 			password:psd.val()
 		},
 		dataType:'json',
@@ -113,9 +113,6 @@ var phoneNum = $('#phoneNum'),
 	  loginBtn = $('#loginBtn'),
 	  registBtn = $('#registBtn');
 mui.plusReady(function(){
-	//进入页面先清空输入框里的内容
-	phoneNum.val('');
-	psd.val('');
 	//预先加载注册页面
 	var registView = mui.preload({
 	    url:'regist_phone.html',
@@ -127,9 +124,25 @@ mui.plusReady(function(){
 	    extras:{}
 	});
 	
+	//预先加载忘记密码页面
+	var registView = mui.preload({
+	    url:'forget_psd.html',
+	    id:'forget_psd.html',
+	    styles:{
+	    		top:'0px',
+	    		bottom:'0px'
+	    },
+	    extras:{}
+	});
+	
 	//点击注册打开注册界面
 	mui(document).on('tap', '#registBtn', function() {
 		 plus.webview.getWebviewById('regist_phone.html').show();
+	});
+	
+	//点击忘记密码打开忘记密码页面
+	mui(document).on('tap', '#forgetPsd', function() {
+		 plus.webview.getWebviewById('forget_psd.html').show();
 	});
 	
 	//点击注册打开注册界面
@@ -147,6 +160,8 @@ mui.plusReady(function(){
 	});
 	
 	
+	
+	
 	//关闭注册界面的时候，监听cookie是否已经写入，写入就显示登录信息，没有写入显示登录失败
 	if(mui.os.ios) {
 		setTimeout(function() {
@@ -157,8 +172,14 @@ mui.plusReady(function(){
 		 		}else{
 		 			mui.toast('注册失败');
 		 		}
-	        },100);
-		})
+	        });
+		},100)
+		
+		////进入页面先清空输入框里的内容
+		plus.webview.currentWebview().addEventListener('show', function() {
+			phoneNum.val('');
+			psd.val('');
+        },100);
 	}
 	
 })

@@ -77,8 +77,8 @@
 			setTimeout(function() {
 				plus.webview.getWebviewById('video_c.html').addEventListener('hide', function() {
 		            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()');
-		        },200);
-			})
+		        });
+			},200)
 		}	
 	})
   	

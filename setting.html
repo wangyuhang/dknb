@@ -12,7 +12,7 @@
     <style>
     .mui-content{font-size:14px;}
     .mui-icon{color:#333;}
-    .c-ico span{margin-left:20px; font-size:14px; color:#333;}
+    .c-ico span{margin-left:20px; font-size:16px; color:#333;}
     
 	.c-setting-head{width:100%; height:150px; background:url(images/c-set-head-bg.jpg) repeat center; text-align:center;}
 	.c-avatar{padding-top:10px;}	
@@ -47,21 +47,21 @@
 		
 		<ul class="mui-table-view mui-table-view-chevron">
 			<li class="openItem mui-table-view-cell">
-				<a href="#notifications" class="mui-navigate-right mui-icon c-ico c-ico-msg"><span>我的消息</span></a>
+				<a href="notifications" class="mui-navigate-right mui-icon c-ico c-ico-msg"><span>我的消息</span></a>
 			</li>
-			<li class="openItem mui-table-view-cell">
-				<a href="#privacy" class="mui-navigate-right mui-icon c-ico c-ico-personal"><span>个人资料</span></a>
+			<li class="openItem mui-table-view-cell" rel="setting_personal.html">
+				<a href="javascript:;"  class="mui-navigate-right mui-icon c-ico c-ico-personal"><span>个人资料</span></a>
 			</li>
 		</ul>
 		<ul class="mui-table-view mui-table-view-chevron">
 			<li class="openItem mui-table-view-cell">
-				<a href="#address" class="mui-navigate-right mui-icon c-ico c-ico-gift"><span>已兑换奖品</span></a>
+				<a href="address" class="mui-navigate-right mui-icon c-ico c-ico-gift"><span>已兑换奖品</span></a>
 			</li>
 			<li class="openItem mui-table-view-cell">
-				<a href="#address" class="mui-navigate-right mui-icon c-ico c-ico-address"><span>我的收货地址</span></a>
+				<a href="address" class="mui-navigate-right mui-icon c-ico c-ico-address"><span>我的收货地址</span></a>
 			</li>
 			<li class="openItem mui-table-view-cell">
-				<a href="#vipcard" class="mui-navigate-right mui-icon c-ico c-ico-card"><span>我的卡券</span></a>
+				<a href="vipcard" class="mui-navigate-right mui-icon c-ico c-ico-card"><span>我的卡券</span></a>
 			</li>
 		</ul>
 		<ul class="mui-table-view mui-table-view-chevron">
@@ -153,8 +153,25 @@ mui.plusReady(function(){
 	});
 	
 	mui(document).on('tap', '.openItem', function() {
+		var id = $.cookie('id'),
+			target = this.getAttribute('rel');
+		console.log(target)
 		if($.cookie('id')) {
-			
+			 var webview = mui.openWindow({
+			    url: target,
+			    id: target,
+			    styles:{
+			      top: '0px',//新页面顶部位置
+			      bottom: '0px'
+			    },
+			    extras:{
+			    		id: id
+			    },
+			    waiting:{
+			      autoShow:true,//自动显示等待框，默认为true
+			      title:'正在加载...'//等待对话框上显示的提示内容
+			    }				  
+			})
 		}else{
 			 openLoginView() ;
 		}
@@ -169,10 +186,10 @@ mui.plusReady(function(){
 	           	if(personalInfo) {
 		 			loadPersonalInfo();
 		 		}else{
-		 			mui.toast('信息有误');
+		 			mui.toast('登录失败');
 		 		}
-	        },100);
-		})
+	        });
+		},100)
 	}
 		
 
