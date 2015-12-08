@@ -57,7 +57,7 @@
 			<li class="openItem mui-table-view-cell">
 				<a href="address" class="mui-navigate-right mui-icon c-ico c-ico-gift"><span>已兑换奖品</span></a>
 			</li>
-			<li class="openItem mui-table-view-cell">
+			<li class="openItem mui-table-view-cell" rel="address.html">
 				<a href="address" class="mui-navigate-right mui-icon c-ico c-ico-address"><span>我的收货地址</span></a>
 			</li>
 			<li class="openItem mui-table-view-cell">
@@ -98,21 +98,66 @@
  <script type="text/javascript" charset="utf-8">
  
 mui.init();
-mui.plusReady(function(){
-	
-	var loginView = mui.preload({
-	    url:'login_sign_in.html',
-	    id:'login_sign_in.html',
-	    styles:{
-	    		top:'0px',
-	    		bottom:'0px'
-	    },
-	    extras:{}
-	});
+mui.plusReady(function(){	
+	//打开个人资料页面
+	function openPersinalView() {
+		var webview = mui.openWindow({
+		    url: 'setting_personal.html',
+		    id: 'setting_personal.html',
+		    styles:{
+		      top: '0px',//新页面顶部位置
+		      bottom: '0px',
+		      popGesture:'close'
+		    },
+		    waiting:{
+		      autoShow:true,//自动显示等待框，默认为true
+		      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+
+        //监听个人资料修改页面隐藏
+        if(mui.os.ios) {
+	        setTimeout(function() {
+		        plus.webview.getWebviewById('setting_personal.html').addEventListener('hide', function() {
+					var personalInfo = $.cookie('id');
+		           	if(personalInfo) {
+			 			$('#pAvatar').attr('src', $.cookie('avatar'));
+						$('#pName').html($.cookie('nickname'));
+			 		}
+		        });
+		     },200)
+	    }
+
+	}
 	
  	//打开登录界面
  	function openLoginView() {
- 		plus.webview.getWebviewById('login_sign_in.html').show();
+ 		var webview = mui.openWindow({
+		    url: 'login_sign_in.html',
+		    id: 'login_sign_in.html',
+		    styles:{
+		      top: '0px',//新页面顶部位置
+		      bottom: '0px'
+		    },
+		    waiting:{
+		      autoShow:true,//自动显示等待框，默认为true
+		      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+ 		if(mui.os.ios) {
+			setTimeout(function() {
+				//监听登录页面隐藏
+				plus.webview.getWebviewById('login_sign_in.html').addEventListener('close', function() {
+					console.log('登录成功')
+					var personalInfo = $.cookie('id');
+		           	if(personalInfo) {
+			 			loadPersonalInfo();
+			 		}else{
+			 			mui.toast('登录失败');
+			 		}
+		        });
+			},100);
+		}
  	}
  	
  	//从localstore里读取用户信息
@@ -132,7 +177,7 @@ mui.plusReady(function(){
 		$('#loginBtn').css('display','none');
 		$('#pAvatar').attr('src', $.cookie('avatar'));
 		$('#pIntegral').html($.cookie('integral'));
-		$('#pName').html($.cookie('username'))
+		$('#pName').html($.cookie('nickname'))
 		$('#signOutBtn').css('display','block');
  	}
  	
@@ -144,7 +189,7 @@ mui.plusReady(function(){
 	
 	//点击注销，退出登录
 	mui(document).on('tap', '#signOutBtn', function() {
-		$.cookie('username',null);
+		$.cookie('cellphone',null);
 		$.cookie('id',null);
 		$.cookie('nickname',null);
 		$.cookie('avatar',null);
@@ -155,43 +200,30 @@ mui.plusReady(function(){
 	mui(document).on('tap', '.openItem', function() {
 		var id = $.cookie('id'),
 			target = this.getAttribute('rel');
-		console.log(target)
 		if($.cookie('id')) {
-			 var webview = mui.openWindow({
-			    url: target,
-			    id: target,
-			    styles:{
-			      top: '0px',//新页面顶部位置
-			      bottom: '0px'
-			    },
-			    extras:{
-			    		id: id
-			    },
-			    waiting:{
-			      autoShow:true,//自动显示等待框，默认为true
-			      title:'正在加载...'//等待对话框上显示的提示内容
-			    }				  
-			})
+			if(target == 'setting_personal.html') {
+				openPersinalView();
+			}else {
+				 var webview = mui.openWindow({
+				    url: target,
+				    id: target,
+				    styles:{
+				      top: '0px',//新页面顶部位置
+				      bottom: '0px'
+				    },
+				    extras:{
+				    		id: id
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+			}
 		}else{
 			 openLoginView() ;
 		}
 	});
 	
-
-	//关闭登录界面的时候，监听cookie是否已经写入，写入就显示登录信息，没有写入显示登录失败
-	if(mui.os.ios) {
-		setTimeout(function() {
-			plus.webview.getWebviewById('login_sign_in.html').addEventListener('hide', function() {
-				var personalInfo = $.cookie('id');
-	           	if(personalInfo) {
-		 			loadPersonalInfo();
-		 		}else{
-		 			mui.toast('登录失败');
-		 		}
-	        });
-		},100)
-	}
-		
-
  })
  </script>

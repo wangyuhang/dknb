@@ -11,7 +11,6 @@
     		<link href="css/setting.css" rel="stylesheet"/>
     		<link href="css/mui.picker.css" rel="stylesheet" />
 		<link href="css/mui.poppicker.css" rel="stylesheet" />
-		<link href="css/mui.listpicker.css" rel="stylesheet" />
 
 		<style>
 		.mui-content{padding-top:44px; font-size:16px;}
@@ -27,7 +26,7 @@
 		    返回
 		  </button>
 		  <a id="saveInfo" class="c-head-right">保存</a>
-		  <h1 id="typeTitle" class="mui-title">登录</h1>
+		  <h1 id="typeTitle" class="mui-title">个人资料</h1>
 		</header>
 		
 		<!--单页面结束-->
@@ -95,7 +94,6 @@
 </html>
 <script src="js/zepto.min.js"></script>
 <script src="js/cookie.js"></script>
-<script src="js/mui.listpicker.js"></script>
 <script src="js/mui.picker.js"></script>
 <script src="js/mui.poppicker.js"></script>
 <script>
@@ -246,6 +244,7 @@ getToken();
 
 function initInfo() {
 	var id = $.cookie('id');
+		console.log(id)
 	if(id) {
 		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/get-user-message',{
 			data:{
@@ -276,7 +275,6 @@ function initInfo() {
 			}
 		});
 	}else {
-		//plus.webview.currentWebview().hide();
 		mui.toast('登录失效请重新登录');
 	}
 }
@@ -305,6 +303,7 @@ function submitInfo() {
 			timeout:10000,//超时时间设置为10秒；
 			success:function(result){
 				getToken();
+				$.cookie('nickname',nicknameInput.val());
 				mui.toast(result.info);
 			},
 			error:function(xhr,type,errorThrown){
@@ -312,36 +311,33 @@ function submitInfo() {
 			}
 		});
 	}else {
-		//plus.webview.currentWebview().hide();
-		mui.toast('登录失效请重新登录');
 	}
 }
 
 function submitAvatar(url) {
 	var id = $.cookie('id');
-	console.log(url)
 	var url = 'file://'+url;
 	if(id) {
 		var task = plus.uploader.createUpload( 'http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/upload/avatar', 
 			{ method:"post"},
 			function ( t, status ) {
+				//重新获取token
 				getToken();
 				// 上传完成
 				if ( status == 200 ) { 
-					console.log( "Upload success: " + t.responseText);
+					$.cookie('avatar',$.parseJSON(t.responseText).data);
+					mui.toast('头像上传成功');
 				} else {
-					alert( "Upload failed: " + status );
+					//alert( "Upload failed: " + status );
+					mui.toast('头像上传失败');
 				}
 			}
 		);
 		task.addFile(url, {key:"avatar"});
 		task.addData( "token", token);
 		task.addData( "uid", id );
-
 		task.start();
 	}else {
-		//plus.webview.currentWebview().hide();
-		mui.toast('登录失效请重新登录');
 	}
 }
 

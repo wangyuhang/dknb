@@ -125,13 +125,16 @@
 	getToken();
 
 	//请求验证码倒计时
+	var time = 60,
+		setIntervalFun = null;
 	function resetTime(ele) {
-		var time = 60;
-		setInterval(function() {
+		time = 60;
+		setIntervalFun = setInterval(function() {
 			if(time>=0) {
 				ele.text(time--);
 			}else{
 				ele.css('display','none');
+				clearInterval(setIntervalFun);
 			}		
 		},1000);
 	}
@@ -167,7 +170,7 @@
 			type: 'post',
 			dataType:'json',
 			data:{
-				username: phoneNum.val(),
+				cellphone: phoneNum.val(),
 				token:token,
 				smstype:1
 			},
@@ -211,7 +214,7 @@
 		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/forget-password',{
 			type: 'post',
 			data:{
-				username: phoneNum.val(),
+				cellphone: phoneNum.val(),
 				smscode:iCode.val(),
 				newpassword:pPsd.val()
 			},
@@ -219,7 +222,7 @@
 			success: function(result) {
 				if(result.succ) {
 					mui.toast(result.info);
-					plus.webview.currentWebview().hide();
+					plus.webview.currentWebview().close();
 				}else{
 					mui.toast(result.info);
 				}
@@ -261,7 +264,7 @@
 			getICodeFun();
 		});
 
-		//点击注册完成，注册成功直接登录
+		//点击下一步
 		mui(document).on('tap', '#signInBtn', function() {
 			var step = this.getAttribute('rel');
 			if(step == 1) {

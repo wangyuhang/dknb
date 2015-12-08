@@ -126,13 +126,16 @@
 	getToken();
 
 	//请求验证码倒计时
+	var time = 60,
+		setIntervalFun = null;
 	function resetTime(ele) {
-		var time = 60;
-		setInterval(function() {
+		time = 60;
+		setIntervalFun = setInterval(function() {
 			if(time>=0) {
 				ele.text(time--);
 			}else{
 				ele.css('display','none');
+				clearInterval(setIntervalFun);
 			}		
 		},1000);
 	}
@@ -168,7 +171,7 @@
 			type: 'post',
 			dataType:'json',
 			data:{
-				username: phoneNum.val(),
+				cellphone: phoneNum.val(),
 				token:token,
 				smstype:0
 			},
@@ -212,7 +215,7 @@
 		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/register',{
 			type: 'post',
 			data:{
-				username: phoneNum.val(),
+				cellphone: phoneNum.val(),
 				smscode:iCode.val(),
 				password:pPsd.val()
 			},
@@ -220,12 +223,12 @@
 			success: function(result) {
 				if(result.succ) {
 					mui.toast(result.info);
-					$.cookie('username',result.data.username);
+					/*$.cookie('cellphone',result.data.cellphone);
 					$.cookie('id',result.data.id);
 					$.cookie('nickname',result.data.nickname);
 					$.cookie('avatar',result.data.avatar);
-					$.cookie('integral',result.data.integral);
-					plus.webview.currentWebview().hide();
+					$.cookie('integral',result.data.integral);*/
+					plus.webview.currentWebview().close();
 				}else{
 					mui.toast(result.info);
 				}
@@ -268,7 +271,7 @@
 			getICodeFun();
 		});
 
-		//点击注册完成，注册成功直接登录
+		//点击注册完成
 		mui(document).on('tap', '#signInBtn', function() {
 			var step = this.getAttribute('rel');
 			if(step == 1) {

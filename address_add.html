@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<script src="js/mui.min.js"></script>
+    		<link href="css/mui.min.css" rel="stylesheet"/>
+    		<link href="css/comm.css" rel="stylesheet"/>
+    		<link href="css/setting.css" rel="stylesheet"/>
+    		<link href="css/mui.picker.css" rel="stylesheet" />
+		<link href="css/mui.poppicker.css" rel="stylesheet" />
+
+		<style>
+		.mui-content{padding-top:44px; font-size:16px;}
+		input,textarea{font-size:16px;}
+		.c-head-right{line-height:44px; float:right; color:#fff;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+		  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+		    <span class="mui-icon mui-icon-left-nav"></span>
+		    返回
+		  </button>
+		  <a id="saveInfo" class="c-head-right">保存</a>
+		  <h1 id="typeTitle" class="mui-title">修改地址</h1>
+		</header>
+		
+		<!--单页面结束-->
+		<div  class="mui-content">
+			<div  class="mui-input-group">
+				<div class="mui-input-row">
+					<label>收货人</label>
+					<input id="name" type="text" class="mui-input-clear" placeholder="请输入收货人姓名">
+				</div>
+				<div class="mui-input-row">
+					<label>手机号码</label>
+					<input id='phone' class="mui-input-clear" type='text' placeholder="请输入收货人手机号码"></input>
+				</div>
+				<div class="mui-input-row">
+					<label>邮编</label>
+					<input id="postcode" class="mui-input-clear" type='text' placeholder="请输入所在地邮编">
+				</div>
+				<div class="mui-input-row">
+					<label>所在地区</label>
+					<input id="area" class="mui-input-clear" type='text' placeholder="请选择所在地区" readonly="readonly" >
+					<div id="areaContent" style="display:none;"></div>
+				</div>
+				<div class="mui-input-row">
+					<label>详细地址</label>
+					<input id="address" class="mui-input-clear" type='text' placeholder="请输入详细地址">
+				</div>
+			</div>
+			
+		</div>
+		
+	</body>
+</html>
+<script src="js/zepto.min.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/mui.picker.js"></script>
+<script src="js/mui.poppicker.js"></script>
+<script src="js/city.data.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+<script>
+mui.init();
+
+
+//获取token值
+var token = null;
+function getToken() {
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/get-update-accesstoken',{
+		dataType:'json',//服务器返回json格式数据
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(result){
+			if(result.succ) {
+				token = result.info;
+			}
+		},
+		error:function(xhr,type,errorThrown){
+		}
+	});
+}
+getToken();
+
+
+var areaContent = $('#areaContent');
+mui.plusReady(function() {
+	//地址选择
+	var cityPicker3 = new mui.PopPicker({
+		layer: 3
+	});
+	cityPicker3.setData(cityData3);
+	var showCityPickerButton = document.getElementById('area');
+	showCityPickerButton.addEventListener('tap', function(event) {
+		cityPicker3.show(function(items) {
+			showCityPickerButton.value = (items[0] || {}).text + ' ' + (items[1] || {}).text + ' ' + (items[2] || {}).text;
+			areaContent.html('<span id="province">'+(items[0] || {}).text + '</span> <span id="city">' + (items[1] || {}).text + '</span> <span id="country">' + (items[2] || {}).text+'</span>');
+		});
+	}, false);
+	
+	//保存地址信息
+	var name = $('#name'),
+		phone = $('#phone'),
+		postcode = $('#postcode'),
+		address = $('#address'),
+		area = $('#area');
+	mui(document).on('tap', '#saveInfo', function() {
+		if($.trim(name.val()) == '') {
+			mui.toast('收件人姓名不能为空');
+			return false;
+		}else if($.trim(phone.val()) == '') {
+			mui.toast('收件人电话不能为空');
+			return false;
+		}else if($.trim(area.val()) == '') {
+			mui.toast('所在地区不能为空');
+			return false;
+		}else if($.trim(address.val()) == '') {
+			mui.toast('详细地址不能为空');
+			return false;
+		}
+		var id = $.cookie('id');
+		if(id) {
+			mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/address/create',{
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒
+				data:{
+					uid: id,
+					token: token,
+					name: name.val(),
+					phone: phone.val(),
+					postcode: postcode.val(),
+					address: address.val(),
+					province: $('#province').html(),
+					city: $('#city').html(),
+					country: $('#country').html()
+				},
+				success:function(result){
+					getToken();
+					if(result.succ) {
+						plus.webview.currentWebview().close();
+					}
+					mui.toast(result.info)
+				},
+				error:function(xhr,type,errorThrown){
+				}
+			});
+		}
+	});
+	
+})
+	
+
+</script>
+

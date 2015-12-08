@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <style>
+    	.mui-content{padding-top:44px; font-size:16px;}
+	input,textarea{font-size:16px;}
+	.c-head-right{line-height:44px; float:right; color:#fff;}
+	
+	.mui-content>.mui-table-view:first-child{margin-top:0;}
+	.mui-table-view{background-color:#f0eff5;}
+	.mui-table-view-cell{margin-bottom:10px; background-color:#fff;}
+	.mui-table-view-cell:after{height:0;}
+	
+	.mui-table-view-cell.on{padding-bottom:10px; background:url(images/c-address-cell-bottom.gif) bottom repeat-x #fffdee;}
+	.mui-table-view-cell.on .mui-slider-handle{background-color:#fffdee;}
+	.c-address-cell .c-name{float:left;}
+	.c-address-cell .c-phone{float:right;}
+	.c-address-cell .c-address{margin-top:3px; color:#676566; font-size:14px;}
+	.c-default-address{display:none; margin-top:3px; color:#07a5e4; font-size:14px;}
+	.mui-table-view-cell.on .c-default-address{display:block;}
+    </style>
+    
+</head>
+<body>
+
+<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+    <span class="mui-icon mui-icon-left-nav"></span>
+    返回
+  </button>
+  <a id="addAddress" class="c-head-right">新增</a>
+  <h1 id="typeTitle" class="mui-title">我的收货地址</h1>
+</header>
+
+<div class="mui-content">
+	<ul id="addressCtn" class="mui-table-view">
+		
+	
+	</ul>
+
+	
+<div>
+
+</body>
+</html>
+<script src="js/zepto.min.js"></script>
+<script src="js/cookie.js"></script>
+<script type="text/javascript" charset="utf-8">
+ mui.init();
+ 
+ //获取token值
+var token = null;
+function getToken() {
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/get-update-accesstoken',{
+		dataType:'json',//服务器返回json格式数据
+		type:'post',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(result){
+			if(result.succ) {
+				token = result.info;
+			}
+		},
+		error:function(xhr,type,errorThrown){
+		}
+	});
+}
+getToken();
+
+//获取地址列表，addressArr用于修改地址时候，传给修改页面的单条地址信息。
+var addressArr = [];
+function getAddressList() {
+	var id = $.cookie('id');
+	if(id) {
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/address/list', {
+			data:{
+				uid: id
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'get',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(result){
+				if(result.succ) {
+					var arr = result.data,
+						html = '',
+						defaulHtml = '';
+					$.each(arr, function(index) {
+						var addressId = this.id,
+							country = this.country,
+							province = this.province,
+							city = this.city,
+							address = this.address,
+							name = this.name,
+							phone = this.phone,
+							postcode = this.postcode,
+							is_default = this.is_default == '1'? 'on': '';
+						addressArr[index] = this;
+						html += '<li id="add'+addressId+'" class="mui-table-view-cell '+is_default+'" rel="'+addressId+'">'+
+										'<div class="mui-slider-right mui-disabled">'+
+											'<a class="mui-btn mui-btn-green modifyAddressBtn" rel="'+index+'">修改</a>'+
+											'<a class="mui-btn mui-btn-red deleteAddressBtn" rel="'+addressId+'">删除</a>'+
+										'</div>'+
+										'<div class="mui-slider-handle c-address-cell">'+
+											'<div class="mui-clearfix"><span class="c-name">'+name+'</span><span class="c-phone">'+phone+'</span></div>'+
+											'<div class="c-address">'+province+city+country+address+'</div>'+
+											'<div class="c-default-address mui-icon c-ico  c-ico-right"> 默认地址</div>'+
+										'</div>'+
+									'</li>';
+					});
+					$('#addressCtn').html(html);
+				}else {
+					mui.toast(result.info)
+				}
+			},
+			error:function(xhr,type,errorThrown){
+			}
+		});
+	}else {
+	}
+}
+getAddressList();
+
+//删除收获地址
+function deleteAddress(addressId) {
+	var id = $.cookie('id');
+	if(id) {
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/address/delete', {
+			data:{
+				uid: id,
+				addrid: addressId,
+				token: token
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(result){
+				getToken();
+				mui.toast(result.info);
+				$('#add'+addressId).remove();
+			},
+			error:function(xhr,type,errorThrown){
+			}
+		});
+	}else {
+	}
+}
+
+//设置默认地址
+function setDefaultAddress(addressId) {
+	var id = $.cookie('id');
+	if(id) {
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/address/set-default', {
+			data:{
+				uid: id,
+				addrid: addressId,
+				token: token
+			},
+			dataType:'json',//服务器返回json格式数据
+			type:'post',//HTTP请求类型
+			timeout:10000,//超时时间设置为10秒；
+			success:function(result){
+				getToken();
+				mui.toast(result.info);
+				//给默认地址加上样式
+				var thisCell = $('#add'+addressId);
+				$('.on').removeClass('on');
+				thisCell.addClass('on');
+				
+				//将默认地址放到最上面
+				var thisCellClone = thisCell.clone();
+				$('#addressCtn').prepend(thisCellClone);
+				thisCell.remove();
+			},
+			error:function(xhr,type,errorThrown){
+			}
+		});
+	}else {
+	}
+}
+
+
+
+mui.plusReady(function() {
+	//点击地址设置默认地址
+	mui(document).on('tap', '.mui-table-view-cell', function() {
+		var addressId = this.getAttribute('rel');
+		setDefaultAddress(addressId);
+	});
+	
+	//点击删除
+	mui(document).on('tap', '.deleteAddressBtn', function() {
+		var addressId = this.getAttribute('rel');
+		deleteAddress(addressId);
+	});
+	
+	//点击修改
+	mui(document).on('tap', '.modifyAddressBtn', function() {
+		var index = this.getAttribute('rel');
+		var webview = mui.openWindow({
+		    url: 'address_modify.html',
+		    id: 'address_modify.html',
+		    styles:{
+		      top: '0px',//新页面顶部位置
+		      bottom: '0px'
+		    },
+		    extras:{
+		    		addressPre: addressArr[index]
+		    },
+		    waiting:{
+		      autoShow:true,//自动显示等待框，默认为true
+		      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+		
+		if(mui.os.ios) {
+			setTimeout(function() {
+				//监听登录页面隐藏
+				plus.webview.getWebviewById('address_modify.html').addEventListener('close', function() {
+					getAddressList();
+		        });
+			})
+		}
+	});
+	
+	//点击新建
+	mui(document).on('tap', '#addAddress', function() {
+		var webview = mui.openWindow({
+		    url: 'address_add.html',
+		    id: 'address_add.html',
+		    styles:{
+		      top: '0px',//新页面顶部位置
+		      bottom: '0px'
+		    },
+		    waiting:{
+		      autoShow:true,//自动显示等待框，默认为true
+		      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+		
+		if(mui.os.ios) {
+			setTimeout(function() {
+				//监听登录页面隐藏
+				plus.webview.getWebviewById('address_add.html').addEventListener('close', function() {
+					getAddressList();
+		        });
+			})
+		}
+	});
+	
+	
+})
+</script>

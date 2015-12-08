@@ -95,12 +95,13 @@ function loginFun() {
 		success: function(result) {
 			if(result.succ) {
 				mui.toast(result.info);
-				$.cookie('username',result.data.username);
+				$.cookie('cellphone',result.data.cellphone);
 				$.cookie('id',result.data.id);
 				$.cookie('nickname',result.data.nickname);
 				$.cookie('avatar',result.data.avatar);
 				$.cookie('integral',result.data.integral);
-				plus.webview.currentWebview().hide();
+				plus.storage.setItem('id',result.data.id);
+				plus.webview.currentWebview().close();
 			}else{
 				mui.toast(result.info);
 			}
@@ -108,44 +109,67 @@ function loginFun() {
 	});
 }
 
+//进入app之后，来个请求，看看是不是在登录状态，是就直接登录，不是就重新登录
+function autoLogin() {
+	var id = plus.storage.getItem('id');
+	
+}
+
 var phoneNum = $('#phoneNum'),
 	  psd = $('#psd'),
 	  loginBtn = $('#loginBtn'),
 	  registBtn = $('#registBtn');
 mui.plusReady(function(){
-	//预先加载注册页面
-	var registView = mui.preload({
-	    url:'regist_phone.html',
-	    id:'regist_phone.html',
-	    styles:{
-	    		top:'0px',
-	    		bottom:'0px'
-	    },
-	    extras:{}
-	});
-	
-	//预先加载忘记密码页面
-	var registView = mui.preload({
-	    url:'forget_psd.html',
-	    id:'forget_psd.html',
-	    styles:{
-	    		top:'0px',
-	    		bottom:'0px'
-	    },
-	    extras:{}
-	});
 	
 	//点击注册打开注册界面
 	mui(document).on('tap', '#registBtn', function() {
-		 plus.webview.getWebviewById('regist_phone.html').show();
+		 var webview = mui.openWindow({
+		    url: 'regist_phone.html',
+		    id: 'regist_phone.html',
+		    styles:{
+		      top: '0px',//新页面顶部位置
+		      bottom: '0px'
+		    },
+		    waiting:{
+		      autoShow:true,//自动显示等待框，默认为true
+		      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+		/* if(mui.os.ios) {
+			setTimeout(function() {
+				plus.webview.getWebviewById('regist_phone.html').addEventListener('close', function() {
+				
+		        })
+			},100)
+		}	 */
 	});
 	
 	//点击忘记密码打开忘记密码页面
 	mui(document).on('tap', '#forgetPsd', function() {
-		 plus.webview.getWebviewById('forget_psd.html').show();
+		  var webview = mui.openWindow({
+		    url: 'forget_psd.html',
+		    id: 'forget_psd.html',
+		    styles:{
+		      top: '0px',//新页面顶部位置
+		      bottom: '0px'
+		    },
+		    waiting:{
+		      autoShow:true,//自动显示等待框，默认为true
+		      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+		if(mui.os.ios) {
+			setTimeout(function() {	
+				////进入页面先清空输入框里的内容
+				plus.webview.currentWebview().addEventListener('show', function() {
+					phoneNum.val('');
+					psd.val('');
+		        });
+			},100);
+		}
 	});
 	
-	//点击注册打开注册界面
+	//点击登录
 	mui(document).on('tap', '#loginBtn', function() {
 		if( !isnum(phoneNum)) {
 			mui.toast('用户名或手机号码输入有误');
@@ -159,28 +183,6 @@ mui.plusReady(function(){
 		
 	});
 	
-	
-	
-	
-	//关闭注册界面的时候，监听cookie是否已经写入，写入就显示登录信息，没有写入显示登录失败
-	if(mui.os.ios) {
-		setTimeout(function() {
-			plus.webview.getWebviewById('regist_phone.html').addEventListener('hide', function() {
-				var personalInfo = $.cookie('id');
-	           	if(personalInfo) {
-		 			plus.webview.currentWebview().hide();
-		 		}else{
-		 			mui.toast('注册失败');
-		 		}
-	        });
-		},100)
-		
-		////进入页面先清空输入框里的内容
-		plus.webview.currentWebview().addEventListener('show', function() {
-			phoneNum.val('');
-			psd.val('');
-        },100);
-	}
 	
 })
 </script>
