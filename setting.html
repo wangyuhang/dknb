@@ -181,21 +181,66 @@ mui.plusReady(function(){
 		$('#signOutBtn').css('display','block');
  	}
  	
+ //进入app之后，来个请求，看看是不是在登录状态，是就直接登录，不是就重新登录
+function autoLogin() {
+	var id = plus.storage.getItem('id'),
+		username = plus.storage.getItem('username');
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/login-status',{
+		type: 'post',
+		dataType:'json',
+		data:{
+			uid: id,
+			username: username
+		},
+		success: function(result) {
+			if(result.succ) {
+				$.cookie('cellphone',result.data.cellphone);
+				$.cookie('id',result.data.id);
+				$.cookie('nickname',result.data.nickname);
+				$.cookie('avatar',result.data.avatar);
+				$.cookie('integral',result.data.integral);
+				$.cookie('username',result.data.username);
+				loadPersonalInfo();
+			}else{
+			}
+		}
+	});
+}
+autoLogin();
+ 	
  
-	//点击登录注册打开登录界面
-	mui(document).on('tap', '#loginBtn', function() {
-		 openLoginView() ;
-	});
+//点击登录注册打开登录界面
+mui(document).on('tap', '#loginBtn', function() {
+	 openLoginView() ;
+});
 	
-	//点击注销，退出登录
-	mui(document).on('tap', '#signOutBtn', function() {
-		$.cookie('cellphone',null);
-		$.cookie('id',null);
-		$.cookie('nickname',null);
-		$.cookie('avatar',null);
-		$.cookie('integral',null);
-		initPage();
+//点击注销，退出登录
+mui(document).on('tap', '#signOutBtn', function() {
+	var id = plus.storage.getItem('id'),
+		username = plus.storage.getItem('username');
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/logout',{
+		type: 'post',
+		dataType:'json',
+		data:{
+			uid: id,
+			username: username
+		},
+		success: function(result) {
+			if(result.succ) {
+				$.cookie('cellphone',null);
+				$.cookie('id',null);
+				$.cookie('nickname',null);
+				$.cookie('avatar',null);
+				$.cookie('integral',null);
+				initPage();
+				plus.storage.setItem('id',null);
+				plus.storage.setItem('username',null);
+				mui.toast('退出成功');
+			}else{
+			}
+		}
 	});
+});
 	
 	mui(document).on('tap', '.openItem', function() {
 		var id = $.cookie('id'),

@@ -100,7 +100,9 @@ function loginFun() {
 				$.cookie('nickname',result.data.nickname);
 				$.cookie('avatar',result.data.avatar);
 				$.cookie('integral',result.data.integral);
-				plus.storage.setItem('id',result.data.id);
+				$.cookie('username',result.data.username);
+				plus.storage.setItem('id',result.data.id.toString());
+				plus.storage.setItem('username',result.data.username);
 				plus.webview.currentWebview().close();
 			}else{
 				mui.toast(result.info);
@@ -109,11 +111,7 @@ function loginFun() {
 	});
 }
 
-//进入app之后，来个请求，看看是不是在登录状态，是就直接登录，不是就重新登录
-function autoLogin() {
-	var id = plus.storage.getItem('id');
-	
-}
+
 
 var phoneNum = $('#phoneNum'),
 	  psd = $('#psd'),
