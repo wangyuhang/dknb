@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <style>
+    .mui-content{background-color:#fff;}
+    ul,li{margin:0; padding:0; list-style:none;}
+    	.program_detail{display:none;}
+	.program_detail .am_pm{height:44px; line-height:44px; padding-left:20px; border-bottom:1px solid #e5e5e5; color:#00a0e9; font-weight:bold;}
+	.program_detail ul.second_list li{display:block; height:44px; line-height:44px; padding-left:20px; border-bottom:1px solid #e5e5e5; overflow:hidden;}
+	.program_detail ul.second_list li a{display:block; height:44px; padding-left:20px;}
+	.program_detail ul.second_list li i{float:right; margin:20px 20px 0 0;}
+	.program_detail ul.second_list strong{color:#00a0e9; font-weight:normal;}
+
+	
+	/*program_tab*/
+	.program_tab{width:100%; height:60px; background:#fff;}
+	.program_tab a{display:block; width:14.2857%; height:60px; float:left; overflow:hidden; text-align:center; color:#666;}
+	.program_tab a .week{height:30px; line-height:30px; }
+	.program_tab a .date{height:30px; line-height:22px; margin:0 auto; font-size:22px;}
+	.program_tab a.on{color:#07a7e5;}
+	.program_tab a.on .date{border-bottom:3px solid #07a7e5;}
+    </style>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+</head>
+<body>
+	
+<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+    <span class="mui-icon mui-icon-left-nav"></span>
+    返回
+  </button>
+  <h1 id="typeTitle" class="mui-title">节目单</h1>
+</header>
+
+<div class="mui-content">
+    <div id="programGuidesTab" class="program_tab">
+        
+    </div>
+
+    <div id="jmdList">
+        
+    </div>    
+    
+</div>
+	
+</body>
+</html>
+<script src="js/zepto.min.js"></script>
+<script>
+mui.init();
+var arrWeek = ['一','二','三','四','五','六','七'];
+function getJmd(channel) {
+	mui.ajax('http://epg.nbtv.cn/json.html', {
+		dataType: 'json',
+		type: 'get',
+		data: {
+			week: 0,
+			channel: channel
+		},
+		success: function(result) {
+			if(result.status) {
+				var toDay = new Date().getDay()-1;
+				toDay = toDay==-1?6:toDay;
+				var weekHtml = '',
+					jmdHtml = '',
+					arr = result.epg;
+				$.each(arr, function(index) {
+					var markToDay = (toDay==index)?'on':'',
+						display = (toDay==index)?'block':'none';
+					weekHtml += '<a href="javascript:;" class=" '+markToDay +' ">'+
+								            '<div class="week">'+arrWeek[index]+'</div>'+
+								            '<div class="date">'+(this.date.split('-'))[2]+'</div>'+
+								        '</a>';
+					var amHtml = '',
+						pmHtml = '';
+					$.each(this.detail, function() {
+						var isPm = (this.time.split(':'))[0] >=12? true: false;
+						if(isPm) {
+							pmHtml += '<li>'+(this.time).toString().substr(0, 5)+' '+this.programme+'</li>';
+						}else {
+							amHtml += '<li>'+(this.time).toString().substr(0, 5)+' '+this.programme+'</li>';
+						}
+					});
+					jmdHtml += '<li>'+
+						                '<div class="program_detail programDeital"  style="display:'+display+'">'+
+						                    '<div class="am_pm">上午</div>'+
+						                    '<div>'+
+						                        '<ul class="second_list">'+amHtml+'</ul>'+
+						                    '</div>'+
+						                    '<div class="am_pm">下午</div>'+
+						                    '<div>'+
+						                        '<ul class="second_list">'+pmHtml+'</ul>'+
+						                    '</div>'+
+						                '</div>'+
+						            '</li>';
+				});
+				$('#jmdList').html('<ul>'+jmdHtml+'</ul>');
+				$('#programGuidesTab').html(weekHtml);
+								
+			}
+		}
+	})
+}
+
+mui.plusReady(function(){
+	var channel = plus.webview.currentWebview().channel;
+	getJmd(channel);
+	
+	//切换每天的节目单
+	mui('#programGuidesTab').on('tap', 'a', function() {
+		var index = $(this).index(),
+			 showHideProgram = $(".programDeital"),
+            programGuidesTab = $("#programGuidesTab a");
+		showHideProgram.css("display","none");
+        programGuidesTab.removeClass("on");
+        $(this).addClass("on");
+        $(showHideProgram[index]).css("display","block");
+	});
+	
+})
+
+</script>

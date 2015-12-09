@@ -50,7 +50,7 @@
 
     mui.init();
     //所有底部菜单子页面数组
-	var subpages = ['news.html', 'video_c.html', 'interaction.html', 'city.html','setting.html','index_content.html'];
+	var subpages = ['news.html', 'video_c.html', 'interaction.html', 'city.html','setting.html','audio.html','index_content.html'];
 	var subpage_style = {
 		top: '46px',
 		bottom: '50px'
@@ -61,10 +61,10 @@
   		
   		//创建子页面，首个选项卡页面显示，其它均隐藏；
   		var self = plus.webview.currentWebview();
-		for (var i = 0; i < 6; i++) {
+		for (var i = 0; i < 7; i++) {
 			var temp = {};
 			var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
-			if (i < 5) {
+			if (i < 6) {
 				sub.hide();
 			}else{
 				temp[subpages[i]] = "true";
@@ -83,10 +83,11 @@
 	})
   	
   	//当前激活选项
-	var activeTab = subpages[5];
+	var activeTab = subpages[7];
 	var title = document.getElementById("title");
 	 //选项卡点击事件
 	mui(document).on('tap', '.cIndexNav', function(e) {
+		console.log(this.getAttribute('href'))
 		var targetTab = this.getAttribute('href');
 		if (targetTab == activeTab) {
 			return;
@@ -96,6 +97,16 @@
 		if(tabTitle == '首页') {
 			title.innerHTML = '<img src="images/logo.png">';
 			$('.mui-active').removeClass('mui-active');
+		}else if(tabTitle == '视听' || tabTitle == '电视') {
+			title.innerHTML = '<div class="c-head-segment">'+
+											'<a class="cIndexNav on" href="video_c.html"><span class="mui-tab-label" style="">电视</span></a>'+
+											'<a class="cIndexNav" href="audio.html"><span class="mui-tab-label" style="">广播</span></a>'+
+										'</div>';
+		}else if(tabTitle == '广播'){
+			title.innerHTML = '<div class="c-head-segment">'+
+											'<a class="cIndexNav" href="video_c.html"><span class="mui-tab-label" style="">电视</span></a>'+
+											'<a class="cIndexNav on"  href="audio.html"><span class="mui-tab-label" style="">广播</span></a>'+
+										'</div>';
 		}else {
 			title.innerHTML = tabTitle;
 		}
@@ -115,22 +126,8 @@
 		activeTab = targetTab;
 	});
 	
-	
-	 //自定义事件，模拟点击“首页选项卡”
-	/*document.addEventListener('gohome', function() {
-		var defaultTab = document.getElementById("defaultTab");
-		//模拟首页点击
-		mui.trigger(defaultTab, 'tap');
-		//切换选项卡高亮
-		var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
-		if (defaultTab !== current) {
-			current.classList.remove('mui-active');
-			defaultTab.classList.add('mui-active');
-		}
-	});*/
   	
   	//头部导航展开
-
    document.getElementById('popNav').addEventListener('tap', function() {
    		if(plus.webview.getWebviewById('pop_nav') && plus.webview.getWebviewById('pop_nav').isVisible()) {
    			plus.webview.getWebviewById('pop_nav').hide('slide-out-top', 300);

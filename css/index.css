@@ -30,3 +30,9 @@
 .c-index-cell-1 a img{width:80px; height:60px; margin-right:10px; float:left;}
 .c-index-cell-1 .c-title{height:20px; font-size:14px; color:#333; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .c-index-cell-1 .c-summary{height:40px; font-size:12px; color:#666; overflow:hidden;}
+
+.c-head-segment{margin-top:2px;}
+.c-head-segment a{display:inline-block; width:60px; height:26px; line-height:26px; border:1px solid #fff; font-size:14px; font-weight:normal;}
+.c-head-segment a.on{background-color:#fff; color:#07a7e1;}
+.c-head-segment a:last-child{margin-left:-1px; border-radius: 0 3px 3px 0;}
+.c-head-segment a:first-child{border-radius:3px 0 0 3px;}
