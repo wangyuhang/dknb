@@ -118,7 +118,7 @@ mui.plusReady(function(){
         //监听个人资料修改页面隐藏
         if(mui.os.ios) {
 	        setTimeout(function() {
-		        plus.webview.getWebviewById('setting_personal.html').addEventListener('hide', function() {
+		        plus.webview.getWebviewById('setting_personal.html').addEventListener('close', function() {
 					var personalInfo = $.cookie('id');
 		           	if(personalInfo) {
 			 			$('#pAvatar').attr('src', $.cookie('avatar'));
@@ -242,33 +242,33 @@ mui(document).on('tap', '#signOutBtn', function() {
 	});
 });
 	
-	mui(document).on('tap', '.openItem', function() {
-		var id = $.cookie('id'),
-			target = this.getAttribute('rel');
-		if($.cookie('id')) {
-			if(target == 'setting_personal.html') {
-				openPersinalView();
-			}else {
-				 var webview = mui.openWindow({
-				    url: target,
-				    id: target,
-				    styles:{
-				      top: '0px',//新页面顶部位置
-				      bottom: '0px'
-				    },
-				    extras:{
-				    		id: id
-				    },
-				    waiting:{
-				      autoShow:true,//自动显示等待框，默认为true
-				      title:'正在加载...'//等待对话框上显示的提示内容
-				    }				  
-				})
-			}
-		}else{
-			 openLoginView() ;
+mui(document).on('tap', '.openItem', function() {
+	var id = $.cookie('id'),
+		target = this.getAttribute('rel');
+	if($.cookie('id')) {
+		if(target == 'setting_personal.html') {
+			openPersinalView();
+		}else {
+			 var webview = mui.openWindow({
+			    url: target,
+			    id: target,
+			    styles:{
+			      top: '0px',//新页面顶部位置
+			      bottom: '0px'
+			    },
+			    extras:{
+			    		id: id
+			    },
+			    waiting:{
+			      autoShow:true,//自动显示等待框，默认为true
+			      title:'正在加载...'//等待对话框上显示的提示内容
+			    }				  
+			})
 		}
-	});
+	}else{
+		 openLoginView() ;
+	}
+});
 	
  })
  </script>

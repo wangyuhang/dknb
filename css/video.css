@@ -30,7 +30,7 @@
 .c-audio-box.c-fm920{background:url(../images/audio_live_bg.jpg) center top;}
 .c-audio-box img{width:100px; box-shadow:0 0 10px 0 #000; position:absolute; left:20px; top:20px;}
 .c-audio-box .c-text{position:absolute; left:140px; top:30px; font-size:30px; color:#fff;;}
-.c-audio-box .c-play-btn{text-align:center; padding-top:10px;}
+.c-audio-box .c-play-btn{text-align:center; padding-top:100px;}
 .c-audio-box .c-play-btn a{display:inline-block; width:100px; height:100px; background:url(../images/audio_live_btns.png) 0 0; zoom:0.6;}
 .c-audio-box .c-stop-btn a{display:inline-block; width:100px; height:100px; background:url(../images/audio_live_btns.png) 0 -400px; zoom:0.6;}
 
