@@ -10,7 +10,11 @@
     <link href="css/news.css" rel="stylesheet"/>
     	<script type="text/javascript" src="js/common.js"></script>	
 	<style>
-		.mui-popover{position:fixed;}
+		body,html{height:100%;}
+		.mui-popover{position:fixed; }
+		.mui-content{height:100%; padding:44px 0; overflow:auto;}
+		header{position:fixed; top:0;}
+		footer{width:100%; height:44px; padding:6px; background-color:#e5e5e5; position:fixed; bottom:0;}
 	</style>
 </head>
 <body>
@@ -40,13 +44,14 @@
 			<ul id="commentList"></ul>
 		</div>
 	</div>
-	<div class="c-fix-bottom"></div>
-	<div class="c-comment-input">
-		<input type="text" placeholder="我说两句..." />
-		<a href="javascript:;">发送</a>
-	</div>
-	
 </div>
+
+<footer>
+	<div id="commentInput" class="c-comment-input">
+		<input type="text" placeholder="我说两句..." />
+		<a id="submitComment" href="javascript:;">发送</a>
+	</div>
+</footer>
 
 <!--分享-->
 <div id="share" class="mui-popover mui-popover-action mui-popover-bottom">
@@ -58,8 +63,13 @@
 	</ul>
 </div>
 <!--分享 end-->
-
+<script src="js/zepto.min.js"></script>
+<script src="js/md5.js"></script>
+<script src="js/cookie.js"></script>
 <script>
+	/*window.addEventListener('resize', function() {
+		ui.areaMsgList.scrollTop = ui.areaMsgList.scrollHeight + ui.areaMsgList.offsetHeight;
+	}, false);*/
 
 	function transTime(nS) {     
        var date =  new Date(parseInt(nS)).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
@@ -74,9 +84,7 @@
 	var list=null,
 		shares=null,
 		sharecontent = {};
-	
-	
-		
+
 	//更新分享列表
 	function updateServices(){
 		list.innerHTML="";
@@ -115,10 +123,8 @@
 	 
 	function shareMessage(s){
 		s.send(sharecontent, function(){
-			//outLine( "分享到\""+s.description+"\"成功！ " );
 			mui.toast( "分享到\""+s.description+"\"成功！ " );
 		}, function(e){
-			//outLine( "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
 			mui.toast(  "分享到\""+s.description+"\"失败: "+e.code+" - "+e.message );
 		} );
 		mui('#share').popover('toggle');
@@ -178,101 +184,138 @@
 		}
 	});
 			
-	mui.plusReady(function() {
-		//接收上个页面传入的参数
-		var newsType = plus.webview.currentWebview().tp,
-			newsTitle = plus.webview.currentWebview().title,
-			shareUrl = plus.webview.currentWebview().shareUrl;
+mui.plusReady(function() {
+	//接收上个页面传入的参数
+	var newsType = plus.webview.currentWebview().tp,
+		newsTitle = plus.webview.currentWebview().title,
+		shareUrl = plus.webview.currentWebview().shareUrl;
+		
+	thumbsUrl = plus.webview.currentWebview().thumbs;		
+	createDownload();		
+	
+	//赋值分享内容		
+	sharecontent = {
+		'title':newsTitle,
+		'href':shareUrl
+	};
+	list = document.getElementById("dlist");
+	//调用分享功能
+	updateServices();
 			
-		thumbsUrl = plus.webview.currentWebview().thumbs;		
-		createDownload();		
-		
-		//赋值分享内容		
-		sharecontent = {
-			'title':newsTitle,
-			'href':shareUrl
-		};
-		list = document.getElementById("dlist");
-		//调用分享功能
-		updateServices();
-				
-		//填充页面内容
-		document.getElementById('typeTitle').innerHTML = newsType;
-		document.getElementById('newsTitle').innerHTML = newsTitle;
-		
-		//获取平面宽度，用于给文章图片设定宽度
-		var windowWidth = plus.webview.currentWebview().getStyle().width;
-		
-		//根据文章id请求文章内容
-		var aid = plus.webview.currentWebview().aid;
-		mui.ajax('http://cmsapi.tools.nbtv.cn',{
-			data:{
-				articleId:aid,
-				task: 'get-single-article'
-			},
-			dataType:'json',//服务器返回json格式数据
-			type:'get',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
-			success:function(data){
-				var result = (data.data)[0],
-					title = result.title,
-					subtitle = result.sub_title,
-					desc = result.desc,
-					createTime =  result.create_time;
+	//填充页面内容
+	document.getElementById('typeTitle').innerHTML = newsType;
+	document.getElementById('newsTitle').innerHTML = newsTitle;
+	
+	//获取平面宽度，用于给文章图片设定宽度
+	var windowWidth = plus.webview.currentWebview().getStyle().width;
+	
+	//根据文章id请求文章内容
+	var aid = plus.webview.currentWebview().aid;
+	mui.ajax('http://cmsapi.tools.nbtv.cn',{
+		data:{
+			articleId:aid,
+			task: 'get-single-article'
+		},
+		dataType:'json',//服务器返回json格式数据
+		type:'get',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(data){
+			var result = (data.data)[0],
+				title = result.title,
+				subtitle = result.sub_title,
+				desc = result.desc,
+				createTime =  result.create_time;
 
-				document.getElementById('newsContent').innerHTML = result.article_content;
-				document.getElementById('createTime').innerHTML = transTime(createTime);
-				
-				var imgs = document.getElementsByTagName('img'),
-					widthLimit = windowWidth-40;
-				mui.each(imgs, function() {
-					var scale = (this.width/widthLimit);
-					this.width = widthLimit;
-					this.height = this.height/scale;
-				});
-				
-			},
-			error:function(xhr,type,errorThrown){				
-			}
-		});
-		
-		
-		//根据文章id请求评论数据
-		mui.ajax('http://cmscomment.tools.nbtv.cn/index.php',{
-			data:{
-				articleId:5,
-				r: 'app-comment/list',
-				offset: 0,
-				count: 5
-			},
-			dataType:'json',//服务器返回json格式数据
-			type:'get',//HTTP请求类型
-			timeout:10000,//超时时间设置为10秒；
-			success:function(data){
-				var arr = data.data,
-					html = '';
-				mui.each(arr, function() {
-					html += '<li>'+
-								'<div>'+
-									'<img src="">'+
-									'<div class="c-comment-cnt">'+
-										'<div>'+
-											'<span class="c-name">'+this.nickname+'</span>'+
-											'<span class="c-time">'+transTime(this.create_time)+'</span>'+
-										'</div>'+
-										'<div class="c-content">'+this.content+'</div>'+
-									'</div>'+
-								'</div>'+
-							'</li>'
-				});
-				document.getElementById('commentList').innerHTML = html;				
-			},
-			error:function(xhr,type,errorThrown){
-				
-			}
-		});
-		
+			document.getElementById('newsContent').innerHTML = result.article_content;
+			document.getElementById('createTime').innerHTML = transTime(createTime);
+			
+			var imgs = document.getElementsByTagName('img'),
+				widthLimit = windowWidth-40;
+			mui.each(imgs, function() {
+				var scale = (this.width/widthLimit);
+				this.width = widthLimit;
+				this.height = this.height/scale;
+			});
+			
+		},
+		error:function(xhr,type,errorThrown){				
+		}
 	});
+	
+	
+	//根据文章id请求评论数据
+	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=comment/manager/list',{
+		data:{
+			articleId:121235,
+			offset: 0,
+			count: 5
+		},
+		dataType:'json',//服务器返回json格式数据
+		type:'get',//HTTP请求类型
+		timeout:10000,//超时时间设置为10秒；
+		success:function(data){
+			var arr = data.data,
+				html = '';
+			mui.each(arr, function() {
+				console.log(this.avatar)
+				html += '<li id="'+this.id+'">'+
+							'<div>'+
+								'<img src="">'+
+								'<div class="c-comment-cnt">'+
+									'<div>'+
+										'<span class="c-name">'+this.nickname+'</span>'+
+										'<span class="c-time">'+transTime(this.create_time)+'</span>'+
+									'</div>'+
+									'<div class="c-content">'+this.content+'</div>'+
+								'</div>'+
+							'</div>'+
+						'</li>'
+			});
+			document.getElementById('commentList').innerHTML = html;				
+		},
+		error:function(xhr,type,errorThrown){
+			
+		}
+	});
+	
+	var checkCode = hex_md5('121235nbtv8');
+	checkCode = checkCode.substr(0,1)+checkCode.substr(31,1)+checkCode.substr(1,1)+checkCode.substr(30,1)+checkCode.substr(2,1)+checkCode.substr(29,1);
+	mui(document).on('tap', '#submitComment', function() {
+		var commentVal = $.trim($('#commentInput input').val());
+		if(commentVal !='') {
+			mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=comment/manager/create',{
+				data:{
+					article_id:121235,
+					article_title:newsTitle,
+					uid:8,
+					content:$('#commentInput input').val(),
+					nickname:$.cookie('nickname'),
+					username:$.cookie('username'),
+					check:checkCode
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'post',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+				success:function(result){
+					if(result.succ) {
+						$('#commentInput input').val('');
+						document.querySelector('#commentInput input').blur()
+					}else{
+						
+					}
+					mui.toast(result.info);
+				},
+				error:function(xhr,type,errorThrown){
+					
+				}
+			});
+		}else {
+			mui.toast('评论不能为空');
+		}
+	})
+	
+	
+});
 				
 			
 </script>

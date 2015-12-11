@@ -8,29 +8,7 @@
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/comm.css" rel="stylesheet"/>
     <link href="css/interation.css" rel="stylesheet"/>
-    <script type="text/javascript" charset="utf-8">
-      	mui.init();
-      	mui.plusReady(function(){
-      		//首页快捷菜单点击事件
-		    mui('#interactionList').on('tap', 'li', function(e) {
-		    		var pageId = this.getAttribute('link');
-		    		var webview = mui.openWindow({
-				    url:pageId+'.html',
-				    id:pageId,
-				    styles:{
-				      top:'0px',//新页面顶部位置
-				      bottom:'0px'
-				    },
-				    extras:{
-				    },
-				    waiting:{
-				      autoShow:true,//自动显示等待框，默认为true
-				      title:'正在加载...'//等待对话框上显示的提示内容
-				    }				  
-				})
-		    });
-      	})
-    </script>
+    
 </head>
 <body>
 <div class="mui-content">
@@ -105,3 +83,27 @@
 
 </body>
 </html>
+
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		//首页快捷菜单点击事件
+	    mui('#interactionList').on('tap', 'li', function(e) {
+	    		var pageId = this.getAttribute('link');
+	    		var webview = mui.openWindow({
+			    url:pageId+'.html',
+			    id:pageId,
+			    styles:{
+			      top:'0px',//新页面顶部位置
+			      bottom:'0px'
+			    },
+			    extras:{
+			    },
+			    waiting:{
+			      autoShow:true,//自动显示等待框，默认为true
+			      title:'正在加载...'//等待对话框上显示的提示内容
+			    }				  
+			})
+	    });
+  	})
+</script>
