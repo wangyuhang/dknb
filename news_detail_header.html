@@ -299,7 +299,7 @@ mui.plusReady(function() {
 				success:function(result){
 					if(result.succ) {
 						$('#commentInput input').val('');
-						document.querySelector('#commentInput input').blur()
+						document.querySelector('#commentInput input').blur();
 					}else{
 						
 					}
@@ -324,18 +324,18 @@ mui.plusReady(function() {
 
 
 <script>	
-	mui('body').on('tap', '#sharePop', function() {
-		var a = this,
-			parent;
-		//根据点击按钮，反推当前是哪个actionsheet
-		for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
-			if (parent.classList.contains('mui-popover-action')) {
-				break;
-			}
+mui('body').on('tap', '#sharePop', function() {
+	var a = this,
+		parent;
+	//根据点击按钮，反推当前是哪个actionsheet
+	for (parent = a.parentNode; parent != document.body; parent = parent.parentNode) {
+		if (parent.classList.contains('mui-popover-action')) {
+			break;
 		}
-		//关闭actionsheet
-		mui('#' + parent.id).popover('toggle');
-	})
+	}
+	//关闭actionsheet
+	mui('#' + parent.id).popover('toggle');
+})
 </script>
 
 

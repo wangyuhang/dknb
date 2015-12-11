@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+    <link href="css/city.css" rel="stylesheet"/>
+    <style>
+    	.mui-content{height:100%;}
+    </style>
+</head>
+<body>
+<div class="mui-content">
+	<div id="serviceList" class="c-service-list" >
+		<ul>
+			<li link="http://dwz.cn/24iDBC" title="宁波地图">
+				<img src="images/sercice-ico-map.gif">
+				<div>宁波地图</div>
+			</li>
+			<li link="http://waptianqi.2345.com/ningbo-58465.htm" title="宁波天气">
+				<img src="images/sercice-ico-weather.gif">
+				<div>宁波天气</div>
+			</li>
+			<li link="http://typhoon.zjwater.gov.cn/wap.htm" title="台风路径">
+				<img src="images/sercice-ico-tf.gif">
+				<div>台风路径</div>
+			</li>
+			<li link="http://touch.qunar.com/h5/train/" title="铁路查询">
+				<img src="images/sercice-ico-railway.gif">
+				<div>铁路查询</div>
+			</li>
+			<li link="http://touch.qunar.com/h5/flight/">
+				<img src="images/sercice-ico-air.gif">
+				<div>航班查询</div>
+			</li>
+			<li link="http://0574.m.weizhangwang.com/" title="违章查询">
+				<img src="images/sercice-ico-illegal.gif">
+				<div>违章查询</div>
+			</li>
+			<li link="http://hd.nbtv.cn/app/yingyong/gjj.html" title="公积金查询">
+				<img src="images/sercice-ico-gjj.gif">
+				<div>公积金查询</div>
+			</li>
+			<li link="http://hd.nbtv.cn/app/yingyong/sb.html" title="社保查询">
+				<img src="images/sercice-ico-sb.gif">
+				<div>社保查询</div>
+			</li>
+		</ul>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+</body>
+</html>
+<script src="js/mui.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+mui.init();	
+ mui.plusReady(function(){
+  	//首页快捷菜单点击事件
+	mui('#serviceList').on('tap', 'li', function(e) {
+		var link = this.getAttribute('link'),
+			title = this.getAttribute('title');
+		var webview = mui.openWindow({
+	    url:'service_detail.html',
+	    id:'service_detail',
+	    styles:{
+	      top:'0px',//新页面顶部位置
+	      bottom:'0px'
+	    },
+	    extras:{
+	    		'link': link,
+	    		'title':title
+	    },
+	    waiting:{
+	      autoShow:true,//自动显示等待框，默认为true
+	      title:'正在加载...'//等待对话框上显示的提示内容
+		    }				  
+		})
+    });
+})
+</script>
