@@ -7,14 +7,7 @@
     <script src="js/mui.min.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/pop_nav.css" rel="stylesheet" />
-    <script type="text/javascript" charset="utf-8">
-      	mui.init();
-      	mui.plusReady(function(){
-      		document.getElementById('closeNav').addEventListener('tap', function() {
-      			plus.webview.currentWebview().hide('slide-out-top', 300);
-      		})
-      	})
-    </script>
+    
 </head>
 <body>
 <!--右上角弹出菜单-->
@@ -23,23 +16,40 @@
 	<div class="c-scroll-wrapper">
 		<div class="c-scroll">
 			<ul>
-				<li><a href="#"><img src="images/42x42.gif"><div>首页</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>摇一摇</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>新闻</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>电视</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>广播</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>爆料</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>活动</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>社区</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>服务</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>全民秀</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>积分商城</div></a></li>
-				<li><a href="#"><img src="images/42x42.gif"><div>邀请好友</div></a></li>
-				<div style="clear:both;"></div>
+				<li><a href="#"><img src="images/pop_nav_yao.png"><div>摇一摇</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_baoliao.png"><div>爆料</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_huodong.png"><div>活动</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_diaocha.png"><div>调查</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_jifen.png"><div>积分商城</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_laohua.png"><div>宁波老话</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_yigong.png"><div>城管义工</div></a></li>
+				<li><a href="#"><img src="images/pop_nav_laji.png"><div>垃圾分类</div></a></li>
 			</ul>
-			<div class="c-close-btn"><a id="closeNav" href="javascript:;">x</a></div>
 		</div>
 	</div>
 </div>
 </body>
 </html>
+<script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	mui.plusReady(function(){
+  		//关闭back、menu按键监听，这样侧滑主界面会自动获得back和memu的按键事件，仅在主界面处理按键逻辑即可；
+		mui.init({
+			keyEventBind: {
+				backbutton: false,
+				menubutton: false
+			}
+		});
+		var main = null;
+		mui.plusReady(function () {
+			main = plus.webview.currentWebview().opener();
+		})
+		
+		function closeMenu () {
+			mui.fire(main,"menu:swiperight");
+		}
+		
+		//左滑显示出来的菜单，只需监听右滑，然后将菜单关闭即可；在该菜单上左滑，不做任何操作；
+		window.addEventListener("swiperight",closeMenu);
+  	})
+</script>

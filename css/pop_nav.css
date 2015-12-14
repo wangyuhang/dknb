@@ -1,9 +1,9 @@
-body{background-color:#fff;}
+body{background:url(../images/pop_nav_bg.jpg) left top; background-size:100% 200%;}
 .c-popnav{width:100%;}
 .c-popnav ul{padding:0; margin:0; list-style:none;}
-.c-popnav ul li{width:33%; height:90px; margin-top:20px; float:left; border:none; text-align:center;}
-.c-popnav ul li a{color:#000;}
-.c-popnav ul li a img{width:60px; height:60px;}
+.c-popnav ul li{height:44px; line-height:30px; padding-left:30px; margin-top:20px; border:none; }
+.c-popnav ul li a{color:#fff;}
+.c-popnav ul li a img{width:30px; height:30px; margin-right:20px; float:left;}
 
 .c-close-btn{margin-top:40px; text-align:center; font-size:30px;}
 .c-close-btn a{display:inline-block; width:100%; height:40px; line-height:40px;}

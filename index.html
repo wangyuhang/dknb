@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>点看宁波</title>
-    <script src="js/mui.min.js"></script>
-    <script src="js/zepto.min.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/comm.css" rel="stylesheet"/>
     <link href="css/index.css" rel="stylesheet" />
@@ -15,7 +13,7 @@
 
 
 <header class="mui-bar mui-bar-nav c-top-bar">
-	<a id="home" class="mui-icon c-ico c-ico-home cIndexNav" href="index_content.html"><span class="mui-tab-label" style="display:none;">首页</span></a>
+	<a  id="user"  class="mui-icon c-ico c-ico c-ico-user cIndexNav" ><span class="mui-tab-label" style="display:none;">我</span></a>
 	<a id="popNav" class="mui-icon mui-pull-right c-ico c-ico-all"></a>
 	<h1 id="title" class="mui-title"><img src="images/logo.png"></h1>
 </header>
@@ -23,9 +21,9 @@
 
 
 <nav class="mui-bar mui-bar-tab">
-	<a id="defaultTab" class="mui-tab-item cIndexNav" href="news.html">
-		<span class="mui-icon c-ico c-ico-news"></span>
-		<span class="mui-tab-label">新闻</span>
+	<a id="defaultTab" class="mui-tab-item cIndexNav mui-active" href="index_content.html">
+		<span class="mui-icon c-ico c-ico-home"></span>
+		<span class="mui-tab-label">首页</span>
 	</a>
 	<a class="mui-tab-item cIndexNav" href="video_c.html">
 		<span class="mui-icon c-ico c-ico-video"><span class="mui-badge">9</span></span>
@@ -39,15 +37,21 @@
 		<span class="mui-icon c-ico c-ico-local"></span>
 		<span class="mui-tab-label">同城</span>
 	</a>
-	<a class="mui-tab-item cIndexNav" href="setting.html">
-		<span class="mui-icon c-ico c-ico-user"></span>
-		<span class="mui-tab-label">我</span>
+	<a class="mui-tab-item cIndexNav" href="news.html">
+		<span class="mui-icon c-ico c-ico-news"></span>
+		<span class="mui-tab-label">新闻</span>
 	</a>
 </nav>
 
 </body>
+<script src="js/mui.min.js"></script>
+<script src="js/zepto.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-
+	//侧滑
+	var main,menu,mask;
+	var showMenu = false,
+		mode = 'main-move';
+	
     mui.init();
     //所有底部菜单子页面数组
 	var subpages = ['news.html', 'video_c.html', 'interaction.html', 'city.html','setting.html','audio.html','index_content.html'];
@@ -72,6 +76,7 @@
 			}
 			self.append(sub);
 		}
+		
 		//直播页面切换到其他页面的时候（延迟监听是为了修正create页面之后无法立刻获取page的BUG）
 		if(mui.os.ios) {
 			setTimeout(function() {
@@ -79,7 +84,28 @@
 		            plus.webview.getWebviewById('video_c.html').evalJS('videoSource.pause()');
 		        });
 			},200)
-		}	
+		}
+		
+		
+		main = plus.webview.currentWebview();
+		//setTimeout的目的是等待窗体动画结束后，再执行create webview操作，避免资源竞争，导致窗口动画不流畅；
+		setTimeout(function () {
+			menu = mui.preload({
+				id: 'pop_nav.html',
+				url: 'pop_nav.html',
+				styles: {
+					left: "100%",
+					width: '70%',
+					zindex: 9999
+				}
+			});
+		},300);
+		
+		main.addEventListener("maskClick", function() {
+			main.setStyle({mask: "none"});
+			closeMenu();
+		}, false);
+		
 	})
   	
   	//当前激活选项
@@ -126,32 +152,67 @@
 		activeTab = targetTab;
 	});
 	
-  	
-  	//头部导航展开
-   document.getElementById('popNav').addEventListener('tap', function() {
-   		if(plus.webview.getWebviewById('pop_nav') && plus.webview.getWebviewById('pop_nav').isVisible()) {
-   			plus.webview.getWebviewById('pop_nav').hide('slide-out-top', 300);
-   		}else{
-			mui.openWindow({
-			    url:'pop_nav.html',
-			    id:'pop_nav',
-			    styles:{
-			      top:'46px',
-			      bottom:'0px',
-			      opacity:0.98
-			    },
-			    show:{
-			      autoShow:true,
-			      aniShow:'slide-in-top'
-			    },
-			    waiting:{
-			      autoShow:true,
-			      title:'正在加载...'		     
-			    }
+  	mui(document).on('tap', '#popNav', function(e) {
+  		openMenu()
+  	})
+  
+	
+	
+	/*
+	 * 显示菜单菜单
+	 */
+	function openMenu() {
+		if (!showMenu) {
+			//侧滑菜单处于隐藏状态，则立即显示出来；
+			//显示完毕后，根据不同动画效果移动窗体；
+			menu.show('none', 0, function() {
+				menu.setStyle({
+					left: '30%',
+					transition: {
+						duration: 150
+					}
+				});
 			});
+			main.setStyle({mask:'rgba(0,0,0,0.5)'});
+			showMenu = true;
 		}
-	});
-		
-		
+	}
+	
+	function closeMenu () {
+		//窗体移动
+		_closeMenu();
+		//关闭遮罩
+		main.setStyle({mask:'none'})
+	}
+	
+	/**
+	 * 关闭侧滑菜单(业务部分)
+	 */
+	function _closeMenu() {
+		if (showMenu) {
+			//主窗体开始侧滑；
+			menu.setStyle({
+				left: '100%',
+				transition: {
+					duration: 150
+				}
+			});
+			//等窗体动画结束后，隐藏菜单webview，节省资源；
+			setTimeout(function() {
+				menu.hide();
+			}, 300);
+			showMenu = false;
+		}
+	}
+	
+	
+	 //主界面向左滑动，若菜单未显示，则显示菜单；否则不做任何操作；
+	window.addEventListener("swipeleft", openMenu);
+	 //主界面向右滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
+	window.addEventListener("swiperight", closeMenu);
+	 //menu页面向右滑动，关闭菜单；
+	window.addEventListener("menu:swiperight", closeMenu);
+	
+	
     </script>
 </html>
