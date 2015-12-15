@@ -7,87 +7,73 @@
     <script src="js/mui.min.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/comm.css" rel="stylesheet"/>
-    <link href="css/setting.css" rel="stylesheet"/>
-    
-    <style>
-    .mui-content{font-size:14px;}
-    .mui-icon{color:#333;}
-    .c-ico span{margin-left:20px; font-size:16px; color:#333;}
-    
-	.c-setting-head{width:100%; height:150px; background:url(images/c-set-head-bg.jpg) repeat center; text-align:center;}
-	.c-avatar{padding-top:10px;}	
-	.c-avatar img{width:70px; height:70px; border-radius:35px;}
-	.c-name{margin-top:5px; font-size:16px;}
-	.c-coin{margin-top:5px; font-size:14px; color:#03A7E2;}
-	.c-coin .c-num{font-size:18px;}
-	.c-sign-btn{width:45px; height:45px; position:absolute; top:10px; right:10px;}
-	.c-sign-btn img{width:45px;}
-	
-	.c-login-btn{padding-top:20px;}
-    </style>
+    <link href="css/side_bar_setting.css" rel="stylesheet"/>
+
   
 </head>
 <body>
-<!--单页面开始-->
+<!--右上角弹出菜单-->
 <div class="mui-content">
-	<!--页面主内容区开始-->
-	<div class="mui-page-content c-setting-content">
-		<div class="c-setting-head">
-			<div id="hasLogined" style="display: none;">
-				<div class="c-avatar"><img id="pAvatar" src="images/42x42.gif"></div>
+	<div class="content">
+		<div id="hasLogined" class="c-has-logined" style="display:block;">
+			<div>
+				<div class="c-avatar"><img id="pAvatar" src="images/defult_avatar.png"></div>
 				<div id="pName" class="c-name">起个响亮一点的名字吧</div>
 				<div class="c-coin">积分：<span id="pIntegral" class="c-num">25800</span></div>
-				<div class="c-sign-btn"><img src="images/c-sign-btn.png"></div>
+				<div class="mui-clearfix"></div>
 			</div>
-			<div id="loginBtn" class="c-login-btn">
-				<div class="c-avatar"><img src="images/c-login-avatar.png"></div>
-				<div>点击登录/注册</div>
-			</div>
+			<div class="c-sign-btn"><img src="images/c-sign-btn.png"></div>
+			
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="openItem mui-table-view-cell">
+					<a href="notifications" class="mui-icon c-ico c-ico-msg"><span>我的消息</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell" rel="setting_personal.html">
+					<a href="javascript:;"  class="mui-icon c-ico c-ico-personal"><span>个人资料</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell">
+					<a href="address" class="mui-icon c-ico c-ico-gift"><span>已兑换奖品</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell" rel="address.html">
+					<a href="address" class="mui-icon c-ico c-ico-address"><span>我的收货地址</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell">
+					<a href="vipcard" class="mui-icon c-ico c-ico-card"><span>我的卡券</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell">
+					<a href="#" class="mui-icon c-ico c-ico-lnvitation"><span>邀请好友</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell">
+					<a href="#" class="mui-icon c-ico c-ico-friends"><span>我的好友</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell">
+					<a href="#" class="mui-icon c-ico c-ico-service"><span>在线客服</span></a>
+				</li>
+				<li class="openItem mui-table-view-cell">
+					<a href="#" class="mui-icon c-ico c-ico-setting"><span>系统设置</span></a>
+				</li>
+			</ul>
+			
+			<!--<ul id="signOutBtn" class="mui-table-view" style="display:none;">
+				<li class="mui-table-view-cell" style="text-align: center;">
+					<a>退出登录</a>
+				</li>
+			</ul>-->
+			
 		</div>
 		
-		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="openItem mui-table-view-cell">
-				<a href="notifications" class="mui-navigate-right mui-icon c-ico c-ico-msg"><span>我的消息</span></a>
-			</li>
-			<li class="openItem mui-table-view-cell" rel="setting_personal.html">
-				<a href="javascript:;"  class="mui-navigate-right mui-icon c-ico c-ico-personal"><span>个人资料</span></a>
-			</li>
-		</ul>
-		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="openItem mui-table-view-cell">
-				<a href="address" class="mui-navigate-right mui-icon c-ico c-ico-gift"><span>已兑换奖品</span></a>
-			</li>
-			<li class="openItem mui-table-view-cell" rel="address.html">
-				<a href="address" class="mui-navigate-right mui-icon c-ico c-ico-address"><span>我的收货地址</span></a>
-			</li>
-			<li class="openItem mui-table-view-cell">
-				<a href="vipcard" class="mui-navigate-right mui-icon c-ico c-ico-card"><span>我的卡券</span></a>
-			</li>
-		</ul>
-		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="openItem mui-table-view-cell">
-				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-lnvitation"><span>邀请好友</span></a>
-			</li>
-			<li class="openItem mui-table-view-cell">
-				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-friends"><span>我的好友</span></a>
-			</li>
-		</ul>
-		<ul class="mui-table-view mui-table-view-chevron">
-			<li class="openItem mui-table-view-cell">
-				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-service"><span>在线客服</span></a>
-			</li>
-			<li class="openItem mui-table-view-cell">
-				<a href="#" class="mui-navigate-right mui-icon c-ico c-ico-setting"><span>系统设置</span></a>
-			</li>
-		</ul>
-		<ul id="signOutBtn" class="mui-table-view" style="display:none;">
-			<li class="mui-table-view-cell" style="text-align: center;">
-				<a>退出登录</a>
-			</li>
-		</ul>
-
+		
+		<div id="loginBtn" class="c-login-ctn">
+			<div class="c-avatar"><img src="images/defult_avatar.png"></div>
+			<div class="c-login-btn">立即登录</div>
+			<div class="c-regist-btn">没有账号？<span>马上注册</span></div>
+		</div>
+		
 	</div>
-	<!--页面主内容区结束-->
+
+</div>
+<!--页面主内容区结束-->
+
 	
 	
 </div>
@@ -96,11 +82,17 @@
 <script src="js/zepto.min.js"></script>
 <script src="js/cookie.js"></script>
  <script type="text/javascript" charset="utf-8">
- 
-mui.init();
+ mui.init({
+	keyEventBind: {
+		backbutton: false,
+		menubutton: false
+	},
+	swipeBack: false
+});
+
 mui.plusReady(function(){	
 	//打开个人资料页面
-	function openPersinalView() {
+	function openPersinalView() {		
 		var webview = mui.openWindow({
 		    url: 'setting_personal.html',
 		    id: 'setting_personal.html',
@@ -114,7 +106,9 @@ mui.plusReady(function(){
 		      title:'正在加载...'//等待对话框上显示的提示内容
 		    }				  
 		})
-
+		
+		//关闭父界面的侧滑设置
+		mui.fire(main,"setting:swipeleft");
         //监听个人资料修改页面隐藏
         if(mui.os.ios) {
 	        setTimeout(function() {
@@ -144,6 +138,8 @@ mui.plusReady(function(){
 		      title:'正在加载...'//等待对话框上显示的提示内容
 		    }				  
 		})
+ 		//关闭父界面的侧滑设置
+		mui.fire(main,"setting:swipeleft");
  		if(mui.os.ios) {
 			setTimeout(function() {
 				//监听登录页面隐藏
@@ -167,7 +163,7 @@ mui.plusReady(function(){
  		}else {
  			$('#hasLogined').css('display','none');
 			$('#loginBtn').css('display','block');
-			$('#signOutBtn').css('display','none');
+			//$('#signOutBtn').css('display','none');
  		}	
  	}
  	initPage();
@@ -178,97 +174,113 @@ mui.plusReady(function(){
 		$('#pAvatar').attr('src', $.cookie('avatar'));
 		$('#pIntegral').html($.cookie('integral'));
 		$('#pName').html($.cookie('nickname'))
-		$('#signOutBtn').css('display','block');
+		//$('#signOutBtn').css('display','block');
  	}
  	
- //进入app之后，来个请求，看看是不是在登录状态，是就直接登录，不是就重新登录
-function autoLogin() {
-	var id = plus.storage.getItem('id'),
-		username = plus.storage.getItem('username');
-	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/login-status',{
-		type: 'post',
-		dataType:'json',
-		data:{
-			uid: id,
-			username: username
-		},
-		success: function(result) {
-			if(result.succ) {
-				$.cookie('cellphone',result.data.cellphone);
-				$.cookie('id',result.data.id);
-				$.cookie('nickname',result.data.nickname);
-				$.cookie('avatar',result.data.avatar);
-				$.cookie('integral',result.data.integral);
-				$.cookie('username',result.data.username);
-				loadPersonalInfo();
-			}else{
+	 //进入app之后，来个请求，看看是不是在登录状态，是就直接登录，不是就重新登录
+	function autoLogin() {
+		var id = plus.storage.getItem('id'),
+			username = plus.storage.getItem('username');
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/login-status',{
+			type: 'post',
+			dataType:'json',
+			data:{
+				uid: id,
+				username: username
+			},
+			success: function(result) {
+				if(result.succ) {
+					$.cookie('cellphone',result.data.cellphone);
+					$.cookie('id',result.data.id);
+					$.cookie('nickname',result.data.nickname);
+					$.cookie('avatar',result.data.avatar);
+					$.cookie('integral',result.data.integral);
+					$.cookie('username',result.data.username);
+					loadPersonalInfo();
+				}else{
+				}
 			}
-		}
-	});
-}
-autoLogin();
- 	
- 
-//点击登录注册打开登录界面
-mui(document).on('tap', '#loginBtn', function() {
-	 openLoginView() ;
-});
-	
-//点击注销，退出登录
-mui(document).on('tap', '#signOutBtn', function() {
-	var id = plus.storage.getItem('id'),
-		username = plus.storage.getItem('username');
-	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/logout',{
-		type: 'post',
-		dataType:'json',
-		data:{
-			uid: id,
-			username: username
-		},
-		success: function(result) {
-			if(result.succ) {
-				$.cookie('cellphone',null);
-				$.cookie('id',null);
-				$.cookie('nickname',null);
-				$.cookie('avatar',null);
-				$.cookie('integral',null);
-				initPage();
-				plus.storage.setItem('id',null);
-				plus.storage.setItem('username',null);
-				mui.toast('退出成功');
-			}else{
-			}
-		}
-	});
-});
-	
-mui(document).on('tap', '.openItem', function() {
-	var id = $.cookie('id'),
-		target = this.getAttribute('rel');
-	if($.cookie('id')) {
-		if(target == 'setting_personal.html') {
-			openPersinalView();
-		}else {
-			 var webview = mui.openWindow({
-			    url: target,
-			    id: target,
-			    styles:{
-			      top: '0px',//新页面顶部位置
-			      bottom: '0px'
-			    },
-			    extras:{
-			    		id: id
-			    },
-			    waiting:{
-			      autoShow:true,//自动显示等待框，默认为true
-			      title:'正在加载...'//等待对话框上显示的提示内容
-			    }				  
-			})
-		}
-	}else{
-		 openLoginView() ;
+		});
 	}
-});
+	autoLogin();
+	 	
+	 
+	//点击登录注册打开登录界面
+	mui(document).on('tap', '#loginBtn', function() {
+		 openLoginView() ;
+	});
+		
+	//点击注销，退出登录
+	/*mui(document).on('tap', '#signOutBtn', function() {
+		var id = plus.storage.getItem('id'),
+			username = plus.storage.getItem('username');
+		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/logout',{
+			type: 'post',
+			dataType:'json',
+			data:{
+				uid: id,
+				username: username
+			},
+			success: function(result) {
+				if(result.succ) {
+					$.cookie('cellphone',null);
+					$.cookie('id',null);
+					$.cookie('nickname',null);
+					$.cookie('avatar',null);
+					$.cookie('integral',null);
+					initPage();
+					plus.storage.setItem('id',null);
+					plus.storage.setItem('username',null);
+					mui.toast('退出成功');
+				}else{
+				}
+			}
+		});
+	});*/
+		
+	mui(document).on('tap', '.openItem', function() {
+		var id = $.cookie('id'),
+			target = this.getAttribute('rel');
+		if($.cookie('id')) {
+			if(target == 'setting_personal.html') {
+				openPersinalView();
+			}else {
+				 var webview = mui.openWindow({
+				    url: target,
+				    id: target,
+				    styles:{
+				      top: '0px',//新页面顶部位置
+				      bottom: '0px'
+				    },
+				    extras:{
+				    		id: id
+				    },
+				    waiting:{
+				      autoShow:true,//自动显示等待框，默认为true
+				      title:'正在加载...'//等待对话框上显示的提示内容
+				    }				  
+				})
+				 //关闭父界面的侧滑设置
+				mui.fire(main,"setting:swipeleft");
+			}
+		}else{
+			 openLoginView() ;
+		}
+	});
 	
- })
+	
+	//获得侧滑主窗口webview对象
+	var main = null;
+	mui.plusReady(function () {
+		main = plus.webview.currentWebview().opener();
+	})
+	function closeSetting () {
+		mui.fire(main,"setting:swipeleft");
+	}
+	//优化显示出来的侧滑菜单，只需监听该菜单的左滑事件，然后将其关闭即可；在菜单上右滑，不做任何操作；
+	window.addEventListener("swipeleft",closeSetting);  
+	mui.setting = closeSetting;
+
+
+})
  </script>

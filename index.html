@@ -13,7 +13,7 @@
 
 
 <header class="mui-bar mui-bar-nav c-top-bar">
-	<a  id="user"  class="mui-icon c-ico c-ico c-ico-user cIndexNav" ><span class="mui-tab-label" style="display:none;">我</span></a>
+	<a  id="setting"  class="mui-icon c-ico c-ico c-ico-user" ></a>
 	<a id="popNav" class="mui-icon mui-pull-right c-ico c-ico-all"></a>
 	<h1 id="title" class="mui-title"><img src="images/logo.png"></h1>
 </header>
@@ -47,14 +47,15 @@
 <script src="js/mui.min.js"></script>
 <script src="js/zepto.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-	//侧滑
-	var main,menu,mask;
+	//声明全局变量，主界面、侧滑菜单、侧滑设置
+	var main,menu,setting;
+	//声明并初始化是否显示侧滑菜单变量
 	var showMenu = false,
-		mode = 'main-move';
+		showSetting = false;
 	
     mui.init();
     //所有底部菜单子页面数组
-	var subpages = ['news.html', 'video_c.html', 'interaction.html', 'city.html','setting.html','audio.html','index_content.html'];
+	var subpages = ['news.html', 'video_c.html', 'interaction.html', 'city.html','audio.html','index_content.html'];
 	var subpage_style = {
 		top: '46px',
 		bottom: '50px'
@@ -65,10 +66,10 @@
   		
   		//创建子页面，首个选项卡页面显示，其它均隐藏；
   		var self = plus.webview.currentWebview();
-		for (var i = 0; i < 7; i++) {
+		for (var i = 0; i < 6; i++) {
 			var temp = {};
 			var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
-			if (i < 6) {
+			if (i < 5) {
 				sub.hide();
 			}else{
 				temp[subpages[i]] = "true";
@@ -89,6 +90,7 @@
 		
 		main = plus.webview.currentWebview();
 		//setTimeout的目的是等待窗体动画结束后，再执行create webview操作，避免资源竞争，导致窗口动画不流畅；
+		//预加载菜单
 		setTimeout(function () {
 			menu = mui.preload({
 				id: 'pop_nav.html',
@@ -101,15 +103,31 @@
 			});
 		},300);
 		
+		//预加载设置页面
+		setTimeout(function () {
+			setting = mui.preload({
+				id: 'setting.html',
+				url: 'setting.html',
+				styles: {
+					left: '-70%',
+					width: '70%',
+					zindex: 9999,
+					popGesture:'none'
+				}
+			});
+		},300);
+		
+		//监听遮罩点击事件
 		main.addEventListener("maskClick", function() {
 			main.setStyle({mask: "none"});
 			closeMenu();
+			closeSetting();
 		}, false);
 		
 	})
   	
   	//当前激活选项
-	var activeTab = subpages[7];
+	var activeTab = subpages[6];
 	var title = document.getElementById("title");
 	 //选项卡点击事件
 	mui(document).on('tap', '.cIndexNav', function(e) {
@@ -152,15 +170,8 @@
 		activeTab = targetTab;
 	});
 	
-  	mui(document).on('tap', '#popNav', function(e) {
-  		openMenu()
-  	})
-  
 	
-	
-	/*
-	 * 显示菜单菜单
-	 */
+	//显示侧滑菜单
 	function openMenu() {
 		if (!showMenu) {
 			//侧滑菜单处于隐藏状态，则立即显示出来；
@@ -178,6 +189,24 @@
 		}
 	}
 	
+	//显示设置菜单
+	function openSetting() {
+		if (!showSetting) {
+			//侧滑菜单处于隐藏状态，则立即显示出来；
+			//显示完毕后，根据不同动画效果移动窗体；
+			setting.show('none', 0, function() {
+				setting.setStyle({
+					left: '0%',
+					transition: {
+						duration: 150
+					}
+				});
+			});
+			main.setStyle({mask:'rgba(0,0,0,0.5)'});
+			showSetting = true;
+		}
+	}
+	
 	function closeMenu () {
 		//窗体移动
 		_closeMenu();
@@ -185,9 +214,14 @@
 		main.setStyle({mask:'none'})
 	}
 	
-	/**
-	 * 关闭侧滑菜单(业务部分)
-	 */
+	function closeSetting () {
+		//窗体移动
+		_closeSetting();
+		//关闭遮罩
+		main.setStyle({mask:'none'})
+	}
+	
+	//关闭侧滑菜单(业务部分)
 	function _closeMenu() {
 		if (showMenu) {
 			//主窗体开始侧滑；
@@ -205,13 +239,45 @@
 		}
 	}
 	
+	//关闭侧滑设置
+	function _closeSetting() {
+		if (showSetting) {
+			//主窗体开始侧滑；
+			setting.setStyle({
+				left: '-70%',
+				transition: {
+					duration: 150
+				}
+			});
+			//等窗体动画结束后，隐藏菜单webview，节省资源；
+			setTimeout(function() {
+				setting.hide();
+			}, 300);
+			showSetting = false;
+		}
+	}
+	
+	//点击菜单侧滑出菜单
+	mui(document).on('tap', '#popNav', function(e) {
+  		openMenu()
+  	})
+	//点击设置侧滑出菜单
+	mui(document).on('tap', '#setting', function(e) {
+  		openSetting()
+  	})
 	
 	 //主界面向左滑动，若菜单未显示，则显示菜单；否则不做任何操作；
 	window.addEventListener("swipeleft", openMenu);
 	 //主界面向右滑动，若菜单已显示，则关闭菜单；否则，不做任何操作；
-	window.addEventListener("swiperight", closeMenu);
+	window.addEventListener("swiperight", openSetting);
 	 //menu页面向右滑动，关闭菜单；
 	window.addEventListener("menu:swiperight", closeMenu);
+	//setting页面向左滑动，关闭设置；
+	window.addEventListener("setting:swipeleft", closeSetting);
+	
+	
+	
+	
 	
 	
     </script>
