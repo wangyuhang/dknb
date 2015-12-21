@@ -84,7 +84,7 @@
 			
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" style="text-align: center;">
-					<a>修改密码</a>
+					<a id="resetPsd" >修改密码</a>
 				</li>
 			</ul>
 					
@@ -96,9 +96,13 @@
 <script src="js/cookie.js"></script>
 <script src="js/mui.picker.js"></script>
 <script src="js/mui.poppicker.js"></script>
+<script src="js/md5.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/jm.js"></script>
 <script>
 mui.init();
-
+//声明token，在plusready后读取。
+var token = null;
 
 function getImage() {
 	var c = plus.camera.getCamera();
@@ -224,23 +228,6 @@ function initImgPreview() {
 	}
 }
 
-//获取token值
-var token = null;
-function getToken() {
-	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/get-update-accesstoken',{
-		dataType:'json',//服务器返回json格式数据
-		type:'post',//HTTP请求类型
-		timeout:10000,//超时时间设置为10秒；
-		success:function(result){
-			if(result.succ) {
-				token = result.info;
-			}
-		},
-		error:function(xhr,type,errorThrown){
-		}
-	});
-}
-getToken();
 
 function initInfo() {
 	var id = $.cookie('id');
@@ -280,12 +267,12 @@ function initInfo() {
 initInfo();
 
 function submitInfo() {
-	var id = $.cookie('id');
+	var id = $.cookie('id'),
+		date = Date.parse(new Date());
 	if(id) {
 		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/update-user-message', {
 			data:{
-				uid: id,
-				token: token,
+				tczeidt: id,
 				sex: sexInput.val() == '男'?0:1,
 				nickname: nicknameInput.val(),
 				age: ageInput.val(),
@@ -297,16 +284,20 @@ function submitInfo() {
 				home: homeInput.val(),
 				introduction: introductionInput.val()
 			},
+			headers: {
+				'pragma-device': plus.device.model,
+				'pragma-uuid': plus.device.uuid,
+				'pragma-date': date,
+				'pragma-tcze':jm(token,plus.device.model,date)
+			},
 			dataType:'json',//服务器返回json格式数据
 			type:'post',//HTTP请求类型
 			timeout:10000,//超时时间设置为10秒；
 			success:function(result){
-				getToken();
 				$.cookie('nickname',nicknameInput.val());
 				mui.toast(result.info);
 			},
 			error:function(xhr,type,errorThrown){
-				getToken();
 			}
 		});
 	}else {
@@ -352,7 +343,9 @@ var sexInput = $('#sex'),
 	introductionInput = $('#introduction'),
 	avatarImg = $('#avatar');
 	
-mui.plusReady(function(){		 
+mui.plusReady(function(){
+		//读取token
+		token = plus.storage.getItem('token');
 		//性别选择框
 		var sexPicker =new mui.PopPicker();
 		sexPicker.setData([{
@@ -372,12 +365,12 @@ mui.plusReady(function(){
 		
 		//点击保存提交信息
 		mui(document).on('tap', '#saveInfo', function() {
-			 submitInfo() ;
+			 submitInfo();
 		});
 		
 		
 		//更换头像
-		mui(".mui-table-view-cell").on("tap", "#head", function(e) {
+		mui('.mui-table-view-cell').on("tap", "#head", function(e) {
 			var a = [{
 				title: "拍照"
 			}, {
@@ -402,6 +395,24 @@ mui.plusReady(function(){
 				}
 			})
 		});
+		
+		mui(document).on('tap', '#resetPsd', function() {
+			var webview = mui.openWindow({
+			    url: 'forget_psd.html',
+			    id: 'forget_psd.html',
+			    styles:{
+			      top: '0px',//新页面顶部位置
+			      bottom: '0px'
+			    },
+			    extras:{
+			    		type:'reset'
+			    },
+			    waiting:{
+			      autoShow:true,//自动显示等待框，默认为true
+			      title:'正在加载...'//等待对话框上显示的提示内容
+			    }				  
+			})
+		})
 })
 </script>
 

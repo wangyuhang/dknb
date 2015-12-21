@@ -58,6 +58,9 @@
 </html>
 <script src="js/zepto.min.js"></script>
 <script src="js/cookie.js"></script>
+<script src="js/md5.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/jm.js"></script>
 <script>
 mui.init();
 
@@ -88,8 +91,8 @@ function loginFun() {
 	mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=appuser/manager/login',{
 		type: 'post',
 		data:{
-			cellphone: phoneNum.val(),
-			password:psd.val()
+			cczyidt: phoneNum.val(),
+			pczyidt:psd.val()
 		},
 		dataType:'json',
 		success: function(result) {
@@ -103,6 +106,8 @@ function loginFun() {
 				$.cookie('username',result.data.username);
 				plus.storage.setItem('id',result.data.id.toString());
 				plus.storage.setItem('username',result.data.username);
+				plus.storage.setItem('token',result.data.token);
+				plus.storage.setItem('refresh_token',result.data.fresh_token);
 				plus.webview.currentWebview().close();
 			}else{
 				mui.toast(result.info);

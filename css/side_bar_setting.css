@@ -13,7 +13,7 @@ body,html{height:100%; background-color:#00bcff;}
 
 .c-has-logined{padding-top:30px; text-align:left;}
 .c-has-logined .c-avatar{width:60px; height:60px; overflow:hidden; border-radius:30px;  margin-left:10px; margin-right:10px; float:left;}
-.c-has-logined .c-avatar img{width:60px;;}
+.c-has-logined .c-avatar img{width:60px; height:60px;}
 .c-has-logined .c-name{height:30px; line-height:30px; font-size:18px;}
 .c-has-logined .c-coin{height:30px; line-height:30px; font-size:14px; color:#03A7E2;}
 .c-coin .c-num{font-size:18px;}

@@ -8,12 +8,7 @@
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/comm.css" rel="stylesheet"/>
     <link href="css/vote.css" rel="stylesheet"/>
-    <script type="text/javascript" charset="utf-8">
-      	mui.init();
-      	mui.plusReady(function() {
-      		
-      	})
-    </script>
+   
 </head>
 <body>
 	<header class="mui-bar mui-bar-nav c-blue-top">
@@ -24,44 +19,84 @@
 	  <h1 id="typeTitle" class="mui-title">调查详情</h1>
 	</header>
 	<div class="mui-content">
-		<div class="c-vote-detail">
-			<div class="c-vote-title">爱心商城，您是否支持兑换</div>
-			<div class="c-vote-info">多选投票：最多三项选择<br>公有<strong>1356</strong>人参与</div>
-			<div class="c-vote-list">
-				<ul>
-					<li class="c-on">
-						<div class="c-vote-content">
-							<div>支持，每周有一次兑换机会</div>
-							<div class="c-vote-bar"><div class="c-vote-progress" style="width:50%;"></div></div>
-							<div>
-								<div class="c-vote-count">987票</div>
-								<div class="c-vote-proportion">54.3%</div>
-								<div style="clear:both;"></div>
-							</div>
-						</div>
-						<div class="c-vote-btn">
-							<div class="mui-icon c-ico c-ico-dianzan"></div>
-						</div>
-						<div style="clear:both;"></div>
-					</li>
-					<li>
-						<div class="c-vote-content">
-							<div>支持，每周有一次兑换机会</div>
-							<div class="c-vote-bar"><div class="c-vote-progress" style="width:50%;"></div></div>
-							<div>
-								<div class="c-vote-count">987票</div>
-								<div class="c-vote-proportion">54.3%</div>
-								<div style="clear:both;"></div>
-							</div>
-						</div>
-						<div class="c-vote-btn">
-							<div class="mui-icon c-ico c-ico-dianzan"></div>
-						</div>
-						<div style="clear:both;"></div>
-					</li>
-				</ul>
-			</div>
+		<div id="voteCtn" class="c-vote-detail">
+			
 		</div>
 	</div>
 </body>
 </html>
+<script src="js/zepto.min.js"></script>
+ <script type="text/javascript" charset="utf-8">
+  	mui.init();
+  	
+  	//初始化投票选择
+  	function initVote(inid) {
+  		mui.ajax('http://192.168.200.224/app_admini/backend/web/index.php?r=investigation/manager/index', {
+  			dataType: 'json',
+  			type: 'post',
+  			data: {
+  				inid: inid
+  			},
+  			success: function(result) {
+  				if(result.succ) {
+  					var html = '';
+  					mui.each(result.data.options, function() {
+  						html+= '<li>'+
+										'<div class="c-vote-content">'+
+											'<div><img src='+this.image+'></div>'+
+											'<div>'+this.title+'</div>'+
+											'<div class="c-vote-bar"><div class="c-vote-progress" style="width:'+this.percent*100+'%;"></div></div>'+
+											'<div>'+
+												'<div class="c-vote-count">'+this.count+'票</div>'+
+												'<div class="c-vote-proportion">'+this.percent*100+'</div>'+
+												'<div style="clear:both;"></div>'+
+											'</div>'+
+										'</div>'+
+										'<div class="c-vote-btn"></div>'+
+										'<div style="clear:both;"></div>'+
+									'</li>';
+  					});
+  					html = '<div class="c-vote-title">'+result.data.name+'</div>'+
+									'<div class="c-vote-info">'+result.data.content+'<br>公有<strong>1356</strong>人参与</div>'+
+									'<div class="c-vote-list">'+
+										'<ul>'+html+'</ul>'+
+									'</div>'+
+								'</div>'
+  				}
+  				$('#voteCtn').html(html);
+  			}
+  		})
+  	}
+  	
+  	//单选
+  	function radio() {
+  		mui('#voteCtn').on('tap', 'li', function() {
+  			$(this).siblings().removeClass('c-on');
+  			$(this).addClass('c-on');
+  		})
+  	}
+  	
+  	//多选
+  	function checkbox() {
+  		mui('#voteCtn').on('tap', 'li', function() {
+  			if( $(this).hasClass('c-on') ) {
+  				$(this).removeClass('c-on');
+  			}else {
+  				$(this).addClass('c-on');
+  			}
+  		})
+  	}
+  	
+  	mui.plusReady(function() {
+  		var inid = plus.webview.currentWebview().inid,
+  			count = plus.webview.currentWebview().count;
+  		initVote(inid);
+  		if( count==1 ) {
+  			radio();
+  		}else {
+  			checkbox();
+  		}
+  		
+  		
+  	})
+</script>

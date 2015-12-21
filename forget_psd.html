@@ -256,6 +256,9 @@
 		  invalidBtn = $("#invalidBtn");
 	
 	mui.plusReady(function(){
+		//设置标题，是忘记密码还是修改密码
+		$('#typeTitle').html(plus.webview.currentWebview().type=='reset'?'修改密码':'忘记密码');
+		
 		//每次进入页面回到填写手机号码界面
 		stepFun(1);
 		

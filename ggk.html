@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/comm.css" rel="stylesheet"/>
+   	<style>
+   	html,body,.mui-content{height:100%;}
+   	.c-ggk-ctn{width:100%; height:70%; background:url(images/ggk_bg.gif) center top no-repeat; background-size:100% auto; position:relative; text-align:center;}
+   	.c-ggk-bottom{background:url(images/ggk_bottom.png) no-repeat; background-size:100% auto; position:absolute; color:#333; text-align:center; font-size:20px;}
+   	.c-ggk-cover{position:absolute;}
+   	.c-award{padding:20px; background-color:#fcdeb1;}
+   	.c-award .c-award-cell{padding:10px; margin-bottom:20px; background-color:#f0cf9f;}
+   	.c-award .c-award-cell h2{font-size:18px; color:#961619;}
+   	.c-award .c-award-cell p{padding-left:10px; color:#333; margin:10px 0 0 0;}
+   	</style>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav c-top-bar c-blue-top">
+	  <button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+	    <span class="mui-icon mui-icon-left-nav"></span>
+	    返回
+	  </button>
+	  <h1 id="typeTitle" class="mui-title"></h1>
+	</header>
+	
+	<div class="mui-content">
+		<div  id="ggkBg"  class="c-ggk-ctn">
+			<div id="ggkBottom" class="c-ggk-bottom"></div>
+			<div id="ggkCover" class="c-ggk-cover">
+				<img id="ggkTop" class="c-ggk-top" src="images/ggk_top.gif" />
+			</div>
+		</div>
+		
+		<div class="c-award">
+			<div id="awardSet" class="c-award-cell">
+				
+			</div>
+			
+			<div id="awardInfo" class="c-award-cell">
+				
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>
+<script src="js/jquery-2.1.1-min.js"></script>
+<script src="js/cookie.js"></script>
+<script src="js/jquery.eraser.js"></script>
+<script src="js/md5.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/jm.js"></script>
+<script>
+mui.init();
+var token = null;
+var ggkBottom = $('#ggkBottom'),
+	ggkTop = $('#ggkTop'),
+	ggkBg = $('#ggkBg'),
+	ggkCover = $('#ggkCover'),
+	wWidth = $(window).width();
+ggkBottom.css({width:wWidth*0.6, left:wWidth*0.2, height:wWidth*0.313, 'line-height':wWidth*0.313+'px',  bottom:'15%'});
+ggkTop.css({width:wWidth*0.55, height:wWidth*0.26});
+ggkCover.css({width:wWidth*0.55, left:wWidth*0.225, height:wWidth*0.26, bottom:'19%'});
+ggkBg.css({'height':wWidth*0.8});
+
+function initAwardInfo() {
+	$.ajax({
+		url: 'http://192.168.200.224/app_admini/backend/web/index.php?r=lottery/manager/show-message',
+		type: 'post',
+		dataType: 'json',
+		success: function(result) {
+			var arr = result.data.award,
+				html = '';
+			if(result.succ) {
+				$.each(arr, function() {
+					html += '<p>'+this.name+'</p>';
+				})
+				$('#awardSet').html('<h2>奖项设置</h2>'+html);
+				$('#awardInfo').html('<h2>活动说明</h2><p>'+result.data.description+'</p>');
+			}
+		}
+	})
+}
+
+
+function reqAward() {
+	var id = $.cookie('id'),
+		date = Date.parse(new Date());
+	console.log(plus.device.model)
+	console.log(plus.device.uuid)
+	console.log(jm(token,date))
+	console.log(id)
+	$.ajax({
+		url: 'http://192.168.200.224/app_admini/backend/web/index.php?r=lottery/manager/task-begin&type=0',
+		type: 'post',
+		dataType: 'json',
+		data: {
+			tczeidt: id
+		},
+		headers: {
+			'pragma-device': plus.device.model,
+			'pragma-uuid': plus.device.uuid,
+			'pragma-date': date,
+			'pragma-tcze':jm(token,plus.device.model,date)
+		},
+		success: function(result) {
+			console.log(result.info)
+			if(result.succ) {
+				ggkBottom.html(result.info);
+			}
+		}
+	})
+}
+
+//初始化刮刮层
+ggkTop.eraser({
+	completeRatio: .5,
+    completeFunction: function() {
+		    		
+    }
+});
+
+mui.plusReady(function() {
+	token = plus.storage.getItem('token');
+	//页面初始化后请求奖品信息
+	initAwardInfo();
+	//页面初始化后请求中奖信息。
+	reqAward();
+})
+</script>
