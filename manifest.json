@@ -195,5 +195,309 @@
 				}
 			}
 		}
-	},"fullscreen":false
+	},"fullscreen":false,
+	"dependencies": {
+		"pages": {
+			"index.html": {
+				"resources": [
+					"css/index.css",
+					"news.html",
+					"video_c.html",
+					"images/logo.png",
+					"fonts/ico.ttf",
+					"js/mui.min.js",
+					"js/zepto.min.js",
+					"css/mui.min.css",
+					"city.html",
+					"js/update.js",
+					"css/comm.css",
+					"index_content.html",
+					"audio.html",
+					"interaction.html"
+				],
+				"refer": [
+					"pop_nav.html",
+					"setting.html"
+				],
+				"priority": 0
+			},
+			"news.html": {
+				"resources": [
+					"js/mui.pullToRefresh.js",
+					"css/news.css",
+					"js/mui.pullToRefresh.material.js",
+					"js/mui.lazyload.js",
+					"js/mui.lazyload.img.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"service.html": {
+				"resources": [
+					"images/sercice-ico-gjj.gif",
+					"images/sercice-ico-weather.gif",
+					"images/sercice-ico-sb.gif",
+					"images/sercice-ico-air.gif",
+					"images/sercice-ico-tf.gif",
+					"images/sercice-ico-railway.gif",
+					"images/sercice-ico-map.gif",
+					"images/sercice-ico-illegal.gif"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"pop_nav.html": {
+				"resources": [
+					"images/pop_nav_yao.png",
+					"images/pop_nav_diaocha.png",
+					"images/pop_nav_jifen.png",
+					"css/pop_nav.css",
+					"images/pop_nav_bg.jpg",
+					"images/pop_nav_laohua.png",
+					"images/pop_nav_huodong.png",
+					"images/pop_nav_yigong.png",
+					"images/pop_nav_laji.png",
+					"images/pop_nav_baoliao.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"video_c.html": {
+				"resources": [
+					"images/nbtv1.jpg",
+					"images/nbtv4.jpg",
+					"images/nbtv5.jpg",
+					"images/video_jmd_btn.png",
+					"css/video.css",
+					"images/nbtv2.jpg",
+					"images/nbtv3.jpg"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"setting.html": {
+				"resources": [
+					"css/side_bar_setting.css",
+					"js/cookie.js",
+					"images/defult_avatar.png",
+					"images/c-sign-btn.png",
+					"images/setting_bg.jpg"
+				],
+				"refer": [
+					"login_sign_in.html"
+				],
+				"priority": 0
+			},
+			"city.html": {
+				"resources": [
+					"service.html",
+					"css/city.css",
+					"active.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"index_content.html": {
+				"resources": [
+					"images/index_fast_nav_1.gif",
+					"fonts/mui.ttf",
+					"images/index_fast_nav_3.gif",
+					"images/index_fast_nav_2.gif",
+					"images/index_fast_nav_4.gif"
+				],
+				"refer": [
+					"shack.html"
+				],
+				"priority": 0
+			},
+			"audio.html": {
+				"resources": [
+					"images/fm1029.jpg",
+					"images/audio_live_btns.png",
+					"images/fm904.jpg",
+					"images/fm920.jpg",
+					"images/audio_live_bg.jpg",
+					"images/fm986.jpg",
+					"images/fm939.jpg"
+				],
+				"refer": [
+					"jmd.html"
+				],
+				"priority": 0
+			},
+			"interaction.html": {
+				"resources": [
+					"images/interaction-ico-game.gif",
+					"images/interaction-ico-show.gif",
+					"images/interaction-ico-vote.gif",
+					"images/interaction-ico-shack.gif",
+					"css/interation.css",
+					"images/interaction-ico-broke.gif",
+					"images/interaction-ico-shop.gif"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"login_sign_in.html": {
+				"resources": [
+					"js/base64.js",
+					"js/jm.js",
+					"images/c-login-bg.jpg",
+					"images/c-login-avatar.png",
+					"js/md5.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"shack.html": {
+				"resources": [
+					"css/shack.css",
+					"js/cookie.js",
+					"js/mui.min.js",
+					"js/zepto.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"images/shack.gif",
+					"images/shack2.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"jmd.html": {
+				"resources": [
+					"js/mui.min.js",
+					"js/zepto.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/comm.css"
+				],
+				"refer": [],
+				"priority": 0
+			}
+		},
+		"index": {
+			"resources": [
+				"css/index.css",
+				"news.html",
+				"video_c.html",
+				"images/logo.png",
+				"fonts/ico.ttf",
+				"js/mui.min.js",
+				"js/zepto.min.js",
+				"css/mui.min.css",
+				"city.html",
+				"js/update.js",
+				"css/comm.css",
+				"index_content.html",
+				"audio.html",
+				"interaction.html"
+			],
+			"refer": [],
+			"priority": 0
+		},
+		"idle": {
+			"resources": [
+				"js/mui.dtpicker.js",
+				"active_detail.html",
+				"images/dzp_bg.gif",
+				"js/common.js",
+				"js/mui.poppicker.js",
+				"images/60x60.gif",
+				"js/mui.previewimage.js",
+				"css/vote.css",
+				"js/mui.js",
+				"js/city.data.js",
+				"css/setting.css",
+				"news_detail_sub.html",
+				"images/dzp_bottom.png",
+				"images/c-address-cell-bottom.gif",
+				"js/mui.view.js",
+				"images/start1242x2208.png",
+				"show_list.html",
+				"audio/shake.wav",
+				"images/start640x960.png",
+				"images/game2.jpg",
+				"js/mui.locker.md",
+				"css/mui.listpicker.css",
+				"js/city.data-3.js",
+				"images/upload_btn.gif",
+				"js/jquery.uploadifive.min.js",
+				"test.json",
+				"css/mui.picker.all.css",
+				"regist_phone.html",
+				"css/show.css",
+				"images/start750x1334.png",
+				"js/feedback.js",
+				"images/ggk_bottom.png",
+				"js/mui.imageViewer.js",
+				"images/c-set-head-bg.jpg",
+				"images/game5.jpg",
+				"images/game6.jpg",
+				"images/game3.jpg",
+				"address_add.html",
+				"images/ggk_bg.gif",
+				"vote.html",
+				"js/jquery-2.1.1-min.js",
+				"js/ad.js",
+				"images/iconfont-tianjia.png",
+				"libs/easymob-webim-sdk/jquery-1.11.1.js",
+				"js/mui.indexedlist.js",
+				"images/game7.jpg",
+				"js/rotate.js",
+				"readme.txt",
+				"show_upload.html",
+				"setting_personal.html",
+				"audio_book_list.html",
+				"images/game4.jpg",
+				"edit_personal.html",
+				"images/game8.jpg",
+				"js/jquery.eraser.js",
+				"images/vote_option.png",
+				"js/mui.locker.js",
+				"forget_psd.html",
+				"msg_list.html",
+				"images/pull_arrow.png",
+				"game_detail.html",
+				"login_sign_in_psd.html",
+				"js/mui.zoom.js",
+				"images/start640x1136.png",
+				"css/mui.picker.min.css",
+				"js/mui.picker.js",
+				"libs/easymob-webim-sdk/easemob.im-1.0.5.js",
+				"images/ggk_top.gif",
+				"vote_detail.html",
+				"images/pull_fresh.png",
+				"css/mui.css",
+				"images/audio_default_img.png",
+				"address.html",
+				"service_detail.html",
+				"address_modify.html",
+				"images/start.png",
+				"js/arttmpl.js",
+				"video_detail.html",
+				"dzp.html",
+				"images/42x42.gif",
+				"get_device_msg.js",
+				"game.html",
+				"ggk.html",
+				"js/mui.listpicker.js",
+				"get_psd_set.html",
+				"libs/easymob-webim-sdk/json2.js",
+				"images/logo2.png",
+				"css/mui.poppicker.css",
+				"js/feedback-page.js",
+				"images/game1.jpg",
+				"news_detail_header.html",
+				"show.html",
+				"libs/easymob-webim-sdk/quickstart.md",
+				"css/mui.picker.css",
+				"video_book_list.html",
+				"js/mui.picker.all.js",
+				"images/dzp_top.png",
+				"news_list.html",
+				"libs/easymob-webim-sdk/strophe-custom-2.0.0.js",
+				"get_psd.html"
+			]
+		}
+	}
 }
